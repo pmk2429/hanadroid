@@ -30,19 +30,13 @@ class EntryActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.fab.apply {
-            setOnClickListener {
-                launchUniversityActivity()
-            }
-
             setOnTouchListener(handleTouchListener)
+            setOnClickListener { launchUniversityActivity() }
         }
 
         binding.fabBoredActivity.apply {
-            setOnClickListener {
-                launchBoredActivity()
-            }
-
             setOnTouchListener(handleTouchListener)
+            setOnClickListener { launchBoredActivity() }
         }
     }
 

@@ -13,6 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.hanadroid.databinding.FragmentRandomBoredActivityBinding
 import com.example.hanadroid.ui.viewmodels.BoredActivityViewModel
 import com.example.hanadroid.ui.viewmodels.HanaViewModelFactory
+import com.example.hanadroid.ui.views.SingleRowView
+import com.example.hanadroid.util.*
 import kotlinx.coroutines.launch
 
 class BoredActivityFragment @JvmOverloads constructor(
@@ -42,6 +44,37 @@ class BoredActivityFragment @JvmOverloads constructor(
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        listAllChildViewsOfType(binding.boredActivityRowsContainer)
+        //listAllDirectChildren(binding.boredActivityContainer)
+        //listAllChildViews(binding.boredActivityContainer)
+        testExtensions()
+        testLambda()
+    }
+
+    private fun testExtensions() {
+        val demo = "Pavitra"
+        val first = demo.findFirstIndex { t -> t == 'a' }
+        Log.i("~!@#", "$first")
+        val last = demo.findLastIndex { t -> t == 'a' }
+        Log.i("~!@#", "$last")
+    }
+
+    private fun testLambda() {
+        val summation = sum(10, 20, addTwoNumbers())
+        println(summation)
+    }
+
+    /** val lambdaName : () -> ReturnType = { args1, args2, ... -> codeBody } */
+    private fun addTwoNumbers(): (Int, Int) -> Int = { first, second -> first + second }
+
+    private fun sum(
+        x: Int,
+        y: Int,
+        action: (Int, Int) -> Int // Notice how we are passing the lambda as a parameter to sum() method.
+    ) = action(x, y)
+
     private fun setupObservers() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -58,4 +91,38 @@ class BoredActivityFragment @JvmOverloads constructor(
         _binding = null
         super.onDestroyView()
     }
+
+    private fun listAllChildViewsOfType(parent: ViewGroup) {
+        val allSameViews = parent.allViewsOfType<SingleRowView>()
+        for (view in allSameViews) {
+            Log.i("~!@#", view.toString())
+        }
+    }
+
+    private fun listAllDirectChildren(parent: ViewGroup) {
+        val allViews = parent.allDirectChildren<View>()
+        for (view in allViews) {
+            Log.i("~!@#", view.toString())
+        }
+        Log.i("~!@#", "------------------------------------------------------------------")
+    }
+
+    private fun listAllChildViews(parent: ViewGroup) {
+        val allChildren = parent.allChildViews<View>()
+        for (view in allChildren) {
+            Log.i("~!@#", view.toString())
+        }
+    }
+
+    /**
+     * Same as extension function Extensions#allDirectChildren()
+     */
+    private fun ViewGroup.getAllChildren(): List<View> {
+        val children = ArrayList<View>()
+        for (i in 0 until this.childCount) {
+            children.add(this.getChildAt(i))
+        }
+        return children
+    }
+
 }
