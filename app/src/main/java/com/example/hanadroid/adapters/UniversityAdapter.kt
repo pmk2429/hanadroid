@@ -1,4 +1,4 @@
-package com.example.hanadroid.ui.adapters
+package com.example.hanadroid.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

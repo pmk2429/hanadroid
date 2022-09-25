@@ -11,12 +11,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.hanadroid.databinding.FragmentRandomBoredActivityBinding
-import com.example.hanadroid.ui.viewmodels.BoredActivityViewModel
-import com.example.hanadroid.ui.viewmodels.HanaViewModelFactory
 import com.example.hanadroid.ui.views.SingleRowView
 import com.example.hanadroid.util.*
+import com.example.hanadroid.viewmodels.BoredActivityViewModel
+import com.example.hanadroid.viewmodels.HanaViewModelFactory
 import kotlinx.coroutines.launch
 
+/**
+ * Fragment that fetches and displays Bored Random Activities.
+ */
 class BoredActivityFragment @JvmOverloads constructor(
     factoryProducer: (() -> HanaViewModelFactory)? = null
 ) : Fragment() {
@@ -47,9 +50,9 @@ class BoredActivityFragment @JvmOverloads constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listAllChildViewsOfType(binding.boredActivityRowsContainer)
-        //listAllDirectChildren(binding.boredActivityContainer)
+        listAllDirectChildren(binding.boredActivityContainer)
         //listAllChildViews(binding.boredActivityContainer)
-        testExtensions()
+        //testExtensions()
         testLambda()
     }
 
@@ -77,7 +80,12 @@ class BoredActivityFragment @JvmOverloads constructor(
 
     private fun setupObservers() {
         lifecycleScope.launch {
+            // The block passed to repeatOnLifecycle is executed when the lifecycle
+            // is at least STARTED and is cancelled when the lifecycle is STOPPED.
+            // It automatically restarts the block when the lifecycle is STARTED again.
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // Safely collect from boredActivityUiState (StateFlow) when the lifecycle is STARTED
+                // and stops collection when the lifecycle is STOPPED
                 boredActivityViewModel.boredActivityUiState.collect { uiState ->
                     Log.i("~!@#", "SUCCESS --> ${uiState.name}")
                     Log.i("~!@#", "LOADING --> ${uiState.isLoading}")
@@ -93,8 +101,8 @@ class BoredActivityFragment @JvmOverloads constructor(
     }
 
     private fun listAllChildViewsOfType(parent: ViewGroup) {
-        val allSameViews = parent.allViewsOfType<SingleRowView>()
-        for (view in allSameViews) {
+        val singleRowViews = parent.getViewsByType(SingleRowView::class.java)
+        for (view in singleRowViews) {
             Log.i("~!@#", view.toString())
         }
     }

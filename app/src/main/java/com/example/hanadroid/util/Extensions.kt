@@ -4,20 +4,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.allViews
 import androidx.core.view.children
-import com.example.hanadroid.ui.views.SingleRowView
+import com.example.hanadroid.data.model.AppError
 
-inline fun <reified T : View> ViewGroup.allViewsOfType(): List<View> {
-    val views = mutableListOf<View>()
-    views.addAll((0 until childCount).map(this::getChildAt))
-    views.filterIsInstance<SingleRowView>()
-    return views
+fun <T : View> ViewGroup.getViewsByType(viewTypeClass: Class<T>): List<T> {
+    return mutableListOf<T?>().apply {
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            (child as? ViewGroup)?.let {
+                addAll(child.getViewsByType(viewTypeClass))
+            }
+            if (viewTypeClass.isInstance(child)) {
+                add(viewTypeClass.cast(child))
+            }
+        }
+    }.filterNotNull()
 }
 
-
-inline fun <reified T : View> ViewGroup.allDirectChildren(): List<View> {
-    val views = mutableListOf<View>()
-    views.addAll((0 until childCount).map(this::getChildAt))
-    return views
+fun <T : View> ViewGroup.allDirectChildren(): List<View> {
+    return mutableListOf<View>().apply {
+        addAll((0 until childCount).map { i -> getChildAt(i) })
+    }.toList()
 }
 
 inline fun <reified T : View> View.allChildViews(): List<View> {
@@ -53,4 +59,8 @@ inline fun CharSequence.findLastIndex(predicate: (Char) -> Boolean): Int {
         }
     }
     return -1
+}
+
+fun Throwable?.toAppError(): AppError {
+    return AppError(message = this?.message ?: "NULL", cause = this?.cause)
 }

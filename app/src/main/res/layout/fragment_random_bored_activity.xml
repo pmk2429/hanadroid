@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.hanadroid.ui.viewmodels.BoredActivityViewModel" />
+            type="com.example.hanadroid.viewmodels.BoredActivityViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

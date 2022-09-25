@@ -1,4 +1,4 @@
-package com.example.hanadroid.ui.repository
+package com.example.hanadroid.repository
 
 import com.example.hanadroid.data.universityapi.UniversityApiHelper
 import com.example.hanadroid.data.model.University

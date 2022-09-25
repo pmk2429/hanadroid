@@ -1,8 +1,8 @@
-package com.example.hanadroid.ui.usecases
+package com.example.hanadroid.usecases
 
 import com.example.hanadroid.data.model.BoredActivity
 import com.example.hanadroid.networking.ResponseWrapper
-import com.example.hanadroid.ui.repository.BoredActivityRepository
+import com.example.hanadroid.repository.BoredActivityRepository
 import com.example.hanadroid.util.CoroutineDispatcherProvider
 import kotlinx.coroutines.withContext
 
@@ -18,5 +18,10 @@ class FetchBoredActivityUseCases(
     suspend operator fun invoke(): ResponseWrapper<BoredActivity> =
         withContext(coroutineDispatcher.io()) {
             boredActivityRepository.fetchRandomBoredActivity()
+        }
+
+    suspend fun invokeForResult(): Result<BoredActivity> =
+        withContext(coroutineDispatcher.io()) {
+            boredActivityRepository.fetchRandomBoredActivityForResult()
         }
 }

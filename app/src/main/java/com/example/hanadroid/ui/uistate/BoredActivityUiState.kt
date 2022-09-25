@@ -1,5 +1,7 @@
 package com.example.hanadroid.ui.uistate
 
+import com.example.hanadroid.data.model.AppError
+
 data class BoredActivityUiState(
     val name: String = "",
     val type: String = "",
@@ -7,5 +9,6 @@ data class BoredActivityUiState(
     val price: Double = 0.0,
     val url: String = "",
     val isLoading: Boolean = false,
-    val failureMessage: String? = null
+    val failureMessage: String? = null,
+    val appError: AppError? = null
 )
