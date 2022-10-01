@@ -1,4 +1,4 @@
-package com.example.hanadroid.ui.viewmodels
+package com.example.hanadroid.viewmodels
 
 import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
@@ -8,10 +8,10 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiHelperImpl
 import com.example.hanadroid.data.universityapi.UniversityApiHelperImpl
 import com.example.hanadroid.networking.RetrofitBuilder
-import com.example.hanadroid.ui.repository.BoredActivityRepository
-import com.example.hanadroid.ui.repository.UniversityRepository
-import com.example.hanadroid.ui.usecases.FetchBoredActivityUseCases
-import com.example.hanadroid.ui.usecases.FetchUniversitiesUseCase
+import com.example.hanadroid.repository.BoredActivityRepository
+import com.example.hanadroid.repository.UniversityRepository
+import com.example.hanadroid.usecases.FetchBoredActivityUseCases
+import com.example.hanadroid.usecases.FetchUniversitiesUseCase
 import com.example.hanadroid.util.DefaultDispatcherProvider
 
 @Suppress("UNCHECKED_CAST")

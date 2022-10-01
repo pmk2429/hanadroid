@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hanadroid.R
 import com.example.hanadroid.data.model.University
 import com.example.hanadroid.databinding.FragmentFirstBinding
-import com.example.hanadroid.ui.adapters.UniversityAdapter
-import com.example.hanadroid.ui.viewmodels.UniversityListViewModel
-import com.example.hanadroid.ui.viewmodels.HanaViewModelFactory
+import com.example.hanadroid.adapters.UniversityAdapter
+import com.example.hanadroid.viewmodels.UniversityListViewModel
+import com.example.hanadroid.viewmodels.HanaViewModelFactory
 import kotlinx.coroutines.launch
 
 

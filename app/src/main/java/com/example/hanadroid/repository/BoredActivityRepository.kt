@@ -1,6 +1,7 @@
-package com.example.hanadroid.ui.repository
+package com.example.hanadroid.repository
 
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiHelper
+import com.example.hanadroid.data.model.AppError
 import com.example.hanadroid.data.model.BoredActivity
 import com.example.hanadroid.networking.ResponseWrapper
 import com.example.hanadroid.util.CoroutineDispatcherProvider
@@ -30,4 +31,22 @@ class BoredActivityRepository(
                 ResponseWrapper.Error(e.message!!)
             }
         }
+
+    /**
+     * Fetch Random Bored Activity using Kotlin Result API.
+     */
+    suspend fun fetchRandomBoredActivityForResult(): Result<BoredActivity> =
+        withContext(coroutineDispatcherProvider.io()) {
+            val data = apiHelper.getRandomBoredActivity()
+            try {
+                Result.success(data)
+            } catch (e: Exception) {
+                // Result.failure(e)
+                handleError(e)
+            }
+        }
+
+    private fun <AppError> handleError(t: Throwable): Result<AppError> {
+        return Result.failure(AppError(message = t.message, cause = t.cause))
+    }
 }
