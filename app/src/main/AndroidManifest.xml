@@ -40,6 +40,10 @@
             android:name=".ui.UniversityMainActivity"
             android:exported="true"
             android:theme="@style/Theme.HanaDroid.NoActionBar" />
+        <activity
+            android:name=".ui.ArticleListPaginationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.HanaDroid.NoActionBar" />
     </application>
 
 </manifest>

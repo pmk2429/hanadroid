@@ -8,6 +8,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiHelperImpl
 import com.example.hanadroid.data.universityapi.UniversityApiHelperImpl
 import com.example.hanadroid.networking.RetrofitBuilder
+import com.example.hanadroid.repository.ArticleRepository
 import com.example.hanadroid.repository.BoredActivityRepository
 import com.example.hanadroid.repository.UniversityRepository
 import com.example.hanadroid.usecases.FetchBoredActivityUseCases
@@ -30,6 +31,9 @@ class HanaViewModelFactory(
         }
         if (modelClass.isAssignableFrom(BoredActivityViewModel::class.java)) {
             return BoredActivityViewModel(handle, createBoredActivityUseCase()) as T
+        }
+        if (modelClass.isAssignableFrom(ArticleViewModel::class.java)) {
+            return ArticleViewModel(provideArticleRepository()) as T
         }
         throw IllegalArgumentException("Unknown Class Identifier")
     }
@@ -58,4 +62,6 @@ class HanaViewModelFactory(
             DefaultDispatcherProvider
         )
     }
+
+    private fun provideArticleRepository(): ArticleRepository = ArticleRepository()
 }

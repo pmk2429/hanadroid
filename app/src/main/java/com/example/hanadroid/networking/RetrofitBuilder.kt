@@ -1,19 +1,13 @@
 package com.example.hanadroid.networking
 
-import android.content.Context
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiService
 import com.example.hanadroid.data.universityapi.UniversityApiService
-import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.File
 
 object RetrofitBuilder {
-
-    private const val UNIVERSITY_BASE_URL: String = "http://universities.hipolabs.com/"
-    private const val BORED_ACTIVITY_BASE_URL: String = "http://www.boredapi.com/api/activity/"
 
     private fun createUniversity(): Retrofit {
         val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }

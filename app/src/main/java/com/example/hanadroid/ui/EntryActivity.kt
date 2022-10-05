@@ -24,6 +24,13 @@ class EntryActivity : AppCompatActivity() {
             }
         }
 
+    private val paginationActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityEntryBinding.inflate(layoutInflater)
@@ -38,6 +45,14 @@ class EntryActivity : AppCompatActivity() {
             setOnTouchListener(handleTouchListener)
             setOnClickListener { launchBoredActivity() }
         }
+
+        binding.fabPaginationArticles.apply {
+            setOnClickListener { launchPaginationActivity() }
+        }
+    }
+
+    private fun launchUniversityActivity() {
+        universityActivityLauncher.launch(Intent(this, UniversityMainActivity::class.java))
     }
 
     private fun launchBoredActivity() {
@@ -45,8 +60,8 @@ class EntryActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun launchUniversityActivity() {
-        universityActivityLauncher.launch(Intent(this, UniversityMainActivity::class.java))
+    private fun launchPaginationActivity() {
+        paginationActivityLauncher.launch(Intent(this, ArticleListPaginationActivity::class.java))
     }
 
     /**
