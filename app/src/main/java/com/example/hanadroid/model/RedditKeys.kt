@@ -32,7 +32,7 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.redditclone.models
+package com.example.hanadroid.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -40,7 +40,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "redditKeys")
 data class RedditKeys(
     @PrimaryKey
-    val id: String,
-    val prevKey: Int?,
-    val nextKey: Int?
+    val id: Long,
+    val after: String?,
+    val before: String?
 )
