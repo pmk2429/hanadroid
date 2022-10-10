@@ -1,6 +1,6 @@
 package com.example.hanadroid.ui.uistate
 
-import com.example.hanadroid.data.model.University
+import com.example.hanadroid.model.University
 
 data class UniversityListUiState(
     val universities: List<University> = emptyList(),

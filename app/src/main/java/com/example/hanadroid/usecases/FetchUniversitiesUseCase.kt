@@ -1,6 +1,6 @@
 package com.example.hanadroid.usecases
 
-import com.example.hanadroid.data.model.University
+import com.example.hanadroid.model.University
 import com.example.hanadroid.networking.ResponseWrapper
 import com.example.hanadroid.repository.UniversityRepository
 import com.example.hanadroid.util.CoroutineDispatcherProvider

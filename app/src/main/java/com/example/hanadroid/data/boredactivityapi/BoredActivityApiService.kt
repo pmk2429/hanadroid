@@ -1,6 +1,6 @@
 package com.example.hanadroid.data.boredactivityapi
 
-import com.example.hanadroid.data.model.BoredActivity
+import com.example.hanadroid.model.BoredActivity
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -16,11 +16,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hanadroid.R
-import com.example.hanadroid.data.model.University
-import com.example.hanadroid.databinding.FragmentFirstBinding
 import com.example.hanadroid.adapters.UniversityAdapter
-import com.example.hanadroid.viewmodels.UniversityListViewModel
+import com.example.hanadroid.model.University
+import com.example.hanadroid.databinding.FragmentFirstBinding
 import com.example.hanadroid.viewmodels.HanaViewModelFactory
+import com.example.hanadroid.viewmodels.UniversityListViewModel
 import kotlinx.coroutines.launch
 
 
@@ -44,22 +44,12 @@ class FirstFragment : Fragment(), UniversityAdapter.UniversityItemClickListener 
     ): View {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
 
-        setupUI()
+        binding.bindAdapter(universityAdapter = UniversityAdapter(emptyList(), this@FirstFragment))
+
         setupObserver()
 
         return binding.root
 
-    }
-
-    private fun setupUI() {
-        binding.universityRecyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
-            universityAdapter = UniversityAdapter(emptyList(), this@FirstFragment)
-            addItemDecoration(
-                DividerItemDecoration(context, (layoutManager as LinearLayoutManager).orientation)
-            )
-            adapter = universityAdapter
-        }
     }
 
     private fun setupObserver() {
@@ -95,4 +85,12 @@ class FirstFragment : Fragment(), UniversityAdapter.UniversityItemClickListener 
     override fun onUniversityClicked(university: University) {
         findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
     }
+}
+
+private fun FragmentFirstBinding.bindAdapter(universityAdapter: UniversityAdapter) {
+    universityRecyclerView.layoutManager = LinearLayoutManager(universityRecyclerView.context)
+    universityRecyclerView.addItemDecoration(
+        DividerItemDecoration(universityRecyclerView.context, DividerItemDecoration.VERTICAL)
+    )
+    universityRecyclerView.adapter = universityAdapter
 }

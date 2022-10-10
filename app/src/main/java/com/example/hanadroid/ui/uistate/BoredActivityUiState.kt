@@ -1,6 +1,6 @@
 package com.example.hanadroid.ui.uistate
 
-import com.example.hanadroid.data.model.AppError
+import com.example.hanadroid.model.AppError
 
 data class BoredActivityUiState(
     val name: String = "",

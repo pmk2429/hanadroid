@@ -1,6 +1,6 @@
 package com.example.hanadroid.data.universityapi
 
-import com.example.hanadroid.data.model.University
+import com.example.hanadroid.model.University
 
 interface UniversityApiHelper {
 

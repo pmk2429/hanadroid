@@ -1,8 +1,10 @@
 package com.example.hanadroid.data.boredactivityapi
 
-import com.example.hanadroid.data.model.BoredActivity
+import com.example.hanadroid.model.BoredActivity
 
-class BoredActivityApiHelperImpl(private val boredActivityApiService: BoredActivityApiService) : BoredActivityApiHelper {
+class BoredActivityApiHelperImpl(
+    private val boredActivityApiService: BoredActivityApiService
+) : BoredActivityApiHelper {
     override suspend fun getRandomBoredActivity(): BoredActivity =
         boredActivityApiService.getRandomBoredActivity()
 

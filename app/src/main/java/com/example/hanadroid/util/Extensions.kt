@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.allViews
 import androidx.core.view.children
-import com.example.hanadroid.data.model.AppError
+import com.example.hanadroid.model.AppError
 
 fun <T : View> ViewGroup.getViewsByType(viewTypeClass: Class<T>): List<T> {
     return mutableListOf<T?>().apply {
@@ -20,13 +20,17 @@ fun <T : View> ViewGroup.getViewsByType(viewTypeClass: Class<T>): List<T> {
     }.filterNotNull()
 }
 
-fun <T : View> ViewGroup.allDirectChildren(): List<View> {
+fun <T : View> View.allDirectChildren(): List<View> {
+    if (this !is ViewGroup || childCount == 0) return listOf(this)
+
     return mutableListOf<View>().apply {
         addAll((0 until childCount).map { i -> getChildAt(i) })
     }.toList()
 }
 
 inline fun <reified T : View> View.allChildViews(): List<View> {
+    // if current View is not ViewGroup, it won't have any children
+    // hence return empty List
     if (this !is ViewGroup || childCount == 0) return listOf(this)
 
     return children

@@ -18,6 +18,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".AirlinePassengerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_airline_passenger"
+            android:theme="@style/Theme.HanaDroid.NoActionBar" />
+        <activity
             android:name=".ui.EntryActivity"
             android:exported="true">
             <intent-filter>
@@ -38,6 +43,10 @@
             android:theme="@style/Theme.HanaDroid.NoActionBar" />
         <activity
             android:name=".ui.UniversityMainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.HanaDroid.NoActionBar" />
+        <activity
+            android:name=".ui.ArticleListPaginationActivity"
             android:exported="true"
             android:theme="@style/Theme.HanaDroid.NoActionBar" />
     </application>

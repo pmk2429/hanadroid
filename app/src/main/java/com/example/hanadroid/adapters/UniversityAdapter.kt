@@ -3,7 +3,7 @@ package com.example.hanadroid.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hanadroid.data.model.University
+import com.example.hanadroid.model.University
 import com.example.hanadroid.databinding.UniversityItemLayoutBinding
 
 class UniversityAdapter(
