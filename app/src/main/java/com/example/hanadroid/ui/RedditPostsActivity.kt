@@ -47,7 +47,7 @@ class RedditPostsActivity : AppCompatActivity() {
     }
 
     /**
-     * Binds the [UiState] provided  by the [SearchRepositoriesViewModel] to the UI,
+     * Binds the [UiState] provided  by the [RedditPostsViewModel] to the UI,
      * and allows the UI to feed back user actions to it.
      */
     private fun ActivityRedditPostsBinding.bindState(

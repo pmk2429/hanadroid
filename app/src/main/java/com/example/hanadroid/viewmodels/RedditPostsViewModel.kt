@@ -39,9 +39,7 @@ class RedditPostsViewModel(
             )
             .onStart { emit(UiAction.Scroll(currentQuery = "")) }
 
-        pagingDataFlow = searches
-            .flatMapLatest { fetchPosts() }
-            .cachedIn(viewModelScope)
+        pagingDataFlow = fetchPosts()
 
         accept = { action ->
             viewModelScope.launch { actionStateFlow.emit(action) }

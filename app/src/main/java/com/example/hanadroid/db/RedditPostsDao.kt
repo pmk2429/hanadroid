@@ -48,14 +48,14 @@ interface RedditPostsDao {
     suspend fun insertAll(redditPosts: List<RedditPost>)
 
     @Query("SELECT * FROM redditPosts")
-    fun getPosts(): PagingSource<Int, RedditPost>
+    suspend fun getPosts(): PagingSource<Int, RedditPost>
 
     @Query(
         "SELECT * FROM redditPosts WHERE " +
-                "title LIKE :queryString " +
+                "title LIKE :titleQuery " +
                 "ORDER BY commentCount ASC"
     )
-    fun reposByName(queryString: String): PagingSource<Int, RedditPost>
+    suspend fun redditPostsByTitle(titleQuery: String): PagingSource<Int, RedditPost>
 
     @Query("DELETE FROM redditPosts")
     suspend fun clearPosts()

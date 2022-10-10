@@ -38,8 +38,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.hanadroid.model.RedditPost
 import com.example.hanadroid.model.RedditKeys
+import com.example.hanadroid.model.RedditPost
 
 @Database(
     entities = [RedditPost::class, RedditKeys::class],
@@ -47,12 +47,22 @@ import com.example.hanadroid.model.RedditKeys
     exportSchema = false
 )
 abstract class RedditDatabase : RoomDatabase() {
+
     companion object {
-        fun create(context: Context): RedditDatabase {
-            val databaseBuilder =
-                Room.databaseBuilder(context, RedditDatabase::class.java, "RedditPostsClone.db")
-            return databaseBuilder.build()
-        }
+
+        @Volatile
+        private var INSTANCE: RedditDatabase? = null
+
+        fun getInstance(context: Context): RedditDatabase =
+            INSTANCE ?: synchronized(this) {
+                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+            }
+
+        private fun buildDatabase(context: Context) =
+            Room.databaseBuilder(
+                context.applicationContext,
+                RedditDatabase::class.java, "RedditPostsClone.db"
+            ).build()
     }
 
     abstract fun redditPostsDao(): RedditPostsDao
