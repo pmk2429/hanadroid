@@ -38,7 +38,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
-import com.raywenderlich.android.redditclone.models.RedditKeys
+import com.example.hanadroid.model.RedditKeys
 
 @Dao
 interface RedditKeysDao {
@@ -46,10 +46,15 @@ interface RedditKeysDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertAll(redditKey: List<RedditKeys>)
 
+    @Insert(onConflict = REPLACE)
+    suspend fun saveRedditKeys(redditKey: RedditKeys)
+
     @Query("SELECT * FROM redditKeys ORDER BY id DESC")
     suspend fun getRedditKeys(): List<RedditKeys>
 
     @Query("SELECT * FROM redditKeys WHERE id = :postId")
-    suspend fun getRedditKeysByPostId(postId: String): RedditKeys?
+    suspend fun getRedditKeysByPostId(postId: Long): RedditKeys?
 
+    @Query("DELETE FROM redditKeys")
+    suspend fun clearRedditKeys()
 }
