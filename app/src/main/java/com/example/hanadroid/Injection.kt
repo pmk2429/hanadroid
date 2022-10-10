@@ -31,7 +31,7 @@ object Injection {
     fun provideRedditPostRepository(context: Context): RedditRepository {
         return RedditRepository(
             RetrofitBuilder.redditPostApiService,
-            RedditDatabase.create(context = context)
+            RedditDatabase.getInstance(context)
         )
     }
 

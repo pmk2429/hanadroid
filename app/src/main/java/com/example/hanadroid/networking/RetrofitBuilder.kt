@@ -49,6 +49,6 @@ object RetrofitBuilder {
     }
 
     val redditPostApiService: RedditApiService by lazy {
-        createBoredActivityRetrofit().create(RedditApiService::class.java)
+        createRedditPostRetrofit().create(RedditApiService::class.java)
     }
 }
