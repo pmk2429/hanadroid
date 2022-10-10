@@ -1,8 +1,8 @@
 package com.example.hanadroid.repository
 
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiHelper
-import com.example.hanadroid.data.model.AppError
-import com.example.hanadroid.data.model.BoredActivity
+import com.example.hanadroid.model.AppError
+import com.example.hanadroid.model.BoredActivity
 import com.example.hanadroid.networking.ResponseWrapper
 import com.example.hanadroid.util.CoroutineDispatcherProvider
 import kotlinx.coroutines.withContext

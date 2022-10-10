@@ -1,6 +1,6 @@
 package com.example.hanadroid.usecases
 
-import com.example.hanadroid.data.model.BoredActivity
+import com.example.hanadroid.model.BoredActivity
 import com.example.hanadroid.networking.ResponseWrapper
 import com.example.hanadroid.repository.BoredActivityRepository
 import com.example.hanadroid.util.CoroutineDispatcherProvider

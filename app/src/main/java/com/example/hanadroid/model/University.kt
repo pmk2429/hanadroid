@@ -1,4 +1,4 @@
-package com.example.hanadroid.data.model
+package com.example.hanadroid.model
 
 import com.google.gson.annotations.SerializedName
 

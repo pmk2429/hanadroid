@@ -17,7 +17,7 @@
 package com.example.hanadroid.repository
 
 import androidx.paging.PagingSource
-import com.example.android.codelabs.paging.data.ArticlePagingSource
+import com.example.hanadroid.model.ArticlePagingSource
 
 /**
  * Repository class that mimics fetching [Article] instances from an asynchronous source.

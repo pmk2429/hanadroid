@@ -1,6 +1,7 @@
 package com.example.hanadroid.networking
 
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiService
+import com.example.hanadroid.data.redditapi.RedditApiService
 import com.example.hanadroid.data.universityapi.UniversityApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -9,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitBuilder {
 
-    private fun createUniversity(): Retrofit {
+    private fun createRetrofitService(baseUrl: String): Retrofit {
         val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
         // val cacheDir = context?.cacheDir
@@ -21,32 +22,33 @@ object RetrofitBuilder {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(UNIVERSITY_BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
     }
 
-    private fun createBoredActivityRetrofit(): Retrofit {
-        val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
+    private fun createUniversityRetrofit(): Retrofit =
+        createRetrofitService(UNIVERSITY_BASE_URL)
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logger)
-            .build()
+    private fun createBoredActivityRetrofit(): Retrofit =
+        createRetrofitService(BORED_ACTIVITY_BASE_URL)
 
-        return Retrofit.Builder()
-            .baseUrl(BORED_ACTIVITY_BASE_URL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+    private fun createWoofRetrofit(): Retrofit = createRetrofitService(WOOF_DOG_BASE_URL)
+    private fun createDogCEORetrofit(): Retrofit = createRetrofitService(DOG_CEO_BASE_URL)
+
+    private fun createRedditPostRetrofit(): Retrofit =
+        createRetrofitService(REDDIT_POST_BASE_URL)
 
     val universityApiService: UniversityApiService by lazy {
-        createUniversity().create(UniversityApiService::class.java)
+        createUniversityRetrofit().create(UniversityApiService::class.java)
     }
 
     val boredActivityApiService: BoredActivityApiService by lazy {
         createBoredActivityRetrofit().create(BoredActivityApiService::class.java)
     }
 
+    val redditPostApiService: RedditApiService by lazy {
+        createBoredActivityRetrofit().create(RedditApiService::class.java)
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.hanadroid.repository
 
 import com.example.hanadroid.data.universityapi.UniversityApiHelper
-import com.example.hanadroid.data.model.University
+import com.example.hanadroid.model.University
 import com.example.hanadroid.networking.ResponseWrapper
 import com.example.hanadroid.util.CoroutineDispatcherProvider
 import kotlinx.coroutines.withContext

@@ -1,4 +1,4 @@
-package com.example.hanadroid.data.model
+package com.example.hanadroid.model
 
 open class AppError(
     override val message: String? = null,
