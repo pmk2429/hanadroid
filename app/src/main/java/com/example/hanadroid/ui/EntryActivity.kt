@@ -49,6 +49,10 @@ class EntryActivity : AppCompatActivity() {
         binding.fabPaginationArticles.apply {
             setOnClickListener { launchPaginationActivity() }
         }
+
+        binding.fabRedditPosts.apply {
+            setOnClickListener { launchRedditPostsActivity() }
+        }
     }
 
     private fun launchUniversityActivity() {
@@ -62,6 +66,11 @@ class EntryActivity : AppCompatActivity() {
 
     private fun launchPaginationActivity() {
         paginationActivityLauncher.launch(Intent(this, ArticleListPaginationActivity::class.java))
+    }
+
+    private fun launchRedditPostsActivity() {
+        val intent = Intent(this, RedditPostsActivity::class.java)
+        startActivity(intent)
     }
 
     /**
