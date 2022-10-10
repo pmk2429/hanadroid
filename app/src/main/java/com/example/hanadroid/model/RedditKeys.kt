@@ -39,7 +39,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "redditKeys")
 data class RedditKeys(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Long,
     val after: String?,
     val before: String?
