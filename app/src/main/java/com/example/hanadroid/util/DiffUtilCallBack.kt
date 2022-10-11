@@ -35,16 +35,20 @@
 package com.example.hanadroid.util
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.hanadroid.model.RedditPost
+import com.example.hanadroid.model.RickMortyCharacter
 
-class DiffUtilCallBack : DiffUtil.ItemCallback<RedditPost>() {
-    override fun areItemsTheSame(oldItem: RedditPost, newItem: RedditPost): Boolean {
-        return oldItem.key == newItem.key
+class DiffUtilCallBack : DiffUtil.ItemCallback<RickMortyCharacter>() {
+    override fun areItemsTheSame(
+        oldItem: RickMortyCharacter,
+        newItem: RickMortyCharacter
+    ): Boolean {
+        return oldItem.name == newItem.name
     }
 
-    override fun areContentsTheSame(oldItem: RedditPost, newItem: RedditPost): Boolean {
-        return oldItem.key == newItem.key
-                && oldItem.score == newItem.score
-                && oldItem.commentCount == newItem.commentCount
+    override fun areContentsTheSame(
+        oldItem: RickMortyCharacter,
+        newItem: RickMortyCharacter
+    ): Boolean {
+        return oldItem == newItem
     }
 }

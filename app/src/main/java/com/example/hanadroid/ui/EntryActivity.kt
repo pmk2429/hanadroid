@@ -69,7 +69,7 @@ class EntryActivity : AppCompatActivity() {
     }
 
     private fun launchRedditPostsActivity() {
-        val intent = Intent(this, RedditPostsActivity::class.java)
+        val intent = Intent(this, RickAndMortyCharactersActivity::class.java)
         startActivity(intent)
     }
 

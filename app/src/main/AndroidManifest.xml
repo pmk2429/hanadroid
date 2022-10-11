@@ -40,7 +40,7 @@
             android:exported="true"
             android:theme="@style/Theme.HanaDroid.NoActionBar" />
         <activity
-            android:name=".ui.RedditPostsActivity"
+            android:name=".ui.RickAndMortyCharactersActivity"
             android:exported="false"
             android:label="@string/title_activity_reddit_posts"
             android:theme="@style/Theme.HanaDroid.NoActionBar" />
