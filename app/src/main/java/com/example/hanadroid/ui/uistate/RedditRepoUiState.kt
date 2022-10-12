@@ -1,7 +1,5 @@
 package com.example.hanadroid.ui.uistate
 
-import com.example.hanadroid.model.RedditPost
-
 class RedditRepoUiState(
     val passengers: List<RedditPost> = emptyList(),
     val isLoading: Boolean = false,

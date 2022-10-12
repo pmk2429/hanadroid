@@ -29,10 +29,9 @@ class HanaViewModelFactory(
         if (modelClass.isAssignableFrom(ArticleViewModel::class.java)) {
             return ArticleViewModel(Injection.provideArticleRepository()) as T
         }
-        if (modelClass.isAssignableFrom(RedditPostsViewModel::class.java)) {
-            return RedditPostsViewModel(
-                handle,
-                Injection.provideRedditPostRepository(context!!)
+        if (modelClass.isAssignableFrom(RickAndMortyViewModel::class.java)) {
+            return RickAndMortyViewModel(
+                Injection.provideRickAndMortyCharactersRepository(context!!)
             ) as T
         }
         throw IllegalArgumentException("Unknown Class Identifier")

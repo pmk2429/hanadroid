@@ -32,32 +32,16 @@
  * THE SOFTWARE.
  */
 
-package com.example.hanadroid.db
+package com.example.hanadroid.data.rickandmorty
 
-import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy.REPLACE
-import androidx.room.Query
-import com.example.hanadroid.model.RedditPost
+import com.example.hanadroid.model.CharacterResponse
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-@Dao
-interface RedditPostsDao {
+interface RickAndMortyApiService {
 
-    @Insert(onConflict = REPLACE)
-    suspend fun insertAll(redditPosts: List<RedditPost>)
-
-    @Query("SELECT * FROM redditPosts")
-    suspend fun getPosts(): PagingSource<Int, RedditPost>
-
-    @Query(
-        "SELECT * FROM redditPosts WHERE " +
-                "title LIKE :titleQuery " +
-                "ORDER BY commentCount ASC"
-    )
-    suspend fun redditPostsByTitle(titleQuery: String): PagingSource<Int, RedditPost>
-
-    @Query("DELETE FROM redditPosts")
-    suspend fun clearPosts()
+    @GET("character")
+    suspend fun getCharacters(@Query("page") page: Int): Response<CharacterResponse>
 
 }

@@ -16,15 +16,13 @@
 
 package com.example.hanadroid.adapters
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hanadroid.databinding.RedditPostsLoadStateFooterViewItemBinding
+import com.example.hanadroid.databinding.CharactersLoadStateFooterViewItemBinding
 
-class RedditPostsLoadStateViewHolder(
-    private val binding: RedditPostsLoadStateFooterViewItemBinding,
+class CharactersLoadStateViewHolder(
+    private val binding: CharactersLoadStateFooterViewItemBinding,
     retry: () -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -40,17 +38,6 @@ class RedditPostsLoadStateViewHolder(
             progressBar.isVisible = loadState is LoadState.Loading
             retryButton.isVisible = loadState is LoadState.Error
             errorMsg.isVisible = loadState is LoadState.Error
-        }
-    }
-
-    companion object {
-        fun create(parent: ViewGroup, retry: () -> Unit): RedditPostsLoadStateViewHolder {
-            val binding = RedditPostsLoadStateFooterViewItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-            return RedditPostsLoadStateViewHolder(binding, retry)
         }
     }
 }
