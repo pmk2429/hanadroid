@@ -13,7 +13,6 @@ import com.example.hanadroid.adapters.CharactersAdapter
 import com.example.hanadroid.adapters.CharactersLoadStateAdapter
 import com.example.hanadroid.databinding.ActivityRickAndMortyMainBinding
 import com.example.hanadroid.model.RickMortyCharacter
-import com.example.hanadroid.ui.uistate.UiState
 import com.example.hanadroid.viewmodels.HanaViewModelFactory
 import com.example.hanadroid.viewmodels.RickAndMortyViewModel
 import kotlinx.coroutines.flow.Flow
