@@ -1,10 +1,12 @@
 package com.example.hanadroid.model
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "rick_morty_characters")
 data class RickMortyCharacter(
+    @PrimaryKey
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")
@@ -21,10 +23,12 @@ data class RickMortyCharacter(
     val location: Location
 )
 
+@Entity
 data class Location(
+    @PrimaryKey
     @SerializedName("name")
     val name: String,
-    @SerializedName("name")
+    @SerializedName("url")
     val locationUrl: String
 )
 
