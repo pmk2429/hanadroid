@@ -1,7 +1,5 @@
 # HanaDroid
 
-# Ricky&MortyAPIDemo
-
 A simple app that
 showcases [Guide to App Architecture](https://developer.android.com/topic/architecture).
 
