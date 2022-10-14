@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:padding="8dp"
         tools:context=".ui.DogsMediaActivity">
 
         <Button
@@ -36,7 +36,8 @@
         <ImageView
             android:id="@+id/woof_dog"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="400dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fetch_new_paws"
@@ -45,7 +46,7 @@
         <ImageView
             android:id="@+id/ceo_dog"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="400dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/woof_dog"

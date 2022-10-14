@@ -28,6 +28,9 @@ class DogsMediaActivity : AppCompatActivity() {
             HanaViewModelFactory(this, savedInstanceState)
         }
 
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+
         binding.bindData(viewModel.dogsUiState)
     }
 
