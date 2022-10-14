@@ -39,8 +39,7 @@ class ArticleListPaginationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityArticlesBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         // Instantiate the view model
         val viewModel by viewModels<ArticleViewModel>(

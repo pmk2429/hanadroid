@@ -53,17 +53,20 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
 
     // Added Dependencies
     implementation "androidx.recyclerview:recyclerview:1.2.1"
-    implementation 'com.github.bumptech.glide:glide:4.13.2'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
-    implementation("io.coil-kt:coil:2.2.0")
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    implementation "io.coil-kt:coil:2.2.0"
+
+    // Retrofit and Networking
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
 
     // Room and Paging
     kapt "androidx.room:room-compiler:2.4.3"

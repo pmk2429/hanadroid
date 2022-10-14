@@ -26,3 +26,11 @@ class RickAndMortyViewModel(
             .cachedIn(viewModelScope)
     }
 }
+
+/*
+    Tip for Android apps! You can use WhileSubscribed(5000) most of the time to keep the upstream
+    flow active for 5 seconds more after the disappearance of the last collector.
+    That avoids restarting the upstream flow in certain situations such as configuration changes.
+    This tip is especially helpful when upstream flows are expensive to create and when these
+    operators are used in ViewModels.
+ */

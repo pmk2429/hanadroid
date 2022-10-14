@@ -11,6 +11,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_image_loader">ImageLoaderActivity</string>
     <string name="title_activity_bored_activity">Bored Activity</string>
+    <string name="title_dogs_media_activity">Awwww Paws</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

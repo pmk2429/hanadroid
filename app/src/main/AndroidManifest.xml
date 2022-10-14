@@ -49,6 +49,11 @@
             android:exported="false"
             android:label="@string/title_activity_image_loader"
             android:theme="@style/Theme.HanaDroid.NoActionBar" />
+        <activity
+            android:name=".ui.DogsMediaActivity"
+            android:exported="false"
+            android:label="@string/title_dogs_media_activity"
+            android:theme="@style/Theme.HanaDroid.NoActionBar" />
     </application>
 
 </manifest>
