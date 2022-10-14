@@ -31,6 +31,13 @@ class EntryActivity : AppCompatActivity() {
             }
         }
 
+    private val dogsActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityEntryBinding.inflate(layoutInflater)
@@ -46,8 +53,8 @@ class EntryActivity : AppCompatActivity() {
             setOnClickListener { launchBoredActivity() }
         }
 
-        binding.fabPaginationArticles.apply {
-            setOnClickListener { launchPaginationActivity() }
+        binding.fabFetchDogs.apply {
+            setOnClickListener { launchDogsActivity() }
         }
 
         binding.fabRedditPosts.apply {
@@ -66,6 +73,10 @@ class EntryActivity : AppCompatActivity() {
 
     private fun launchPaginationActivity() {
         paginationActivityLauncher.launch(Intent(this, ArticleListPaginationActivity::class.java))
+    }
+
+    private fun launchDogsActivity() {
+        dogsActivityLauncher.launch(Intent(this, DogsMediaActivity::class.java))
     }
 
     private fun launchRedditPostsActivity() {

@@ -34,6 +34,9 @@ class HanaViewModelFactory(
                 Injection.provideRickAndMortyCharactersRepository(context!!)
             ) as T
         }
+        if (modelClass.isAssignableFrom(DogsViewModel::class.java)) {
+            return DogsViewModel(handle, Injection.createDogsUseCase()) as T
+        }
         throw IllegalArgumentException("Unknown Class Identifier")
     }
 }
