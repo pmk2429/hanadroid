@@ -56,6 +56,23 @@ class BoredActivityFragment @JvmOverloads constructor(
         testLambda()
     }
 
+    private fun setupObservers() {
+        lifecycleScope.launch {
+            // The block passed to repeatOnLifecycle is executed when the lifecycle
+            // is at least STARTED and is cancelled when the lifecycle is STOPPED.
+            // It automatically restarts the block when the lifecycle is STARTED again.
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // Safely collect from boredActivityUiState (StateFlow) when the lifecycle is STARTED
+                // and stops collection when the lifecycle is STOPPED
+                boredActivityViewModel.boredActivityUiState.collect { uiState ->
+                    Log.i("~!@#", "SUCCESS --> ${uiState.name}")
+                    Log.i("~!@#", "LOADING --> ${uiState.isLoading}")
+                    Log.i("~!@#", "ERROR --> ${uiState.failureMessage}")
+                }
+            }
+        }
+    }
+
     private fun testExtensions() {
         val demo = "Pavitra"
         val first = demo.findFirstIndex { t -> t == 'a' }
@@ -77,23 +94,6 @@ class BoredActivityFragment @JvmOverloads constructor(
         y: Int,
         action: (Int, Int) -> Int // Notice how we are passing the lambda as a parameter to sum() method.
     ) = action(x, y)
-
-    private fun setupObservers() {
-        lifecycleScope.launch {
-            // The block passed to repeatOnLifecycle is executed when the lifecycle
-            // is at least STARTED and is cancelled when the lifecycle is STOPPED.
-            // It automatically restarts the block when the lifecycle is STARTED again.
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Safely collect from boredActivityUiState (StateFlow) when the lifecycle is STARTED
-                // and stops collection when the lifecycle is STOPPED
-                boredActivityViewModel.boredActivityUiState.collect { uiState ->
-                    Log.i("~!@#", "SUCCESS --> ${uiState.name}")
-                    Log.i("~!@#", "LOADING --> ${uiState.isLoading}")
-                    Log.i("~!@#", "ERROR --> ${uiState.failureMessage}")
-                }
-            }
-        }
-    }
 
     override fun onDestroyView() {
         _binding = null
