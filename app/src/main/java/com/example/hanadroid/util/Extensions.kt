@@ -68,3 +68,8 @@ inline fun CharSequence.findLastIndex(predicate: (Char) -> Boolean): Int {
 fun Throwable?.toAppError(): AppError {
     return AppError(message = this?.message ?: "NULL", cause = this?.cause)
 }
+
+// with duplicate
+inline fun <T, R> pmkWith(receiver: T, block: T.() -> R): R {
+    return receiver.block()
+}
