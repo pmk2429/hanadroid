@@ -3,7 +3,6 @@ package com.example.hanadroid.usecases
 import com.example.hanadroid.repository.DogsRepository
 import com.example.hanadroid.ui.uistate.DogsUiState
 import com.example.hanadroid.util.CoroutineDispatcherProvider
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FetchPawDogsUseCases(
@@ -12,10 +11,10 @@ class FetchPawDogsUseCases(
 ) {
 
     suspend fun invoke(): Result<DogsUiState> = withContext(coroutineDispatcher.io()) {
-        val woofDog = withContext(Dispatchers.Default) {
+        val woofDog = withContext(coroutineDispatcher.default()) {
             dogsRepository.getWoofDog()
         }
-        val ceoDog = withContext(Dispatchers.Default) {
+        val ceoDog = withContext(coroutineDispatcher.default()) {
             dogsRepository.getCeoDog()
         }
 
