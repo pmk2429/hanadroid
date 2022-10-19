@@ -4,7 +4,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.allViews
 import androidx.core.view.children
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.example.hanadroid.model.AppError
+import kotlinx.coroutines.*
 
 fun <T : View> ViewGroup.getViewsByType(viewTypeClass: Class<T>): List<T> {
     return mutableListOf<T?>().apply {
@@ -20,7 +23,7 @@ fun <T : View> ViewGroup.getViewsByType(viewTypeClass: Class<T>): List<T> {
     }.filterNotNull()
 }
 
-fun <T : View> View.allDirectChildren(): List<View> {
+inline fun <reified T : View> View.allDirectChildren(): List<View> {
     if (this !is ViewGroup || childCount == 0) return listOf(this)
 
     return mutableListOf<View>().apply {
@@ -72,4 +75,24 @@ fun Throwable?.toAppError(): AppError {
 // with duplicate
 inline fun <T, R> pmkWith(receiver: T, block: T.() -> R): R {
     return receiver.block()
+}
+
+/**
+ * Delays on Views
+ *
+ * Uses safe check to locate the LifecycleOwner responsible for managing this View, if present by
+ * calling [findViewTreeLifecycleOwner()].
+ * The block of code executed when calling this method will be delayed by the amount of explicit
+ * input duration in milliseconds. That way the code block is suspended using the Main dispatcher
+ * since we want to interact with the View.
+ */
+fun View.delayOnLifecycle(
+    durationInMillis: Long,
+    dispatcher: CoroutineDispatcher = Dispatchers.Main,
+    block: () -> Unit,
+): Job? = findViewTreeLifecycleOwner()?.let { lifecycleOwner ->
+    lifecycleOwner.lifecycle.coroutineScope.launch(dispatcher) {
+        delay(timeMillis = durationInMillis)
+        block() // execute the code block which is wrapped in delayOnLifecycle function call
+    }
 }
