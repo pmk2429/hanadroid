@@ -1,8 +1,10 @@
 package com.example.hanadroid.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -41,5 +43,12 @@ class ImageLoaderActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_image_loader)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    private fun navigateToImageDetails(view: View) {
+        Navigation.findNavController(view)
+            .navigate(R.id.action_loadImage_to_loadVideoGif, Bundle().apply {
+                putString("DEMO", "DEMO")
+            })
     }
 }
