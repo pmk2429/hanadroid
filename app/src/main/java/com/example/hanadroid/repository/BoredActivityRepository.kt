@@ -4,8 +4,11 @@ import com.example.hanadroid.data.boredactivityapi.BoredActivityApiHelper
 import com.example.hanadroid.model.AppError
 import com.example.hanadroid.model.BoredActivity
 import com.example.hanadroid.networking.ResponseWrapper
+import com.example.hanadroid.networking.ResponseWrapper.Error
+import com.example.hanadroid.networking.ResponseWrapper.Success
 import com.example.hanadroid.util.CoroutineDispatcherProvider
 import kotlinx.coroutines.withContext
+import kotlin.Result.Companion.success
 
 class BoredActivityRepository(
     private val apiHelper: BoredActivityApiHelper,
@@ -14,21 +17,19 @@ class BoredActivityRepository(
     suspend fun fetchBoredActivityByType(
         type: String
     ): ResponseWrapper<BoredActivity> = withContext(coroutineDispatcherProvider.io()) {
-        val result = apiHelper.getBoredActivityByType(type)
-        try {
-            ResponseWrapper.Success(result)
+        return@withContext try {
+            Success(apiHelper.getBoredActivityByType(type))
         } catch (e: Exception) {
-            ResponseWrapper.Error(e.message!!)
+            Error(e.message!!)
         }
     }
 
     suspend fun fetchRandomBoredActivity(): ResponseWrapper<BoredActivity> =
         withContext(coroutineDispatcherProvider.io()) {
-            val result = apiHelper.getRandomBoredActivity()
-            try {
-                ResponseWrapper.Success(result)
+            return@withContext try {
+                Success(apiHelper.getRandomBoredActivity())
             } catch (e: Exception) {
-                ResponseWrapper.Error(e.message!!)
+                Error(e.message!!)
             }
         }
 
@@ -37,11 +38,9 @@ class BoredActivityRepository(
      */
     suspend fun fetchRandomBoredActivityForResult(): Result<BoredActivity> =
         withContext(coroutineDispatcherProvider.io()) {
-            val data = apiHelper.getRandomBoredActivity()
-            try {
-                Result.success(data)
+            return@withContext try {
+                success(apiHelper.getRandomBoredActivity())
             } catch (e: Exception) {
-                // Result.failure(e)
                 handleError(e)
             }
         }
