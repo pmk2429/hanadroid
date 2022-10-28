@@ -72,7 +72,10 @@ fun Throwable?.toAppError(): AppError {
     return AppError(message = this?.message ?: "NULL", cause = this?.cause)
 }
 
-// with duplicate
+/**
+ * The inline function accepts a receiver and a block that executes on the receiver.
+ * The return of this function is same as the result of Lambda (block) after execution.
+ */
 inline fun <T, R> pmkWith(receiver: T, block: T.() -> R): R {
     return receiver.block()
 }

@@ -15,7 +15,9 @@ import com.example.hanadroid.ui.views.SingleRowView
 import com.example.hanadroid.util.*
 import com.example.hanadroid.viewmodels.BoredActivityViewModel
 import com.example.hanadroid.viewmodels.HanaViewModelFactory
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * Fragment that fetches and displays Bored Random Activities.
@@ -131,6 +133,13 @@ class BoredActivityFragment @JvmOverloads constructor(
             children.add(this.getChildAt(i))
         }
         return children
+    }
+
+    private fun scheduleWithCoroutine() = runBlocking {
+        launch {
+            delay(2000L)
+            println("Function in scheduleWithCoroutine executed with delay ")
+        }
     }
 
 }

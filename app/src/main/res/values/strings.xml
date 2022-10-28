@@ -50,4 +50,5 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="title_activity_reddit_posts">Reddit Posts</string>
+    <string name="title_activity_cow_matrix_movement">CowMatrixMovement</string>
 </resources>
