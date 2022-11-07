@@ -2,8 +2,11 @@ package com.example.hanadroid.util
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.allViews
 import androidx.core.view.children
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.example.hanadroid.model.AppError
@@ -99,3 +102,10 @@ fun View.delayOnLifecycle(
         block() // execute the code block which is wrapped in delayOnLifecycle function call
     }
 }
+
+fun View.hideKeyboard() = ViewCompat.getWindowInsetsController(this)
+    ?.hide(WindowInsetsCompat.Type.ime())
+
+fun Fragment.hideKeyboard() = ViewCompat.getWindowInsetsController(requireView())
+    ?.hide(WindowInsetsCompat.Type.ime())
+
