@@ -1,5 +1,6 @@
 package com.example.hanadroid.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import com.example.hanadroid.databinding.ActivityDogMediaBinding
 import com.example.hanadroid.ui.uistate.DogsUiState
 import com.example.hanadroid.viewmodels.DogsViewModel
 import com.example.hanadroid.viewmodels.HanaViewModelFactory
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -46,8 +48,20 @@ class DogsMediaActivity : AppCompatActivity() {
                     Glide.with(ceoDog)
                         .load(uiState.ceoImageUrl)
                         .into(ceoDog)
+
+                    finishAndReturn(uiState.woofImageUrl)
                 }
             }
+        }
+    }
+
+    private fun finishAndReturn(woofImageUrl: String?) {
+        lifecycleScope.launch {
+            setResult(RESULT_OK, Intent().apply {
+                putExtra("DOGGO", woofImageUrl)
+            })
+            delay(3000)
+            finish()
         }
     }
 }

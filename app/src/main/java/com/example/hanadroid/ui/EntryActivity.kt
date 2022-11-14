@@ -34,7 +34,21 @@ class EntryActivity : AppCompatActivity() {
     private val dogsActivityLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val intent = result.data
+                result.data?.let {
+                    val dogUrl = it.getStringExtra("DOGGO")
+                    Log.i("~!@#$", "Doggo Data --- : $dogUrl")
+                }
+            }
+        }
+
+    private val boredActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let {
+                    val boredActivity =
+                        it.getStringExtra(BoredActivityLauncherActivity.BORED_ACTIVITY_NAME)
+                    Log.i("~!@#$", "Bored Activity --- : $boredActivity")
+                }
             }
         }
 
@@ -67,8 +81,7 @@ class EntryActivity : AppCompatActivity() {
     }
 
     private fun launchBoredActivity() {
-        val intent = Intent(this, BoredActivityLauncherActivity::class.java)
-        startActivity(intent)
+        boredActivityLauncher.launch(Intent(this, BoredActivityLauncherActivity::class.java))
     }
 
     private fun launchPaginationActivity() {
