@@ -9,6 +9,7 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.example.hanadroid.model.AppError
 import kotlinx.coroutines.*
 
+
 fun <T : View> ViewGroup.getViewsByType(viewTypeClass: Class<T>): List<T> {
     return mutableListOf<T?>().apply {
         for (i in 0 until childCount) {
