@@ -45,6 +45,10 @@ class BoredActivityFragment @JvmOverloads constructor(
         }
     )
 
+    private val notificationManager: NotificationManager by lazy {
+        requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -81,7 +85,8 @@ class BoredActivityFragment @JvmOverloads constructor(
                     Log.i("~!@#", "SUCCESS --> ${uiState.name}")
                     Log.i("~!@#", "LOADING --> ${uiState.isLoading}")
                     Log.i("~!@#", "ERROR --> ${uiState.failureMessage}")
-                    launchNotification(uiState.name)
+                    //launchNotification(uiState.name)
+                    launchNotificationWithIntent(uiState.name)
                 }
             }
         }
@@ -189,8 +194,6 @@ class BoredActivityFragment @JvmOverloads constructor(
     }
 
     private fun launchNotification(name: String) {
-        val notificationManager =
-            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationChannel =
             NotificationChannel(CHANNEL_ID, "Description", NotificationManager.IMPORTANCE_HIGH)
         notificationManager.createNotificationChannel(notificationChannel)
@@ -205,7 +208,11 @@ class BoredActivityFragment @JvmOverloads constructor(
         notificationManager.notify(NOTIFICATION_ID, newMessageNotification)
     }
 
-    private fun createNotificationChannel() {
+    private fun launchNotificationWithIntent(name: String) {
+        val notificationChannel =
+            NotificationChannel(CHANNEL_ID, "Description", NotificationManager.IMPORTANCE_HIGH)
+        notificationManager.createNotificationChannel(notificationChannel)
+
         // Create an explicit intent for an Activity in your app
         val intent = Intent(requireContext(), EntryActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -213,21 +220,24 @@ class BoredActivityFragment @JvmOverloads constructor(
         val pendingIntent: PendingIntent =
             PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
-        val builder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+        val newMessageNotification = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_comment)
-            .setContentTitle("My notification")
+            .setContentTitle(name)
             .setContentText("Go back to Entry Activity!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(pendingIntent)
             // Notice this code calls setAutoCancel(), which automatically removes the notification when the user taps it.
             .setAutoCancel(true)
+            .build()
 
+        notificationManager.notify(NOTIFICATION_INTENT_ID, newMessageNotification)
     }
 
     companion object {
         private const val CHANNEL_ID = "new_notification"
         private const val NOTIFICATION_ID = 12345
+        private const val NOTIFICATION_INTENT_ID = 123456
     }
 
 }
