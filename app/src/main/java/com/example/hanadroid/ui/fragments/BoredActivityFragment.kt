@@ -1,16 +1,26 @@
 package com.example.hanadroid.ui.fragments
 
+import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.graphics.Insets
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Size
+import android.view.*
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.hanadroid.R
 import com.example.hanadroid.databinding.FragmentRandomBoredActivityBinding
+import com.example.hanadroid.ui.EntryActivity
 import com.example.hanadroid.ui.views.SingleRowView
 import com.example.hanadroid.util.*
 import com.example.hanadroid.viewmodels.BoredActivityViewModel
@@ -56,6 +66,7 @@ class BoredActivityFragment @JvmOverloads constructor(
         //listAllChildViews(binding.boredActivityContainer)
         //testExtensions()
         testLambda()
+        enumTesting()
     }
 
     private fun setupObservers() {
@@ -70,6 +81,7 @@ class BoredActivityFragment @JvmOverloads constructor(
                     Log.i("~!@#", "SUCCESS --> ${uiState.name}")
                     Log.i("~!@#", "LOADING --> ${uiState.isLoading}")
                     Log.i("~!@#", "ERROR --> ${uiState.failureMessage}")
+                    launchNotification(uiState.name)
                 }
             }
         }
@@ -140,6 +152,82 @@ class BoredActivityFragment @JvmOverloads constructor(
             delay(2000L)
             println("Function in scheduleWithCoroutine executed with delay ")
         }
+    }
+
+    private fun enumTesting() {
+        val yellowColor = Colors.values().find {
+            it.name == "Yellow"
+        }
+        val a: Colors = enumValueOf("Red")
+        Log.i("~!@#", "enumTesting: $a")
+    }
+
+    @SuppressLint("NewApi")
+    private fun getWindowMetrics() {
+        val screenHeight = resources.displayMetrics.heightPixels
+        val screenWidth = resources.displayMetrics.widthPixels
+
+        // OR --- the new way
+        val metrics: WindowMetrics = requireActivity().windowManager.currentWindowMetrics
+
+        // Gets all excluding insets
+        val windowInsets = metrics.windowInsets
+        val insets: Insets = windowInsets.getInsetsIgnoringVisibility(
+            WindowInsets.Type.navigationBars()
+                    or WindowInsets.Type.displayCutout()
+        )
+
+        val insetsWidth: Int = insets.right + insets.left
+        val insetsHeight: Int = insets.top + insets.bottom
+
+        // Legacy size that Display#getSize reports
+        val bounds: Rect = metrics.bounds
+        val legacySize: Size = Size(
+            bounds.width() - insetsWidth,
+            bounds.height() - insetsHeight
+        )
+    }
+
+    private fun launchNotification(name: String) {
+        val notificationManager =
+            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationChannel =
+            NotificationChannel(CHANNEL_ID, "Description", NotificationManager.IMPORTANCE_HIGH)
+        notificationManager.createNotificationChannel(notificationChannel)
+
+        val newMessageNotification = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_comment)
+            .setContentTitle("Random Activity")
+            .setContentText(name)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        notificationManager.notify(NOTIFICATION_ID, newMessageNotification)
+    }
+
+    private fun createNotificationChannel() {
+        // Create an explicit intent for an Activity in your app
+        val intent = Intent(requireContext(), EntryActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val builder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_comment)
+            .setContentTitle("My notification")
+            .setContentText("Go back to Entry Activity!")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            // Set the intent that will fire when the user taps the notification
+            .setContentIntent(pendingIntent)
+            // Notice this code calls setAutoCancel(), which automatically removes the notification when the user taps it.
+            .setAutoCancel(true)
+
+    }
+
+    companion object {
+        private const val CHANNEL_ID = "new_notification"
+        private const val NOTIFICATION_ID = 12345
     }
 
 }

@@ -15,10 +15,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.hanadroid.R
 import com.example.hanadroid.adapters.UniversityAdapter
-import com.example.hanadroid.model.University
 import com.example.hanadroid.databinding.FragmentFirstBinding
+import com.example.hanadroid.model.University
 import com.example.hanadroid.viewmodels.HanaViewModelFactory
 import com.example.hanadroid.viewmodels.UniversityListViewModel
 import kotlinx.coroutines.launch
@@ -68,7 +69,7 @@ class FirstFragment : Fragment(), UniversityAdapter.UniversityItemClickListener 
     private fun renderUniversities(universities: List<University>) {
         universityAdapter.setUniversities(universities)
     }
-    
+
     private fun hideSoftKeyboard() {
         val view = requireActivity().currentFocus
         if (view != null) {
@@ -88,9 +89,17 @@ class FirstFragment : Fragment(), UniversityAdapter.UniversityItemClickListener 
 }
 
 private fun FragmentFirstBinding.bindAdapter(universityAdapter: UniversityAdapter) {
-    universityRecyclerView.layoutManager = LinearLayoutManager(universityRecyclerView.context)
-    universityRecyclerView.addItemDecoration(
-        DividerItemDecoration(universityRecyclerView.context, DividerItemDecoration.VERTICAL)
-    )
-    universityRecyclerView.adapter = universityAdapter
+    universityRecyclerView.apply {
+        layoutManager = object : LinearLayoutManager(context) {
+            override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
+                // force height of viewHolder here, this will override layout_height from xml
+                lp.height = height / 3
+                return true
+            }
+        }
+        addItemDecoration(
+            DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        )
+        adapter = universityAdapter
+    }
 }
