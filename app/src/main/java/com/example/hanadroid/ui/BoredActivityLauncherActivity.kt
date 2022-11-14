@@ -1,5 +1,6 @@
 package com.example.hanadroid.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -27,9 +28,28 @@ class BoredActivityLauncherActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        binding.fabGoBack.apply {
+            setOnClickListener { onBoredActivityFetched() }
+        }
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_bored_activity)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    private fun onBoredActivityFetched() {
+        setResult(RESULT_OK, Intent().apply {
+            putExtra(BORED_ACTIVITY_NAME, "PMK Main")
+        })
+        finish()
+    }
+
+    companion object {
+        const val BORED_ACTIVITY_NAME = "BORED_ACTIVITY_NAME"
     }
 }
