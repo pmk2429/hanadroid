@@ -12,6 +12,8 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.*
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -39,12 +41,13 @@ class BoredActivityFragment @JvmOverloads constructor(
     private var _binding: FragmentRandomBoredActivityBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var moveAnim: Animation
+
     private val boredActivityViewModel: BoredActivityViewModel by viewModels(
         factoryProducer = factoryProducer ?: {
             HanaViewModelFactory(this, arguments)
         }
     )
-
     private val notificationManager: NotificationManager by lazy {
         requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
@@ -71,6 +74,7 @@ class BoredActivityFragment @JvmOverloads constructor(
         //testExtensions()
         testLambda()
         enumTesting()
+        moveAnim = AnimationUtils.loadAnimation(context, R.anim.slide_left)
     }
 
     private fun setupObservers() {
@@ -82,6 +86,9 @@ class BoredActivityFragment @JvmOverloads constructor(
                 // Safely collect from boredActivityUiState (StateFlow) when the lifecycle is STARTED
                 // and stops collection when the lifecycle is STOPPED
                 boredActivityViewModel.boredActivityUiState.collect { uiState ->
+                    binding.apply {
+                        activityName.startAnimation(moveAnim)
+                    }
                     Log.i("~!@#", "SUCCESS --> ${uiState.name}")
                     Log.i("~!@#", "LOADING --> ${uiState.isLoading}")
                     Log.i("~!@#", "ERROR --> ${uiState.failureMessage}")
