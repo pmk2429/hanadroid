@@ -2,18 +2,18 @@ package com.example.hanadroid.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hanadroid.model.University
 import com.example.hanadroid.databinding.UniversityItemLayoutBinding
+import com.example.hanadroid.model.University
+import dagger.hilt.android.scopes.FragmentScoped
+import javax.inject.Inject
 
-class UniversityAdapter(
-    private var universities: List<University>,
-    private val universityItemClickListener: UniversityItemClickListener
-) : RecyclerView.Adapter<UniversityAdapter.UniversityViewHolder>() {
-
-    interface UniversityItemClickListener {
-        fun onUniversityClicked(university: University)
-    }
+@FragmentScoped
+class UniversityAdapter @Inject constructor(
+    val universityItemClickListener: UniversityItemClickListener
+) : ListAdapter<University, UniversityAdapter.UniversityViewHolder>(UniversityListDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UniversityViewHolder {
         val binding =
@@ -22,28 +22,39 @@ class UniversityAdapter(
     }
 
     override fun onBindViewHolder(holder: UniversityViewHolder, position: Int) {
-        holder.bind(university = universities[position])
+        holder.bind(university = getItem(position), itemClickListener = universityItemClickListener)
     }
 
-    override fun getItemCount(): Int = universities.size
+    class UniversityListDiffUtil : DiffUtil.ItemCallback<University>() {
+        override fun areItemsTheSame(oldItem: University, newItem: University): Boolean {
+            return oldItem.name == newItem.name
+        }
 
-    fun setUniversities(updatedUniversities: List<University>) {
-        universities = updatedUniversities
-        notifyDataSetChanged()
+        override fun areContentsTheSame(oldItem: University, newItem: University): Boolean {
+            return oldItem == newItem
+        }
+
     }
 
-    inner class UniversityViewHolder(
+    class UniversityItemClickListener @Inject constructor() {
+        var onItemClick: ((University) -> Unit)? = null
+
+        fun onClick(data: University) {
+            onItemClick?.invoke(data)
+        }
+    }
+
+    class UniversityViewHolder(
         private val binding: UniversityItemLayoutBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(university: University) {
+        fun bind(university: University, itemClickListener: UniversityItemClickListener) {
             binding.apply {
                 universityName.text = university.name
                 webUrl.text = university.domains[0]
                 country.text = university.country
-                universityContainer.setOnClickListener {
-                    universityItemClickListener.onUniversityClicked(university)
-                }
+
             }
         }
     }
 }
+

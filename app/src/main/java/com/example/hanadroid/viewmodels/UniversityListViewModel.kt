@@ -3,16 +3,20 @@ package com.example.hanadroid.viewmodels
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hanadroid.model.University
 import com.example.hanadroid.networking.ResponseWrapper
 import com.example.hanadroid.ui.uistate.UniversityListUiState
 import com.example.hanadroid.usecases.FetchUniversitiesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UniversityListViewModel(
+@HiltViewModel
+class UniversityListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchUniversitiesUseCase: FetchUniversitiesUseCase
 ) : ViewModel() {
