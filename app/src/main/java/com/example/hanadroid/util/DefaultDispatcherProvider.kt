@@ -3,7 +3,7 @@ package com.example.hanadroid.util
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-object DefaultDispatcherProvider : CoroutineDispatcherProvider {
+class DefaultDispatcherProvider : CoroutineDispatcherProvider {
     override fun io(): CoroutineDispatcher = Dispatchers.IO
 
     override fun main(): CoroutineDispatcher = Dispatchers.Main

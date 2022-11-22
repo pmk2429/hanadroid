@@ -5,8 +5,9 @@ import com.example.hanadroid.model.University
 import com.example.hanadroid.networking.ResponseWrapper
 import com.example.hanadroid.util.CoroutineDispatcherProvider
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class UniversityRepository(
+class UniversityRepository @Inject constructor(
     private val apiHelper: UniversityApiHelper,
     private val coroutineDispatcher: CoroutineDispatcherProvider
 ) {

@@ -15,24 +15,24 @@ import com.example.hanadroid.util.DefaultDispatcherProvider
 object Injection {
 
     fun createFetchUniversitiesUseCase(): FetchUniversitiesUseCase =
-        FetchUniversitiesUseCase(createUniversityRepository(), DefaultDispatcherProvider)
+        FetchUniversitiesUseCase(createUniversityRepository(), DefaultDispatcherProvider())
 
     fun createBoredActivityUseCase(): FetchBoredActivityUseCases =
         FetchBoredActivityUseCases(
             createBoredActivityRepository(),
-            DefaultDispatcherProvider
+            DefaultDispatcherProvider()
         )
 
     fun createDogsUseCase(): FetchPawDogsUseCases =
         FetchPawDogsUseCases(
             createDogsRepository(),
-            DefaultDispatcherProvider
+            DefaultDispatcherProvider()
         )
 
     private fun createDogsRepository(): DogsRepository =
         DogsRepository(
             DogApiHelperImpl(RetrofitBuilder.woofDogApiService, RetrofitBuilder.ceoDogApiService),
-            DefaultDispatcherProvider
+            DefaultDispatcherProvider()
         )
 
     fun provideArticleRepository(): ArticleRepository = ArticleRepository()
@@ -46,13 +46,13 @@ object Injection {
     private fun createUniversityRepository(): UniversityRepository =
         UniversityRepository(
             UniversityApiHelperImpl(RetrofitBuilder.universityApiService),
-            DefaultDispatcherProvider
+            DefaultDispatcherProvider()
         )
 
     private fun createBoredActivityRepository(): BoredActivityRepository =
         BoredActivityRepository(
             BoredActivityApiHelperImpl(RetrofitBuilder.boredActivityApiService),
-            DefaultDispatcherProvider
+            DefaultDispatcherProvider()
         )
 
 }
