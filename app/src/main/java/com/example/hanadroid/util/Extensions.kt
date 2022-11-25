@@ -2,12 +2,14 @@ package com.example.hanadroid.util
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.allViews
 import androidx.core.view.children
-import androidx.lifecycle.coroutineScope
-import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.*
 import com.example.hanadroid.model.AppError
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 
 
 fun <T : View> ViewGroup.getViewsByType(viewTypeClass: Class<T>): List<T> {
@@ -98,5 +100,39 @@ fun View.delayOnLifecycle(
     lifecycleOwner.lifecycle.coroutineScope.launch(dispatcher) {
         delay(timeMillis = durationInMillis)
         block() // execute the code block which is wrapped in delayOnLifecycle function call
+    }
+}
+
+/**
+ * Extension to call to launch Coroutine with LifecycleScope when it's atleast STARTED from Fragment.
+ */
+fun <T> AppCompatActivity.launchAndRepeatWithLifecycleOwner(
+    flow: Flow<T?>,
+    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
+    block: (T) -> Unit
+) {
+    lifecycleScope.launch {
+        flow.flowWithLifecycle(this@launchAndRepeatWithLifecycleOwner.lifecycle, minActiveState)
+            .collect {
+                it?.let(block)
+            }
+    }
+}
+
+/**
+ * Extension to call to launch Coroutine with LifecycleScope when it's atleast STARTED from Fragment.
+ */
+fun <T> Fragment.launchAndRepeatWithLifecycleOwner(
+    flow: Flow<T?>,
+    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
+    block: (T) -> Unit
+) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        flow.flowWithLifecycle(
+            this@launchAndRepeatWithLifecycleOwner.viewLifecycleOwner.lifecycle,
+            minActiveState
+        ).collect {
+            it?.let(block)
+        }
     }
 }

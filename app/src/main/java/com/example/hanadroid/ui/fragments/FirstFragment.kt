@@ -10,9 +10,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -23,11 +20,11 @@ import com.example.hanadroid.adapters.UniversityAdapter
 import com.example.hanadroid.databinding.FragmentFirstBinding
 import com.example.hanadroid.model.University
 import com.example.hanadroid.ui.uistate.UniversityListUiState
+import com.example.hanadroid.util.launchAndRepeatWithLifecycleOwner
 import com.example.hanadroid.viewmodels.UniversityListViewModel
 import com.example.hanadroid.viewmodels.UniversitySharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -89,19 +86,18 @@ class FirstFragment : Fragment() {
                 findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
             }
 
-            lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    universityListViewModel.universityUiState.collect { uiState ->
-                        Log.i("~!@#", "SUCCESS --> ${uiState.universities}")
-                        Log.i("~!@#", "LOADING --> ${uiState.isLoading}")
-                        Log.i("~!@#", "ERROR --> ${uiState.failureMessage}")
-                        universityAdapter.submitList(uiState.universities)
-                        setRecyclerViewItemTouchListener(
-                            this@apply,
-                            uiState.universities
-                        )
-                    }
-                }
+            // Sample use of the Kotlin Coroutine Extension to launch and repeat
+            launchAndRepeatWithLifecycleOwner(
+                universityUiState
+            ) { uiState ->
+                Log.i("~!@#", "SUCCESS --> ${uiState.universities}")
+                Log.i("~!@#", "LOADING --> ${uiState.isLoading}")
+                Log.i("~!@#", "ERROR --> ${uiState.failureMessage}")
+                universityAdapter.submitList(uiState.universities)
+                setRecyclerViewItemTouchListener(
+                    this@apply,
+                    uiState.universities
+                )
             }
         }
     }
