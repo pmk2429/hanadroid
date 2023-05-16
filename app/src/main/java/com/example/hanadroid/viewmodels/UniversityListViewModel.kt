@@ -3,10 +3,9 @@ package com.example.hanadroid.viewmodels
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hanadroid.model.University
 import com.example.hanadroid.networking.ResponseWrapper
+import com.example.hanadroid.repository.UniversityRepository
 import com.example.hanadroid.ui.uistate.UniversityListUiState
-import com.example.hanadroid.usecases.FetchUniversitiesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UniversityListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val fetchUniversitiesUseCase: FetchUniversitiesUseCase
+    private val universityRepository: UniversityRepository,
 ) : ViewModel() {
 
     private var getUniversitiesJob: Job? = null
@@ -40,7 +39,7 @@ class UniversityListViewModel @Inject constructor(
         }
 
         getUniversitiesJob = viewModelScope.launch {
-            when (val result = fetchUniversitiesUseCase.invoke(country)) {
+            when (val result = universityRepository.fetchUniversities(country)) {
                 is ResponseWrapper.Success -> {
                     _universityUiState.update { currentUiState ->
                         currentUiState.copy(universities = result.data)

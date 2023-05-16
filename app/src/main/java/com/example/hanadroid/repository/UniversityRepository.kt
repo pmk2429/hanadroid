@@ -22,3 +22,4 @@ class UniversityRepository @Inject constructor(
         }
     }
 }
+
