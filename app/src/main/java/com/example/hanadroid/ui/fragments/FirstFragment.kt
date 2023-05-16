@@ -10,6 +10,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -25,6 +28,8 @@ import com.example.hanadroid.viewmodels.UniversityListViewModel
 import com.example.hanadroid.viewmodels.UniversitySharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -85,6 +90,22 @@ class FirstFragment : Fragment() {
                 sharedViewModel.updateUniversity(it)
                 findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
             }
+
+
+
+
+            lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    universityListViewModel.universityUiState.collect { uiState ->
+                        // Consume UiState
+                    }
+                }
+            }
+
+
+
+
+
 
             // Sample use of the Kotlin Coroutine Extension to launch and repeat
             launchAndRepeatWithLifecycleOwner(

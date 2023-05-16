@@ -48,11 +48,13 @@ class UniversityAdapter @Inject constructor(
         private val binding: UniversityItemLayoutBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(university: University, itemClickListener: UniversityItemClickListener) {
-            binding.apply {
+            with(binding) {
                 universityName.text = university.name
                 webUrl.text = university.domains[0]
                 country.text = university.country
-
+                executePendingBindings()
+                clickListener = itemClickListener
+                clickListener.onClick(university)
             }
         }
     }
