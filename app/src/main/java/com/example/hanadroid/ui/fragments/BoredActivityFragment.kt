@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Insets
 import android.graphics.Rect
@@ -49,7 +49,7 @@ class BoredActivityFragment @JvmOverloads constructor(
         }
     )
     private val notificationManager: NotificationManager by lazy {
-        requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        requireContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     }
 
     override fun onCreateView(
@@ -75,6 +75,10 @@ class BoredActivityFragment @JvmOverloads constructor(
         testLambda()
         enumTesting()
         moveAnim = AnimationUtils.loadAnimation(context, R.anim.slide_left)
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     private fun setupObservers() {
@@ -200,21 +204,9 @@ class BoredActivityFragment @JvmOverloads constructor(
         )
     }
 
-    private fun launchNotification(name: String) {
-        val notificationChannel =
-            NotificationChannel(CHANNEL_ID, "Description", NotificationManager.IMPORTANCE_HIGH)
-        notificationManager.createNotificationChannel(notificationChannel)
-
-        val newMessageNotification = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_comment)
-            .setContentTitle("Random Activity")
-            .setContentText(name)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
-
-        notificationManager.notify(NOTIFICATION_ID, newMessageNotification)
-    }
-
+    /**
+     * Launch PendingIntent - Start Activity from Notification.
+     */
     private fun launchNotificationWithIntent(name: String) {
         val notificationChannel =
             NotificationChannel(CHANNEL_ID, "Description", NotificationManager.IMPORTANCE_HIGH)
@@ -238,13 +230,12 @@ class BoredActivityFragment @JvmOverloads constructor(
             .setAutoCancel(true)
             .build()
 
-        notificationManager.notify(NOTIFICATION_INTENT_ID, newMessageNotification)
+        notificationManager.notify(NOTIFICATION_ID, newMessageNotification)
     }
 
     companion object {
         private const val CHANNEL_ID = "new_notification"
         private const val NOTIFICATION_ID = 12345
-        private const val NOTIFICATION_INTENT_ID = 123456
     }
 
 }

@@ -3,11 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.hanadroid">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".HanaDroidApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -17,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HanaDroid"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="32">
         <activity
             android:name=".ui.EntryActivity"
             android:exported="true">
@@ -54,6 +57,11 @@
             android:name=".ui.DogsMediaActivity"
             android:exported="false"
             android:label="@string/title_dogs_media_activity"
+            android:theme="@style/Theme.HanaDroid.NoActionBar" />
+        <activity
+            android:name=".ui.DisneyCharactersActivity"
+            android:exported="false"
+            android:label="@string/disney_characters_activity"
             android:theme="@style/Theme.HanaDroid.NoActionBar" />
     </application>
 
