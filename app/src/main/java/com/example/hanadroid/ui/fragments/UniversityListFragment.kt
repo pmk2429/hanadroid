@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hanadroid.R
 import com.example.hanadroid.adapters.UniversityAdapter
-import com.example.hanadroid.databinding.FragmentFirstBinding
+import com.example.hanadroid.databinding.FragmentUniversityListBinding
 import com.example.hanadroid.model.University
 import com.example.hanadroid.ui.uistate.UniversityListUiState
 import com.example.hanadroid.util.launchAndRepeatWithLifecycleOwner
@@ -28,7 +28,6 @@ import com.example.hanadroid.viewmodels.UniversityListViewModel
 import com.example.hanadroid.viewmodels.UniversitySharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,9 +36,9 @@ import javax.inject.Inject
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 @AndroidEntryPoint
-class FirstFragment : Fragment() {
+class UniversityListFragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentUniversityListBinding? = null
     private val binding get() = _binding!!
 
     @Inject
@@ -53,7 +52,7 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentUniversityListBinding.inflate(inflater, container, false)
         binding.bindAdapter(universityListViewModel.universityUiState)
         return binding.root
     }
@@ -71,7 +70,7 @@ class FirstFragment : Fragment() {
         _binding = null
     }
 
-    private fun FragmentFirstBinding.bindAdapter(universityUiState: StateFlow<UniversityListUiState>) {
+    private fun FragmentUniversityListBinding.bindAdapter(universityUiState: StateFlow<UniversityListUiState>) {
         universityRecyclerView.apply {
 //            layoutManager = object : LinearLayoutManager(context) {
 //                override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
@@ -88,24 +87,16 @@ class FirstFragment : Fragment() {
 
             universityAdapter.universityItemClickListener.onItemClick = {
                 sharedViewModel.updateUniversity(it)
-                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                findNavController().navigate(R.id.action_universityListFragment_to_SecondFragment)
             }
-
-
-
 
             lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    universityListViewModel.universityUiState.collect { uiState ->
+                    universityUiState.collect { uiState ->
                         // Consume UiState
                     }
                 }
             }
-
-
-
-
-
 
             // Sample use of the Kotlin Coroutine Extension to launch and repeat
             launchAndRepeatWithLifecycleOwner(

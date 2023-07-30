@@ -21,7 +21,7 @@ class HanaViewModelFactory(
         handle: SavedStateHandle
     ): T {
         if (modelClass.isAssignableFrom(UniversityListViewModel::class.java)) {
-            return UniversityListViewModel(handle, Injection.createFetchUniversitiesUseCase()) as T
+            return UniversityListViewModel(handle, Injection.createUniversityRepository()) as T
         }
         if (modelClass.isAssignableFrom(BoredActivityViewModel::class.java)) {
             return BoredActivityViewModel(handle, Injection.createBoredActivityUseCase()) as T

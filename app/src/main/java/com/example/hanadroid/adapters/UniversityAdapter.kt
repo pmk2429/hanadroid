@@ -54,7 +54,7 @@ class UniversityAdapter @Inject constructor(
                 country.text = university.country
                 executePendingBindings()
                 clickListener = itemClickListener
-                clickListener.onClick(university)
+                //clickListener.onClick(university)
             }
         }
     }

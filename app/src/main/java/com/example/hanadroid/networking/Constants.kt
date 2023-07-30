@@ -5,3 +5,4 @@ const val BORED_ACTIVITY_BASE_URL: String = "http://www.boredapi.com/api/activit
 const val WOOF_DOG_BASE_URL: String = "https://random.dog/woof.json/"
 const val CEO_DOG_BASE_URL: String = "https://dog.ceo/api/breeds/image/random/"
 const val RICK_AND_MORTY_BASE_URL: String = "https://rickandmortyapi.com/api/"
+const val DISNEY_BASE_URL: String = "http://api.disneyapi.dev"

@@ -12,6 +12,12 @@
     <string name="title_activity_image_loader">ImageLoaderActivity</string>
     <string name="title_activity_bored_activity">Bored Activity</string>
     <string name="title_dogs_media_activity">Awwww Paws</string>
+    <string name="disney_characters_activity">Mickey Mouse</string>
+    <string name="disney_characters_fragment">Disney Characters</string>
+    <string name="channel_name">worker_channel</string>
+    <string name="channel_description">worker_channel_description</string>
+    <string name="upload_bored_data">Upload Data Work</string>
+    <string name="worker_state">Worker State</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -51,4 +57,5 @@
     </string>
     <string name="title_activity_reddit_posts">Reddit Posts</string>
     <string name="title_activity_cow_matrix_movement">CowMatrixMovement</string>
+    <string name="title_activity_disney_characters">DisneyCharactersActivity</string>
 </resources>

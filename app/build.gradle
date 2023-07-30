@@ -49,6 +49,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.fragment:fragment-ktx:1.5.4'
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
     // Kotlinx
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
@@ -74,11 +75,11 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 
     // Room and Paging
-    kapt 'androidx.room:room-compiler:2.4.3'
-    implementation 'androidx.room:room-ktx:2.4.3'
-    implementation 'androidx.room:room-runtime:2.4.3'
+    kapt 'androidx.room:room-compiler:2.5.2'
+    implementation 'androidx.room:room-ktx:2.5.2'
+    implementation 'androidx.room:room-runtime:2.5.2'
     implementation 'androidx.paging:paging-runtime-ktx:3.1.1'
-    implementation 'androidx.room:room-paging:2.4.3'
+    implementation 'androidx.room:room-paging:2.5.2'
 
     // Testing
     testImplementation 'junit:junit:4.13.2'

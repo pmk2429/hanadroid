@@ -2,6 +2,7 @@ package com.example.hanadroid
 
 import android.content.Context
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiHelperImpl
+import com.example.hanadroid.data.disney.DisneyCharactersApiHelperImpl
 import com.example.hanadroid.data.dogapi.DogApiHelperImpl
 import com.example.hanadroid.data.universityapi.UniversityApiHelperImpl
 import com.example.hanadroid.db.RickMortyDatabase
@@ -43,7 +44,7 @@ object Injection {
             RickMortyDatabase.getInstance(context)
         )
 
-    private fun createUniversityRepository(): UniversityRepository =
+    fun createUniversityRepository(): UniversityRepository =
         UniversityRepository(
             UniversityApiHelperImpl(RetrofitBuilder.universityApiService),
             DefaultDispatcherProvider()
@@ -52,6 +53,12 @@ object Injection {
     private fun createBoredActivityRepository(): BoredActivityRepository =
         BoredActivityRepository(
             BoredActivityApiHelperImpl(RetrofitBuilder.boredActivityApiService),
+            DefaultDispatcherProvider()
+        )
+
+    private fun createDisneyCharactersRepository(): DisneyCharactersRepository =
+        DisneyCharactersRepository(
+            DisneyCharactersApiHelperImpl(RetrofitBuilder.disneyApiService),
             DefaultDispatcherProvider()
         )
 
