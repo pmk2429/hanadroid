@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:name=".HanaDroidApplication"
@@ -63,6 +65,17 @@
             android:exported="false"
             android:label="@string/disney_characters_activity"
             android:theme="@style/Theme.HanaDroid.NoActionBar" />
+        <activity
+            android:name=".ui.LaunchingIntentsActivity"
+            android:exported="false"
+            android:label="@string/launch_explicit_intent"
+            android:theme="@style/Theme.HanaDroid.NoActionBar" />
+        <activity
+            android:name=".ui.TimerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.HanaDroid.NoActionBar" />
+
+        <receiver android:name=".broadcastreceivers.MyAlarmReceiver" />
     </application>
 
 </manifest>
