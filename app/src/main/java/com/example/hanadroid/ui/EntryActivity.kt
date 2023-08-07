@@ -111,6 +111,14 @@ class EntryActivity : AppCompatActivity() {
             }
         }
 
+        binding.startLauncherActivity.setOnClickListener {
+            launchImplicitIntentsActivity()
+        }
+
+        binding.startTimerActivity.setOnClickListener {
+            launchTimerActivity()
+        }
+
         checkNotificationPermission()
     }
 
@@ -137,6 +145,16 @@ class EntryActivity : AppCompatActivity() {
 
     private fun launchDisneyCharactersActivity() {
         val intent = Intent(this, DisneyCharactersActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun launchImplicitIntentsActivity() {
+        val intent = Intent(this, LaunchingIntentsActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun launchTimerActivity() {
+        val intent = Intent(this, TimerActivity::class.java)
         startActivity(intent)
     }
 
@@ -241,9 +259,11 @@ class EntryActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // make your action here
             }
+
             shouldShowRequestPermissionRationale(permission) -> {
                 // permission denied permanently
             }
+
             else -> {
                 requestNotificationPermission.launch(permission)
             }
