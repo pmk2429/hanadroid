@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.work.*
 import com.example.hanadroid.R
 import com.example.hanadroid.databinding.ActivityEntryBinding
+import com.example.hanadroid.databinding.FancyItemLayoutBinding
 import com.example.hanadroid.util.EmotionalAnalysisWorker
 import com.example.hanadroid.util.EmotionalAnalysisWorker.Companion.KEY_USER_EMOTION_RESULT
 import com.example.hanadroid.util.UploadDataWorker
@@ -103,6 +104,10 @@ class EntryActivity : AppCompatActivity() {
             setOnClickListener { launchDisneyCharactersActivity() }
         }
 
+        binding.fabFancyItem.apply {
+            setOnClickListener { launchFancyItemActivity() }
+        }
+
         binding.switchUploadData.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 startUploadingDogsData()
@@ -145,6 +150,11 @@ class EntryActivity : AppCompatActivity() {
 
     private fun launchDisneyCharactersActivity() {
         val intent = Intent(this, DisneyCharactersActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun launchFancyItemActivity() {
+        val intent = Intent(this, FancyListActivity::class.java)
         startActivity(intent)
     }
 
