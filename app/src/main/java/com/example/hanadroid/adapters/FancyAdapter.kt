@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hanadroid.databinding.FancyItemLayoutBinding
 import com.example.hanadroid.model.FancyModel
 import com.example.hanadroid.model.createdText
+import com.example.hanadroid.model.toFormattedDateString
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
@@ -41,7 +42,7 @@ class FancyAdapter @Inject constructor(
             with(binding) {
                 fancyItemNumber.text = fancyItem.randomNum.toString()
                 fancyItemName.text = fancyItem.content
-                fancyItemCreatedAt.text = fancyItem.createdText
+                fancyItemCreatedAt.text = fancyItem.createdAt.toFormattedDateString()
             }
         }
     }

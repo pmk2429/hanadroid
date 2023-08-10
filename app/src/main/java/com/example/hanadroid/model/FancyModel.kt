@@ -37,17 +37,3 @@ fun Long.toFormattedDateString(): String {
     return formatter.format(zonedDateTime)
 }
 
-fun getList(): List<FancyModel> {
-    return mutableListOf<FancyModel>().apply {
-        add(FancyModel(1, "Hey", "Lego mini-figures: Have the largest population on Earth", 1690852225556))
-        add(FancyModel(3, "Hello", "Lego mini-figures: Have the largest population on Earth", 1689944451776))
-        add(FancyModel(6, "Random", "Lego mini-figures: Have the largest population on Earth", 1690832478617))
-        add(FancyModel(4, "Best", "Lego mini-figures: Have the largest population on Earth", 1689713773401))
-        add(FancyModel(8, "Android", "Lego mini-figures: Have the largest population on Earth", 1689283756088))
-        add(FancyModel(9, "Interview", "Lego mini-figures: Have the largest population on Earth", 1690938115252))
-        add(FancyModel(21, "Mobile", "Lego mini-figures: Have the largest population on Earth", 1691590235522))
-        add(FancyModel(45, "Design", "Lego mini-figures: Have the largest population on Earth", 1691265469799))
-        add(FancyModel(67, "Hana", "Lego mini-figures: Have the largest population on Earth", 1689909184097))
-        add(FancyModel(83, "Google", "Lego mini-figures: Have the largest population on Earth", 1690776020532))
-    }
-}
