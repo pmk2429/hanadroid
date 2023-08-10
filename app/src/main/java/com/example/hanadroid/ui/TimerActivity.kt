@@ -2,6 +2,8 @@ package com.example.hanadroid.ui
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hanadroid.R
 import com.example.hanadroid.databinding.ActivityTimerBinding
@@ -20,6 +22,10 @@ class TimerActivity : AppCompatActivity() {
     private lateinit var timerTask: MyTimeTask
 
     private var isTimerRunning: Boolean = false
+
+    // Handler and Runnable based Timer
+    private lateinit var handler: Handler
+    private var secondsLeft = 60
 
     private val countDownTimer = object : CountDownTimer(
         TIMER_COUNT,
@@ -41,23 +47,22 @@ class TimerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityTimerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        initTimerTask()
+        initCountdownTimer()
+        initHandlerCountdownTimer()
+    }
+
+    private fun initTimerTask() {
         timerDataHelper = TimerDataHelper(this)
         timerTask = MyTimeTask(timerDataHelper)
 
         // Clock Timer
         binding.btnStartTimer.setOnClickListener { startStopAction() }
         binding.btnResetTimer.setOnClickListener { resetAction() }
-
-        // Countdown Timer
-        binding.btnCountdownStartStop.setOnClickListener {
-            updateButtonText()
-            if (!isTimerRunning) {
-                startCountdownTimer()
-            } else {
-                stopCountdownTimer()
-            }
-        }
 
         if (timerDataHelper.isTimerRunning) {
             startTimer()
@@ -70,6 +75,29 @@ class TimerActivity : AppCompatActivity() {
         }
 
         timer.scheduleAtFixedRate(timerTask, 0, 500)
+    }
+
+    // Countdown Timer
+    private fun initCountdownTimer() {
+        binding.btnCountdownStartStop.setOnClickListener {
+            updateButtonText()
+            if (!isTimerRunning) {
+                startCountdownTimer()
+            } else {
+                stopCountdownTimer()
+            }
+        }
+    }
+
+    private fun initHandlerCountdownTimer() {
+        handler = Handler(Looper.getMainLooper())
+
+        handleViewBindings(secondsLeft.toString(), startEnabled = true)
+        binding.apply {
+            btnStartHandlerTimer.setOnClickListener { startHandlerCountdown() }
+            btnStopHandlerTimer.setOnClickListener { stopHandlerCountdown() }
+            btnResetHandlerTimer.setOnClickListener { resetHandlerCountdown() }
+        }
     }
 
     private fun resetAction() {
@@ -156,6 +184,49 @@ class TimerActivity : AppCompatActivity() {
         super.onStop()
         if (isTimerRunning) {
             stopCountdownTimer()
+        }
+    }
+
+    private fun startHandlerCountdown() {
+        handleViewBindings(secondsLeft.toString(), stopEnabled = true, resetEnabled = true)
+        // Post a message to the handler to decrement the seconds left and update the UI
+        handler.postDelayed({
+            secondsLeft -= 1
+            binding.handlerTimerText.text = secondsLeft.toString()
+
+            // If the countdown is finished, stop the timer
+            if (secondsLeft <= 0) {
+                stopHandlerCountdown()
+            } else {
+                // Post another message to the handler to continue the countdown
+                startHandlerCountdown()
+            }
+        }, 1000)
+    }
+
+    private fun stopHandlerCountdown() {
+        // Remove all pending messages from the handler
+        handler.removeCallbacksAndMessages(null)
+        handleViewBindings("Countdown finished!", stopEnabled = true, resetEnabled = true)
+    }
+
+    private fun resetHandlerCountdown() {
+        handler.removeCallbacksAndMessages(null)
+        secondsLeft = 60
+        handleViewBindings(secondsLeft.toString(), startEnabled = true)
+    }
+
+    private fun handleViewBindings(
+        secondsLeft: String,
+        startEnabled: Boolean = false,
+        stopEnabled: Boolean = false,
+        resetEnabled: Boolean = false
+    ) {
+        binding.apply {
+            binding.handlerTimerText.text = secondsLeft
+            binding.btnStartHandlerTimer.isEnabled = startEnabled
+            binding.btnStopHandlerTimer.isEnabled = stopEnabled
+            binding.btnResetHandlerTimer.isEnabled = resetEnabled
         }
     }
 

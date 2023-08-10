@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.example.hanadroid.adapters.CharactersAdapter
 import com.example.hanadroid.adapters.CharactersLoadStateAdapter
 import com.example.hanadroid.databinding.ActivityRickAndMortyMainBinding
@@ -50,6 +51,7 @@ class RickAndMortyCharactersActivity : AppCompatActivity() {
         pagingData: Flow<PagingData<RickMortyCharacter>>,
     ) {
         val charactersAdapter = CharactersAdapter()
+        charactersAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         val loadStateAdapter = CharactersLoadStateAdapter { charactersAdapter.retry() }
         recyclerViewCharacters.adapter = charactersAdapter.withLoadStateHeaderAndFooter(
             header = loadStateAdapter,
