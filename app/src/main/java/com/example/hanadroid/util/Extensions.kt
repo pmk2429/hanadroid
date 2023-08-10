@@ -1,16 +1,26 @@
 package com.example.hanadroid.util
 
+import android.annotation.SuppressLint
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.allViews
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.example.hanadroid.model.AppError
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-
+import kotlinx.coroutines.launch
 
 fun <T : View> ViewGroup.getViewsByType(viewTypeClass: Class<T>): List<T> {
     return mutableListOf<T?>().apply {
@@ -135,4 +145,26 @@ fun <T> Fragment.launchAndRepeatWithLifecycleOwner(
             it?.let(block)
         }
     }
+}
+
+/**
+ * This gives you the touch event coordinates relative to the view that has the touch listener
+ * assigned to it. The top left corner of the view is (0, 0).
+ * If you move your finger above the view, then y will be negative.
+ * If you move your finger left of the view, then x will be negative.
+ */
+@SuppressLint("ClickableViewAccessibility")
+val handleTouchListener = View.OnTouchListener { _, event ->
+    val x = event.x.toInt()
+    val y = event.y.toInt()
+
+    val xRelToScreen = event.rawX.toInt()
+    val yRelToScreen = event.rawY.toInt()
+
+    when (event.action) {
+        MotionEvent.ACTION_DOWN -> Log.i("~!@#", "touched down ($x, $y)")
+        MotionEvent.ACTION_MOVE -> Log.i("~!@#", "moving: ($x, $y)")
+        MotionEvent.ACTION_UP -> Log.i("~!@#", "touched up ($x, $y)")
+    }
+    false
 }

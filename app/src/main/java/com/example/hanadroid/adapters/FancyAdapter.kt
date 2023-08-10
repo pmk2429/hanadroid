@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hanadroid.databinding.FancyItemLayoutBinding
 import com.example.hanadroid.model.FancyModel
-import com.example.hanadroid.model.createdText
 import com.example.hanadroid.model.toFormattedDateString
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
@@ -36,8 +35,9 @@ class FancyAdapter @Inject constructor(
         }
     }
 
-    class FancyViewHolder(val binding: FancyItemLayoutBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class FancyViewHolder(
+        val binding: FancyItemLayoutBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(fancyItem: FancyModel) {
             with(binding) {
                 fancyItemNumber.text = fancyItem.randomNum.toString()

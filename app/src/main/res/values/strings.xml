@@ -18,6 +18,7 @@
     <string name="channel_name">worker_channel</string>
     <string name="channel_description">worker_channel_description</string>
     <string name="upload_bored_data">Upload Data Work</string>
+    <string name="emotional_analysis_switch">Emotional Analysis Switch</string>
     <string name="worker_state">Worker State</string>
 
     <string name="place_holder_time">00:00:00</string>

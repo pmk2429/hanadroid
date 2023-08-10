@@ -73,8 +73,8 @@ class FancyListActivity : AppCompatActivity() {
         fancyAdapter.notifyItemInserted(itemCount - 1)
         // once the item is added, scroll to the bottom of the list
         binding.recyclerViewFancyItem.apply {
-            this.postDelayed({
-                this.smoothScrollToPosition(itemCount - 1)
+            postDelayed({
+                smoothScrollToPosition(itemCount - 1)
             }, 1000)
         }
     }
@@ -83,8 +83,8 @@ class FancyListActivity : AppCompatActivity() {
         fancyAdapter.notifyItemRemoved(itemRemovedAtIndex)
         // once the item is added, scroll to the bottom of the list
         binding.recyclerViewFancyItem.apply {
-            this.postDelayed({
-                this.smoothScrollToPosition(itemRemovedAtIndex)
+            postDelayed({
+                smoothScrollToPosition(itemRemovedAtIndex)
             }, 1000)
         }
     }
