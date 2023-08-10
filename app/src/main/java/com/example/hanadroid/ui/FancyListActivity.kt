@@ -37,6 +37,7 @@ class FancyListActivity : AppCompatActivity() {
 
         binding.apply {
             fabAddFancyItem.setOnClickListener { fancyListViewModel.addRandomFancyItem() }
+            fabRemoveFancyItem.setOnClickListener { fancyListViewModel.removeFancyItem() }
             bindListItems(fancyListViewModel.fancyItems)
         }
     }
@@ -52,8 +53,15 @@ class FancyListActivity : AppCompatActivity() {
                     fancyItemsUiState.collect { uiState ->
                         fancyAdapter.submitList(uiState.fancyItems)
                         itemCount = uiState.fancyItems.size
+
+                        // item added
                         if (uiState.isItemAdded) {
                             handleItemInserted()
+                        }
+
+                        // item removed
+                        if (uiState.isItemRemoved) {
+                            handleItemRemoved(uiState.itemRemovedAtIndex)
                         }
                     }
                 }
@@ -66,7 +74,17 @@ class FancyListActivity : AppCompatActivity() {
         // once the item is added, scroll to the bottom of the list
         binding.recyclerViewFancyItem.apply {
             this.postDelayed({
-                this.smoothScrollToPosition(this.adapter!!.itemCount - 1)
+                this.smoothScrollToPosition(itemCount - 1)
+            }, 1000)
+        }
+    }
+
+    private fun handleItemRemoved(itemRemovedAtIndex: Int) {
+        fancyAdapter.notifyItemRemoved(itemRemovedAtIndex)
+        // once the item is added, scroll to the bottom of the list
+        binding.recyclerViewFancyItem.apply {
+            this.postDelayed({
+                this.smoothScrollToPosition(itemRemovedAtIndex)
             }, 1000)
         }
     }

@@ -1,5 +1,6 @@
 package com.example.hanadroid.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.hanadroid.ui.uistate.FancyItemsListUiState
 import com.example.hanadroid.util.CreateFancyModel
@@ -21,6 +22,16 @@ class FancyListViewModel @Inject constructor() : ViewModel() {
             val newList = currentUiState.fancyItems.toMutableList()
             newList.add(fancyItem)
             currentUiState.copy(fancyItems = newList, isItemAdded = true)
+        }
+    }
+
+    fun removeFancyItem() {
+        _fancyItemsList.update { currentUiState ->
+            val updatedList = currentUiState.fancyItems.toMutableList()
+            val randomIndex = (0 until updatedList.size).random()
+            Log.i("~!@#$", "removeFancyItem Index: $randomIndex")
+            updatedList.removeAt(randomIndex)
+            currentUiState.copy(fancyItems = updatedList, isItemRemoved = true)
         }
     }
 }
