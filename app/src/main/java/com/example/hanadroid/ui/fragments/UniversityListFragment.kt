@@ -83,7 +83,8 @@ class UniversityListFragment : Fragment() {
             addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
             )
-            universityAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
+            universityAdapter.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.ALLOW
             adapter = universityAdapter
 
             universityAdapter.universityItemClickListener.onItemClick = {
@@ -112,6 +113,29 @@ class UniversityListFragment : Fragment() {
                     uiState.universities
                 )
             }
+
+            /* Smooth scroll to a position in Recycler Adapter when the data set changes
+               using an AdapterDataObserver to automatically scroll the RecyclerView when items
+               are added or removed from the adapter.
+             */
+            universityAdapter.registerAdapterDataObserver(object :
+                RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(
+                    positionStart: Int,
+                    itemCount: Int
+                ) {
+                    this@apply.scrollToPosition(0)
+                }
+
+                override fun onItemRangeRemoved(
+                    positionStart: Int,
+                    itemCount: Int
+                ) {
+                    // Scroll to the last item after removal
+                    val lastItemPosition = adapter!!.itemCount - 1
+                    this@apply.smoothScrollToPosition(lastItemPosition)
+                }
+            })
         }
     }
 
