@@ -32,7 +32,7 @@ class UniversityListViewModel @Inject constructor(
         fetchUniversitiesByCountry()
     }
 
-    private fun fetchUniversitiesByCountry() {
+    fun fetchUniversitiesByCountry() {
         if (getUniversitiesJob?.isActive == true) {
             // Already fetching Universities
             return
@@ -42,14 +42,26 @@ class UniversityListViewModel @Inject constructor(
             when (val result = universityRepository.fetchUniversities(country)) {
                 is ResponseWrapper.Success -> {
                     _universityUiState.update { currentUiState ->
-                        currentUiState.copy(universities = result.data)
+                        currentUiState.copy(universities = result.data, isLoading = false)
                     }
                 }
+
                 is ResponseWrapper.Error -> {
                     _universityUiState.update { currentUiState ->
-                        currentUiState.copy(failureMessage = result.failureMessage)
+                        currentUiState.copy(
+                            failureMessage = result.failureMessage,
+                            isLoading = false
+                        )
                     }
                 }
+            }
+        }
+    }
+
+    fun cancelUniversitiesFetch() {
+        getUniversitiesJob?.let {
+            if (it.isActive) {
+                it.cancel()
             }
         }
     }

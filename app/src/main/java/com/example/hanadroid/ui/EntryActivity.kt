@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.work.*
+import com.example.hanadroid.broadcastreceivers.AirplaneModeBroadcastReceiver
 import com.example.hanadroid.databinding.ActivityEntryBinding
 import com.example.hanadroid.util.createNotificationChannel
 
@@ -23,6 +25,8 @@ class EntryActivity : AppCompatActivity() {
 
     private var _binding: ActivityEntryBinding? = null
     private val binding get() = _binding!!
+
+    private val myBroadcastReceiver by lazy { AirplaneModeBroadcastReceiver() }
 
     private val universityActivityLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -122,6 +126,11 @@ class EntryActivity : AppCompatActivity() {
         checkNotificationPermission()
     }
 
+    override fun onResume() {
+        super.onResume()
+        initBroadcastReceiver()
+    }
+
     private fun launchUniversityActivity() {
         universityActivityLauncher.launch(Intent(this, UniversityMainActivity::class.java))
     }
@@ -167,6 +176,18 @@ class EntryActivity : AppCompatActivity() {
         workerActivityLauncher.launch(Intent(this, WorkerActivity::class.java))
     }
 
+    private fun initBroadcastReceiver() {
+        val listenToBroadcastsFromOtherApps = false
+        val receiverFlags = if (listenToBroadcastsFromOtherApps) {
+            ContextCompat.RECEIVER_EXPORTED
+        } else {
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        }
+        IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
+            registerReceiver(myBroadcastReceiver, it, receiverFlags)
+        }
+    }
+
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) createNotificationChannel(this)
@@ -192,6 +213,11 @@ class EntryActivity : AppCompatActivity() {
                 requestNotificationPermission.launch(permission)
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(myBroadcastReceiver)
     }
 
     /**

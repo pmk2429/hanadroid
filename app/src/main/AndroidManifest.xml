@@ -82,10 +82,16 @@
         <activity
             android:name=".ui.WorkerActivity"
             android:exported="false"
-            android:theme="@style/Theme.HanaDroid.NoActionBar" />
+            android:theme="@style/Theme.HanaDroid.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Broadcast Receiver -->
         <receiver android:name=".broadcastreceivers.MyAlarmReceiver" />
+
+        <!-- Explicit Broadcast Receiver -->
+        <receiver
+            android:name=".broadcastreceivers.HanaBroadcastReceiver"
+            android:exported="false" />
 
     </application>
 
