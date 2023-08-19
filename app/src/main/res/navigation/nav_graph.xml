@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/universityListFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/universityListFragment"
         android:name="com.example.hanadroid.ui.fragments.UniversityListFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/university_list_fragment_label"
         tools:layout="@layout/fragment_university_list">
 
         <action
@@ -18,7 +18,6 @@
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.example.hanadroid.ui.fragments.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-    </fragment>
+        android:label="@string/universities_detail_fragment_label"
+        tools:layout="@layout/fragment_second" />
 </navigation>

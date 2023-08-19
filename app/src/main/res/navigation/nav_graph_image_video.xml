@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/loadImage"
         android:name="com.example.hanadroid.ui.fragments.LoadImageFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/university_list_fragment_label"
         tools:layout="@layout/fragment_load_image">
 
         <action
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/loadVideoGif"
         android:name="com.example.hanadroid.ui.fragments.LoadVideoGifFragment"
-        android:label="@string/second_fragment_label"
+        android:label="@string/universities_detail_fragment_label"
         tools:layout="@layout/fragment_load_video_gif">
 
         <action

@@ -95,10 +95,9 @@ class UniversityListFragment : Fragment() {
             addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
             )
-            universityAdapter.stateRestorationPolicy =
-                RecyclerView.Adapter.StateRestorationPolicy.ALLOW
-
+            universityAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
             adapter = universityAdapter
+
             lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     universityUiState.collect { uiState ->

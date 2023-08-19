@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hanadroid.networking.ResponseWrapper
 import com.example.hanadroid.repository.UniversityRepository
 import com.example.hanadroid.ui.uistate.UniversityListUiState
+import com.example.hanadroid.util.CountryList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,8 @@ class UniversityListViewModel @Inject constructor(
 
     private var getUniversitiesJob: Job? = null
 
-    private val country = savedStateHandle.get<String>("ARGS_KEY_COUNTRY") ?: "United States"
+    private val country =
+        savedStateHandle.get<String>("ARGS_KEY_COUNTRY") ?: CountryList.unitedStates
 
     private var _universityUiState = MutableStateFlow(UniversityListUiState(isLoading = true))
     val universityUiState: StateFlow<UniversityListUiState>
