@@ -77,29 +77,6 @@ class TimerActivity : AppCompatActivity() {
         timer.scheduleAtFixedRate(timerTask, 0, 500)
     }
 
-    // Countdown Timer
-    private fun initCountdownTimer() {
-        binding.btnCountdownStartStop.setOnClickListener {
-            updateButtonText()
-            if (!isTimerRunning) {
-                startCountdownTimer()
-            } else {
-                stopCountdownTimer()
-            }
-        }
-    }
-
-    private fun initHandlerCountdownTimer() {
-        handler = Handler(Looper.getMainLooper())
-
-        handleViewBindings(secondsLeft.toString(), startEnabled = true)
-        binding.apply {
-            btnStartHandlerTimer.setOnClickListener { startHandlerCountdown() }
-            btnStopHandlerTimer.setOnClickListener { stopHandlerCountdown() }
-            btnResetHandlerTimer.setOnClickListener { resetHandlerCountdown() }
-        }
-    }
-
     private fun resetAction() {
         timerDataHelper.setStopTime(null)
         timerDataHelper.setStartTime(null)
@@ -161,6 +138,29 @@ class TimerActivity : AppCompatActivity() {
 
         private fun makeTimeString(hours: Long, minutes: Long, seconds: Long): String {
             return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        }
+    }
+
+    // Countdown Timer
+    private fun initCountdownTimer() {
+        binding.btnCountdownStartStop.setOnClickListener {
+            updateButtonText()
+            if (!isTimerRunning) {
+                startCountdownTimer()
+            } else {
+                stopCountdownTimer()
+            }
+        }
+    }
+
+    private fun initHandlerCountdownTimer() {
+        handler = Handler(Looper.getMainLooper())
+
+        handleViewBindings(secondsLeft.toString(), startEnabled = true)
+        binding.apply {
+            btnStartHandlerTimer.setOnClickListener { startHandlerCountdown() }
+            btnStopHandlerTimer.setOnClickListener { stopHandlerCountdown() }
+            btnResetHandlerTimer.setOnClickListener { resetHandlerCountdown() }
         }
     }
 

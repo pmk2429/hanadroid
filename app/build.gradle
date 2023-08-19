@@ -67,6 +67,7 @@ dependencies {
 
     // hilt
     implementation "com.google.dagger:hilt-android:2.44"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     kapt "com.google.dagger:hilt-compiler:2.44"
 
     // Retrofit and Networking

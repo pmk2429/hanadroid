@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -53,6 +54,12 @@ class UniversityListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUniversityListBinding.inflate(inflater, container, false)
+
+        universityAdapter.universityItemClickListener.onItemClick = {
+            sharedViewModel.updateUniversity(it)
+            findNavController().navigate(R.id.action_universityListFragment_to_SecondFragment)
+        }
+
         binding.bindAdapter(universityListViewModel.universityUiState)
         return binding.root
     }
@@ -71,6 +78,11 @@ class UniversityListFragment : Fragment() {
     }
 
     private fun FragmentUniversityListBinding.bindAdapter(universityUiState: StateFlow<UniversityListUiState>) {
+        swipeRefreshLayout.setOnRefreshListener {
+            universityListViewModel.fetchUniversitiesByCountry()
+            swipeRefreshLayout.isRefreshing = false
+        }
+
         universityRecyclerView.apply {
 //            layoutManager = object : LinearLayoutManager(context) {
 //                override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
@@ -83,19 +95,13 @@ class UniversityListFragment : Fragment() {
             addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
             )
-            universityAdapter.stateRestorationPolicy =
-                RecyclerView.Adapter.StateRestorationPolicy.ALLOW
+            universityAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
             adapter = universityAdapter
-
-            universityAdapter.universityItemClickListener.onItemClick = {
-                sharedViewModel.updateUniversity(it)
-                findNavController().navigate(R.id.action_universityListFragment_to_SecondFragment)
-            }
 
             lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     universityUiState.collect { uiState ->
-                        // Consume UiState
+                        loadingProgress.isVisible = uiState.isLoading
                     }
                 }
             }

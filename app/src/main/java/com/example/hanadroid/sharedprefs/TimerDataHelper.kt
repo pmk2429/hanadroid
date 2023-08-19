@@ -13,7 +13,8 @@ class TimerDataHelper(context: Context) {
 
     private var sharedPref: SharedPreferences =
         context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
-    private var dateFormat = SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault())
+
+    private val dateFormat = SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault())
 
     private var _isTimerRunning = false
     val isTimerRunning get() = _isTimerRunning

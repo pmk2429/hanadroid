@@ -33,7 +33,7 @@ class LaunchingIntentsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        setupAlarm();
+        setupAlarm()
     }
 
     private fun setupAlarm() {

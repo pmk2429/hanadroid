@@ -7,7 +7,13 @@
     <data>
 
         <variable
-            name="clickListener"
+            name="universityItem"
+            type="com.example.hanadroid.model.University" />
+
+        <import type="com.example.hanadroid.model.UniversityKt" />
+
+        <variable
+            name="itemClickListener"
             type="com.example.hanadroid.adapters.UniversityAdapter.UniversityItemClickListener" />
 
         <variable
@@ -19,6 +25,7 @@
         android:id="@+id/universityContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> itemClickListener.onUniversityClick(universityItem)}"
         android:padding="16dp">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -26,7 +33,8 @@
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#0000FF"
+            android:text="@{universityItem.name}"
+            android:textColor="@color/purple_500"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +47,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="@color/black"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="@{UniversityKt.websiteUrl(universityItem)}"
+            android:textColorLink="@color/blue"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:text="@{universityItem.country}"
             android:textColor="@color/black"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"

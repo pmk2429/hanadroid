@@ -20,7 +20,12 @@ class LongRunningTaskWorker(
         val duration = inputData.getLong(KEY_DURATION, DEFAULT_DURATION)
 
         for (i in 1..100) {
-            Thread.sleep(duration / 100) // pretend to be doing long work
+            // For example, if duration is set to 10000 milliseconds (10 seconds),
+            // then Thread.sleep(duration / 100) will sleep for 100 milliseconds between
+            // each iteration.
+            // This gives the appearance of progress updates occurring every 100 milliseconds
+            // as the task simulates its progress.
+            Thread.sleep(duration / 100) // pretend to be performing long running task
             setProgressAsync(Data.Builder().putInt(KEY_PROGRESS, i).build()) // update worker
         }
 

@@ -1,5 +1,7 @@
 package com.example.hanadroid.model
 
+import android.text.Spanned
+import androidx.core.text.HtmlCompat
 import com.google.gson.annotations.SerializedName
 
 
@@ -31,3 +33,8 @@ data class University(
     @SerializedName("alpha_two_code")
     val alphaCode: String = ""
 )
+
+fun websiteUrl(university: University): Spanned {
+    return HtmlCompat.fromHtml(university.webPages[0], HtmlCompat.FROM_HTML_MODE_LEGACY)
+}
+

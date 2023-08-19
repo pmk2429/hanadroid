@@ -1,7 +1,13 @@
 package com.example.hanadroid.ui
 
+import android.app.AlertDialog
 import android.app.NotificationManager
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.work.Constraints
@@ -12,6 +18,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.hanadroid.R
+import com.example.hanadroid.broadcastreceivers.HanaBroadcastReceiver
 import com.example.hanadroid.databinding.ActivityWorkerBinding
 import com.example.hanadroid.util.sendNotification
 import com.example.hanadroid.workers.EmotionalAnalysisWorker
@@ -23,6 +30,7 @@ import com.example.hanadroid.workers.UploadDataWorker
 import com.example.hanadroid.workers.UploadDataWorker.Companion.TAG_WORKER_LOG
 import java.util.concurrent.TimeUnit
 
+
 class WorkerActivity : AppCompatActivity() {
 
     private var _binding: ActivityWorkerBinding? = null
@@ -33,6 +41,8 @@ class WorkerActivity : AppCompatActivity() {
     private val notificationManager: NotificationManager by lazy {
         getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     }
+
+    private val hanaBroadcastReceiver: HanaBroadcastReceiver by lazy { HanaBroadcastReceiver() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +72,62 @@ class WorkerActivity : AppCompatActivity() {
                     setOneTimeEmotionalAnalysisWorkRequest(inputText)
                 }
             }
+
+            btnSendBroadcast.setOnClickListener {
+                val intent = Intent(HanaBroadcastReceiver.CUSTOM_BROADCAST_ACTION)
+                sendBroadcast(intent)
+            }
+
+            btnLaunchDialog.setOnClickListener {
+                launchDialog()
+            }
         }
+    }
+
+    private fun launchDialog() {
+        val builder = AlertDialog.Builder(this)
+        with(builder) {
+            setTitle("Alert")
+            setMessage("We have a message")
+            setIcon(android.R.drawable.ic_dialog_alert)
+
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                Toast.makeText(
+                    this@WorkerActivity,
+                    android.R.string.ok, Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            builder.setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                dialog.cancel()
+            }
+
+            builder.setNeutralButton("Maybe") { _, _ ->
+                Toast.makeText(
+                    this@WorkerActivity,
+                    "Maybe", Toast.LENGTH_SHORT
+                ).show()
+            }
+            show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val listenToBroadcastsFromOtherApps = false
+        val receiverFlags = if (listenToBroadcastsFromOtherApps) {
+            ContextCompat.RECEIVER_EXPORTED
+        } else {
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        }
+        IntentFilter(HanaBroadcastReceiver.CUSTOM_BROADCAST_ACTION).also {
+            registerReceiver(hanaBroadcastReceiver, it, receiverFlags)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(hanaBroadcastReceiver)
     }
 
     /**
@@ -195,5 +260,12 @@ class WorkerActivity : AppCompatActivity() {
 
     private fun cancelEmotionalAnalysisWorker() {
         workManager.cancelAllWorkByTag(EMOTIONAL_ANALYSIS_WORK_TAG)
+    }
+
+    fun showSoftKeyboard(view: View) {
+        if (view.requestFocus()) {
+            val imm = getSystemService(InputMethodManager::class.java)
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }
     }
 }
