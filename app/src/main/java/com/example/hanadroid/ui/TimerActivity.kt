@@ -77,6 +77,21 @@ class TimerActivity : AppCompatActivity() {
         timer.scheduleAtFixedRate(timerTask, 0, 500)
     }
 
+    private fun startStopAction() {
+        if (timerDataHelper.isTimerRunning) {
+            timerDataHelper.setStopTime(Date())
+            stopTimer()
+        } else {
+            if (timerDataHelper.stopTime != null) {
+                timerDataHelper.setStartTime(timerTask.calcRestartTime())
+                timerDataHelper.setStopTime(null)
+            } else {
+                timerDataHelper.setStartTime(Date())
+            }
+            startTimer()
+        }
+    }
+
     private fun resetAction() {
         timerDataHelper.setStopTime(null)
         timerDataHelper.setStartTime(null)
@@ -92,21 +107,6 @@ class TimerActivity : AppCompatActivity() {
     private fun startTimer() {
         timerDataHelper.setTimerCounting(true)
         binding.btnStartTimer.text = getString(R.string.stop)
-    }
-
-    private fun startStopAction() {
-        if (timerDataHelper.isTimerRunning) {
-            timerDataHelper.setStopTime(Date())
-            stopTimer()
-        } else {
-            if (timerDataHelper.stopTime != null) {
-                timerDataHelper.setStartTime(timerTask.calcRestartTime())
-                timerDataHelper.setStopTime(null)
-            } else {
-                timerDataHelper.setStartTime(Date())
-            }
-            startTimer()
-        }
     }
 
     private fun displayTime(timeValue: Long) {

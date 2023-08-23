@@ -1,12 +1,18 @@
 package com.example.hanadroid.ui.fragments
 
+import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -57,17 +63,46 @@ class UniversityListFragment : Fragment() {
 
         universityAdapter.universityItemClickListener.onItemClick = {
             sharedViewModel.updateUniversity(it)
-            findNavController().navigate(R.id.action_universityListFragment_to_SecondFragment)
+            findNavController().navigate(
+                R.id.action_universityListFragment_to_SecondFragment,
+                Bundle().apply {
+                    putString(ARGS_UNIVERSITY_NAME, it.name)
+                })
         }
 
         binding.bindAdapter(universityListViewModel.universityUiState)
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Add menu items here
+                menuInflater.inflate(R.menu.menu_main, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    R.id.action_search -> {
+                        val searchManager =
+                            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
     private fun hideSoftKeyboard() {
         val view = requireActivity().currentFocus
         if (view != null) {
-            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
@@ -80,7 +115,6 @@ class UniversityListFragment : Fragment() {
     private fun FragmentUniversityListBinding.bindAdapter(universityUiState: StateFlow<UniversityListUiState>) {
         swipeRefreshLayout.setOnRefreshListener {
             universityListViewModel.fetchUniversitiesByCountry()
-            swipeRefreshLayout.isRefreshing = false
         }
 
         universityRecyclerView.apply {
@@ -95,12 +129,14 @@ class UniversityListFragment : Fragment() {
             addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
             )
-            universityAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
+            universityAdapter.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.ALLOW
             adapter = universityAdapter
 
             lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     universityUiState.collect { uiState ->
+                        swipeRefreshLayout.isRefreshing = false
                         loadingProgress.isVisible = uiState.isLoading
                     }
                 }
@@ -168,6 +204,11 @@ class UniversityListFragment : Fragment() {
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    companion object {
+        const val ARGS_UNIVERSITY_COUNTRY_KEY = "ARGS_UNIVERSITY_COUNTRY_KEY"
+        const val ARGS_UNIVERSITY_NAME = "ARGS_UNIVERSITY_NAME"
     }
 }
 

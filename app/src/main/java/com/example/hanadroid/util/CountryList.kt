@@ -5,5 +5,5 @@ object CountryList {
 
     const val unitedStates = "United States"
 
-    val randomCountry = (countriesList.indices).random()
+    val randomCountry = countriesList[(countriesList.indices).random()]
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hanadroid.networking.ResponseWrapper
 import com.example.hanadroid.repository.UniversityRepository
+import com.example.hanadroid.ui.fragments.UniversityListFragment.Companion.ARGS_UNIVERSITY_COUNTRY_KEY
 import com.example.hanadroid.ui.uistate.UniversityListUiState
 import com.example.hanadroid.util.CountryList
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,8 +24,8 @@ class UniversityListViewModel @Inject constructor(
 
     private var getUniversitiesJob: Job? = null
 
-    private val country =
-        savedStateHandle.get<String>("ARGS_KEY_COUNTRY") ?: CountryList.unitedStates
+    private var country =
+        savedStateHandle.get<String>(ARGS_UNIVERSITY_COUNTRY_KEY) ?: CountryList.unitedStates
 
     private var _universityUiState = MutableStateFlow(UniversityListUiState(isLoading = true))
     val universityUiState: StateFlow<UniversityListUiState>
@@ -39,6 +40,8 @@ class UniversityListViewModel @Inject constructor(
             // Already fetching Universities
             return
         }
+
+        country = CountryList.randomCountry
 
         getUniversitiesJob = viewModelScope.launch {
             when (val result = universityRepository.fetchUniversities(country)) {

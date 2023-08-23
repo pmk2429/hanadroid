@@ -55,6 +55,5 @@ class FancyAdapter @Inject constructor(
         override fun areContentsTheSame(oldItem: FancyModel, newItem: FancyModel): Boolean {
             return oldItem == newItem
         }
-
     }
 }
