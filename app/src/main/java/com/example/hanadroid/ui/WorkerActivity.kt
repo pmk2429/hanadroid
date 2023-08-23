@@ -98,16 +98,17 @@ class WorkerActivity : AppCompatActivity() {
                 ).show()
             }
 
-            builder.setNegativeButton(android.R.string.cancel) { dialog, _ ->
+            setNegativeButton(android.R.string.cancel) { dialog, _ ->
                 dialog.cancel()
             }
 
-            builder.setNeutralButton("Maybe") { _, _ ->
+            setNeutralButton("Maybe") { _, _ ->
                 Toast.makeText(
                     this@WorkerActivity,
                     "Maybe", Toast.LENGTH_SHORT
                 ).show()
             }
+
             show()
         }
     }

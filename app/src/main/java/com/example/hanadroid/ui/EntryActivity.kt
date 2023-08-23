@@ -79,6 +79,12 @@ class EntryActivity : AppCompatActivity() {
             }
         }
 
+    private val requestNotificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) createNotificationChannel(this)
+            else Toast.makeText(this, "No Notif Permission", Toast.LENGTH_LONG)
+        }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +129,7 @@ class EntryActivity : AppCompatActivity() {
             launchWorkerActivity()
         }
 
+        checkPermissions()
         checkNotificationPermission()
     }
 
@@ -188,33 +195,6 @@ class EntryActivity : AppCompatActivity() {
         }
     }
 
-    private val requestNotificationPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) createNotificationChannel(this)
-            else Toast.makeText(this, "No Notif Permission", Toast.LENGTH_LONG)
-        }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun checkNotificationPermission() {
-        val permission = Manifest.permission.POST_NOTIFICATIONS
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                permission
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                // make your action here
-            }
-
-            shouldShowRequestPermissionRationale(permission) -> {
-                // permission denied permanently
-            }
-
-            else -> {
-                requestNotificationPermission.launch(permission)
-            }
-        }
-    }
-
     override fun onStop() {
         super.onStop()
         unregisterReceiver(myBroadcastReceiver)
@@ -240,5 +220,42 @@ class EntryActivity : AppCompatActivity() {
             MotionEvent.ACTION_UP -> Log.i("~!@#", "touched up ($x, $y)")
         }
         false
+    }
+
+    private fun checkPermissions() {
+        val packageManager = packageManager
+        val packageName = packageName
+
+        // Get the list of permissions declared in the manifest
+        val permissions = packageManager.getPackageInfo(
+            packageName,
+            PackageManager.GET_PERMISSIONS
+        ).requestedPermissions
+
+        // Print the list of permissions
+        permissions?.forEach { permission ->
+            println("Declared permission: $permission")
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun checkNotificationPermission() {
+        val permission = Manifest.permission.POST_NOTIFICATIONS
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // make your action here
+            }
+
+            shouldShowRequestPermissionRationale(permission) -> {
+                // permission denied permanently
+            }
+
+            else -> {
+                requestNotificationPermission.launch(permission)
+            }
+        }
     }
 }

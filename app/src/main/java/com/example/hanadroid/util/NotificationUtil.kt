@@ -12,6 +12,23 @@ import com.example.hanadroid.R
 const val WORKER_CHANNEL_ID = "123425"
 const val PENDING_INTENT_CHANNEL_ID = "789"
 
+/**
+ * Create the NotificationChannel, but only on API 26+ because
+ * the NotificationChannel class is new and not in the support library
+ */
+fun createNotificationChannel(context: Context) {
+    val name = context.getString(R.string.channel_name)
+    val descriptionText = context.getString(R.string.channel_description)
+    val importance = NotificationManager.IMPORTANCE_HIGH
+    val channel = NotificationChannel(WORKER_CHANNEL_ID, name, importance).apply {
+        description = descriptionText
+    }
+    // Register the channel with the system
+    val notificationManager: NotificationManager =
+        context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.createNotificationChannel(channel)
+}
+
 fun NotificationManager.sendNotification(
     context: Context,
     title: String = "Success",
@@ -57,21 +74,4 @@ fun NotificationManager.launchNotificationWithPendingIntent(
         .build()
 
     notify(NOTIFICATION_ID, newMessageNotification)
-}
-
-/**
- * Create the NotificationChannel, but only on API 26+ because
- * the NotificationChannel class is new and not in the support library
- */
-fun createNotificationChannel(context: Context) {
-    val name = context.getString(R.string.channel_name)
-    val descriptionText = context.getString(R.string.channel_description)
-    val importance = NotificationManager.IMPORTANCE_HIGH
-    val channel = NotificationChannel(WORKER_CHANNEL_ID, name, importance).apply {
-        description = descriptionText
-    }
-    // Register the channel with the system
-    val notificationManager: NotificationManager =
-        context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.createNotificationChannel(channel)
 }

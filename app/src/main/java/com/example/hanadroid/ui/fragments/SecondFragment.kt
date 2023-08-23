@@ -25,6 +25,8 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        val universityName = arguments?.getString(UniversityListFragment.ARGS_UNIVERSITY_NAME)
+        Log.i("~!@# BUNDLE - ", "$universityName")
         return binding.root
     }
 
