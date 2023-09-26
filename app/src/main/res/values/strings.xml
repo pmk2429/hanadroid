@@ -66,4 +66,8 @@
     <string name="title_activity_cow_matrix_movement">CowMatrixMovement</string>
     <string name="title_activity_disney_characters">DisneyCharactersActivity</string>
     <string name="title_activity_timer">TimerActivity</string>
+    <string name="title_activity_beer_data">Beer Data</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="beer_list_fragment_label">Best Beers</string>
+    <string name="second_fragment_label">Second Fragment</string>
 </resources>

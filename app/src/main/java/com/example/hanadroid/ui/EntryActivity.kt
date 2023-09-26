@@ -109,8 +109,8 @@ class EntryActivity : AppCompatActivity() {
             setOnClickListener { launchRedditPostsActivity() }
         }
 
-        binding.fabDisneyCharacters.apply {
-            setOnClickListener { launchDisneyCharactersActivity() }
+        binding.fabBeerData.apply {
+            setOnClickListener { launchBeerDataActivity() }
         }
 
         binding.fabFancyItem.apply {
@@ -161,6 +161,11 @@ class EntryActivity : AppCompatActivity() {
 
     private fun launchDisneyCharactersActivity() {
         val intent = Intent(this, DisneyCharactersActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun launchBeerDataActivity() {
+        val intent = Intent(this, BeerDataActivity::class.java)
         startActivity(intent)
     }
 

@@ -84,15 +84,16 @@
             android:exported="false"
             android:theme="@style/Theme.HanaDroid.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
-
+        <activity
+            android:name=".ui.BeerDataActivity"
+            android:exported="false"
+            android:label="@string/title_activity_beer_data"
+            android:theme="@style/Theme.HanaDroid.NoActionBar" />
         <!-- Broadcast Receiver -->
-        <receiver android:name=".broadcastreceivers.MyAlarmReceiver" />
-
-        <!-- Explicit Broadcast Receiver -->
+        <receiver android:name=".broadcastreceivers.MyAlarmReceiver" /> <!-- Explicit Broadcast Receiver -->
         <receiver
             android:name=".broadcastreceivers.HanaBroadcastReceiver"
             android:exported="false" />
-
     </application>
 
 </manifest>
