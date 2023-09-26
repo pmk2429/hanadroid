@@ -1,5 +1,8 @@
 package com.example.hanadroid.di
 
+import com.example.hanadroid.data.beerapi.BeerDataApiHelper
+import com.example.hanadroid.data.beerapi.BeerDataApiHelperImpl
+import com.example.hanadroid.data.beerapi.BeerDataApiService
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiService
 import com.example.hanadroid.data.disney.DisneyCharactersApiHelper
 import com.example.hanadroid.data.disney.DisneyCharactersApiHelperImpl
@@ -87,6 +90,18 @@ class NetworkModule {
     @Provides
     fun provideDisneyApiHelper(): DisneyCharactersApiHelper {
         return DisneyCharactersApiHelperImpl(providesDisneyCharactersApiService())
+    }
+
+    @Singleton
+    @Provides
+    fun providesBeerDataApiService(): BeerDataApiService {
+        return createRetrofitService(BEER_INFO_BASE_URL).create(BeerDataApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideBeerDataApiHelper(): BeerDataApiHelper {
+        return BeerDataApiHelperImpl(providesBeerDataApiService())
     }
 
     @Singleton
