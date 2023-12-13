@@ -7,7 +7,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 
 class UploadDataWorker(
-    private val context: Context,
+    context: Context,
     userParameters: WorkerParameters
 ) : Worker(context, userParameters) {
 

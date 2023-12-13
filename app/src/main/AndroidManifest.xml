@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.hanadroid">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -23,6 +24,9 @@
         android:theme="@style/Theme.HanaDroid"
         android:usesCleartextTraffic="true"
         tools:targetApi="32">
+        <activity
+            android:name=".ui.LocationActivity"
+            android:exported="false" />
         <!-- Main Launcher Activity -->
         <activity
             android:name=".ui.EntryActivity"
@@ -89,8 +93,35 @@
             android:exported="false"
             android:label="@string/title_activity_beer_data"
             android:theme="@style/Theme.HanaDroid.NoActionBar" />
-        <!-- Broadcast Receiver -->
-        <receiver android:name=".broadcastreceivers.MyAlarmReceiver" /> <!-- Explicit Broadcast Receiver -->
+        <activity
+            android:name=".ui.DeepLinkActivity"
+            android:exported="true"
+            android:theme="@style/Theme.HanaDroid.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="droidfood" />
+                <data android:path="/restaurants/keybabs" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="sabs-deeplinks-test.web.app" />
+                <data android:path="/restaurants/keybabs/order/latest.html" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="https" />
+                <data android:host="sabs-deeplinks-test.web.app" />
+                <data android:pathPrefix="/restaurants" />
+            </intent-filter>
+        </activity> <!-- Explicit Broadcast Receiver -->
+        <receiver android:name=".broadcastreceivers.MyAlarmReceiver" />
         <receiver
             android:name=".broadcastreceivers.HanaBroadcastReceiver"
             android:exported="false" />

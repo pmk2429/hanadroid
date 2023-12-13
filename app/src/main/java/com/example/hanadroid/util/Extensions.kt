@@ -1,6 +1,7 @@
 package com.example.hanadroid.util
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.allViews
 import androidx.core.view.children
@@ -36,6 +38,7 @@ fun <T : View> ViewGroup.getViewsByType(viewTypeClass: Class<T>): List<T> {
                 addAll(child.getViewsByType(viewTypeClass))
             }
             if (viewTypeClass.isInstance(child)) {
+
                 add(viewTypeClass.cast(child))
             }
         }
@@ -191,4 +194,17 @@ fun isInternetConnected(context: Context): Boolean {
     val network = connectivityManager.activeNetwork
     val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
     return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+}
+
+fun Fragment.hideKeyboard() {
+    view?.let { activity?.hideKeyboard(it) }
+}
+
+fun Activity.hideKeyboard() {
+    hideKeyboard(currentFocus ?: View(this))
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }

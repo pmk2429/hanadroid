@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.work.Constraints
 import androidx.work.Data
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
@@ -210,11 +211,21 @@ class WorkerActivity : AppCompatActivity() {
     }
 
     private fun startUploadingLogs() {
-        val sendingLog = PeriodicWorkRequestBuilder<UploadDataWorker>(10, TimeUnit.SECONDS)
+        /**
+         * The minimum time interval for triggering PeriodicWork is 15 Minutes.
+         * https://developer.android.com/reference/androidx/work/PeriodicWorkRequest
+         */
+        val sendingLog = PeriodicWorkRequestBuilder<UploadDataWorker>(20, TimeUnit.MINUTES)
             .addTag(TAG_WORKER_LOG)
             .build()
 
-        workManager.enqueue(sendingLog)
+        // workManager.enqueue(sendingLog)
+
+        workManager.enqueueUniquePeriodicWork(
+            "periodicNotificationWork",
+            ExistingPeriodicWorkPolicy.UPDATE, // Replace any existing work with the same name
+            sendingLog
+        )
 
         workManager.getWorkInfoByIdLiveData(sendingLog.id).observe(this) { workInfo ->
             workInfo?.let {

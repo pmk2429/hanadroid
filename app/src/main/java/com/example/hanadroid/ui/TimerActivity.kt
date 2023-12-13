@@ -207,7 +207,7 @@ class TimerActivity : AppCompatActivity() {
     private fun stopHandlerCountdown() {
         // Remove all pending messages from the handler
         handler.removeCallbacksAndMessages(null)
-        handleViewBindings("Countdown finished!", stopEnabled = true, resetEnabled = true)
+        handleViewBindings("Countdown finished!", startEnabled = true)
     }
 
     private fun resetHandlerCountdown() {

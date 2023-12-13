@@ -22,9 +22,4 @@ class HanaDroidAppModule {
         coroutineDispatcher: CoroutineDispatcherProvider
     ) = UniversityRepository(apiHelper, coroutineDispatcher)
 
-    fun provideDisneyRepository(
-        apiHelper: DisneyCharactersApiHelperImpl,
-        coroutineDispatcher: CoroutineDispatcherProvider
-    ) = DisneyCharactersRepository(apiHelper, coroutineDispatcher)
-
 }
