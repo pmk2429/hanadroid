@@ -31,7 +31,7 @@ class FancyListViewModel @Inject constructor() : ViewModel() {
             val randomIndex = (0 until updatedList.size).random()
             Log.i("~!@#$", "removeFancyItem Index: $randomIndex")
             updatedList.removeAt(randomIndex)
-            currentUiState.copy(fancyItems = updatedList, isItemRemoved = true)
+            currentUiState.copy(fancyItems = updatedList, isItemRemoved = true, itemRemovedAtIndex = randomIndex)
         }
     }
 }
