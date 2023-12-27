@@ -24,9 +24,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="32">
         <activity
-            android:name=".ui.LocationActivity"
+            android:name=".ui.DownloadStuffActivity"
             android:exported="false" />
-        <!-- Main Launcher Activity -->
+        <activity
+            android:name=".ui.LocationActivity"
+            android:exported="false" /> <!-- Main Launcher Activity -->
         <activity
             android:name=".ui.EntryActivity"
             android:exported="true">
