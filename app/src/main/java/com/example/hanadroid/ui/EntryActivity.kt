@@ -79,6 +79,14 @@ class EntryActivity : AppCompatActivity() {
             }
         }
 
+    private val launchDownloadActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let {
+                }
+            }
+        }
+
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) createNotificationChannel(this)
@@ -127,6 +135,10 @@ class EntryActivity : AppCompatActivity() {
 
         binding.startLongRunningTaskActivity.setOnClickListener {
             launchWorkerActivity()
+        }
+
+        binding.btnDownload.setOnClickListener {
+            launchDownloadActivity()
         }
 
         checkPermissions()
@@ -186,6 +198,10 @@ class EntryActivity : AppCompatActivity() {
 
     private fun launchWorkerActivity() {
         workerActivityLauncher.launch(Intent(this, WorkerActivity::class.java))
+    }
+
+    private fun launchDownloadActivity() {
+        launchDownloadActivity.launch(Intent(this, WorkerActivity::class.java))
     }
 
     private fun initBroadcastReceiver() {

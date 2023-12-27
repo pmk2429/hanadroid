@@ -27,21 +27,12 @@ class TimerActivity : AppCompatActivity() {
     private lateinit var handler: Handler
     private var secondsLeft = 60
 
-    private val countDownTimer = object : CountDownTimer(
-        TIMER_COUNT,
-        COUNTDOWN_INTERVAL
-    ) {
-        // Callback function, fired on regular interval
-        override fun onTick(millisUntilFinished: Long) {
-            binding.apply {
-                countdownText.text = "seconds remaining: " + millisUntilFinished / 1000
-            }
-        }
-
-        override fun onFinish() {
-            binding.countdownText.text = "00"
-        }
-    }
+    // START ---- Simple Timer using Handler and 16 ms Refresh Rate
+    private val simpleTimerHandler = Handler(Looper.getMainLooper())
+    private val refreshRate = 16L // Milliseconds
+    private val countdownDurationMillis = 5 * 60 * 1000 // 5 minutes in milliseconds
+    private var startTimeMillis = 0L
+    // END ---- Simple Timer using Handler and 16 ms Refresh Rate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +43,9 @@ class TimerActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         initTimerTask()
-        initCountdownTimer()
+        initCountdownTimerUsingAPI()
         initHandlerCountdownTimer()
+        initSimpleCountdownTimer()
     }
 
     private fun initTimerTask() {
@@ -141,8 +133,24 @@ class TimerActivity : AppCompatActivity() {
         }
     }
 
-    // Countdown Timer
-    private fun initCountdownTimer() {
+    // START ---- CountDownTimer API using Handler and 16 ms Refresh Rate
+    private val countDownTimer = object : CountDownTimer(
+        TIMER_COUNT,
+        COUNTDOWN_INTERVAL
+    ) {
+        // Callback function, fired on regular interval
+        override fun onTick(millisUntilFinished: Long) {
+            binding.apply {
+                countdownText.text = "seconds remaining: " + millisUntilFinished / 1000
+            }
+        }
+
+        override fun onFinish() {
+            binding.countdownText.text = "00"
+        }
+    }
+
+    private fun initCountdownTimerUsingAPI() {
         binding.btnCountdownStartStop.setOnClickListener {
             updateButtonText()
             if (!isTimerRunning) {
@@ -150,17 +158,6 @@ class TimerActivity : AppCompatActivity() {
             } else {
                 stopCountdownTimer()
             }
-        }
-    }
-
-    private fun initHandlerCountdownTimer() {
-        handler = Handler(Looper.getMainLooper())
-
-        handleViewBindings(secondsLeft.toString(), startEnabled = true)
-        binding.apply {
-            btnStartHandlerTimer.setOnClickListener { startHandlerCountdown() }
-            btnStopHandlerTimer.setOnClickListener { stopHandlerCountdown() }
-            btnResetHandlerTimer.setOnClickListener { resetHandlerCountdown() }
         }
     }
 
@@ -179,11 +176,18 @@ class TimerActivity : AppCompatActivity() {
     private fun updateButtonText() {
         binding.btnCountdownStartStop.text = if (isTimerRunning) "Stop" else "Start"
     }
+    // END ---- CountDownTimer API using Handler and 16 ms Refresh Rate
 
-    override fun onStop() {
-        super.onStop()
-        if (isTimerRunning) {
-            stopCountdownTimer()
+
+    // START ---- Handler Only Countdown Timer with Start, Stop and Reset
+    private fun initHandlerCountdownTimer() {
+        handler = Handler(Looper.getMainLooper())
+
+        handleViewBindings(secondsLeft.toString(), startEnabled = true)
+        binding.apply {
+            btnStartHandlerTimer.setOnClickListener { startHandlerCountdown() }
+            btnStopHandlerTimer.setOnClickListener { stopHandlerCountdown() }
+            btnResetHandlerTimer.setOnClickListener { resetHandlerCountdown() }
         }
     }
 
@@ -228,6 +232,62 @@ class TimerActivity : AppCompatActivity() {
             binding.btnStopHandlerTimer.isEnabled = stopEnabled
             binding.btnResetHandlerTimer.isEnabled = resetEnabled
         }
+    }
+    // END ---- Handler Only Countdown Timer with Start, Stop and Reset
+
+    // START ---- Simple Timer using Handler and 16 ms Refresh Rate
+    private fun initSimpleCountdownTimer() {
+        binding.btnSimpleCountdownStartStop.setOnClickListener {
+            // Set the start time
+            startTimeMillis = System.currentTimeMillis()
+            // start the countdown timer
+            simpleTimerHandler.postDelayed(
+                countdownRunnable,
+                refreshRate
+            )
+        }
+    }
+
+    private val countdownRunnable = object : Runnable {
+        override fun run() {
+            val elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis
+            val remainingTimeMillis = countdownDurationMillis - elapsedTimeMillis
+
+            if (remainingTimeMillis > 0) {
+                // update and refresh the UI
+                updateSimpleTimerUi(remainingTimeMillis)
+                // callback the Handler to keep refreshing
+                simpleTimerHandler.postDelayed(this, refreshRate)
+            } else {
+                // Countdown has finished, perform any desired action
+                binding.simpleCountdownText.text = "Countdown Finished!"
+            }
+        }
+    }
+
+    private fun updateSimpleTimerUi(remainingTimeMillis: Long) {
+        val minutes = (remainingTimeMillis / (1000 * 60)) % 60
+        val seconds = (remainingTimeMillis / 1000) % 60
+        val timerText = String.format("%02d:%02d", minutes, seconds)
+        binding.simpleCountdownText.text = timerText
+    }
+
+    private fun resetSimpleTimer() {
+        simpleTimerHandler.removeCallbacksAndMessages(countdownRunnable)
+    }
+    // END ---- Simple Timer using Handler and 16 ms Refresh Rate
+
+    override fun onStop() {
+        super.onStop()
+        if (isTimerRunning) {
+            stopCountdownTimer()
+        }
+    }
+
+    override fun onDestroy() {
+        // Remove the runnable to avoid memory leaks
+        simpleTimerHandler.removeCallbacks(countdownRunnable)
+        super.onDestroy()
     }
 
     companion object {

@@ -28,8 +28,6 @@ class FancyListActivity : AppCompatActivity() {
     @Inject
     lateinit var fancyAdapter: FancyAdapter
 
-    private var itemCount = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityFancyListBinding.inflate(layoutInflater)
@@ -52,14 +50,13 @@ class FancyListActivity : AppCompatActivity() {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     fancyItemsUiState.collect { uiState ->
                         fancyAdapter.submitList(uiState.fancyItems)
-                        itemCount = uiState.fancyItems.size
 
-                        // item added
+                        // handle item added. For this case, the item is always added to end of list
                         if (uiState.isItemAdded) {
-                            handleItemInserted()
+                            handleItemInserted(uiState.fancyItems.size - 1)
                         }
 
-                        // item removed
+                        // handle item removed
                         if (uiState.isItemRemoved) {
                             handleItemRemoved(uiState.itemRemovedAtIndex)
                         }
@@ -69,12 +66,12 @@ class FancyListActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleItemInserted() {
-        fancyAdapter.notifyItemInserted(itemCount - 1)
+    private fun handleItemInserted(itemAddedAtIndex: Int) {
+        fancyAdapter.notifyItemInserted(itemAddedAtIndex)
         // once the item is added, scroll to the bottom of the list
         binding.recyclerViewFancyItem.apply {
             postDelayed({
-                smoothScrollToPosition(itemCount - 1)
+                smoothScrollToPosition(itemAddedAtIndex)
             }, 1000)
         }
     }
