@@ -24,6 +24,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="32">
         <activity
+            android:name=".ui.NonHiltActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.DownloadStuffActivity"
             android:exported="false" />
         <activity
