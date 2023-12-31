@@ -16,6 +16,7 @@ class FancyListViewModel @Inject constructor() : ViewModel() {
         MutableStateFlow(FancyItemsListUiState(fancyItems = CreateFancyModel.fancyItems))
     val fancyItems get() = _fancyItemsList
 
+    // TODO: Add logic to avoid duplicate and sort all items using Toggle in UI
     fun addRandomFancyItem() {
         val fancyItem = CreateFancyModel.randomFancyItem()
         _fancyItemsList.update { currentUiState ->
