@@ -1,5 +1,6 @@
 package com.example.hanadroid.util
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -74,4 +75,35 @@ fun NotificationManager.launchNotificationWithPendingIntent(
         .build()
 
     notify(NOTIFICATION_ID, newMessageNotification)
+}
+
+fun NotificationManager.createNotificationWithIntentForForegroundService(
+    context: Context,
+    activityClass: Class<*>?,
+    title: String = "Music Player",
+    desc: String = "Playing Music..."
+): Notification {
+
+    // Create Notification with Pending Intent
+    val CHANNEL_ID = "ForegroundServiceChannel"
+    val serviceChannel = NotificationChannel(
+        CHANNEL_ID,
+        "Foreground Service Channel",
+        NotificationManager.IMPORTANCE_DEFAULT
+    )
+    createNotificationChannel(serviceChannel)
+
+    // Create Notification with Pending Intent
+    val notificationIntent = Intent(context, activityClass)
+    val pendingIntent = PendingIntent.getActivity(
+        context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
+    )
+
+    return NotificationCompat.Builder(context, CHANNEL_ID)
+        .setContentTitle(title)
+        .setContentText(desc)
+        .setSmallIcon(R.drawable.ic_launcher_foreground)
+        .setContentIntent(pendingIntent)
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .build()
 }

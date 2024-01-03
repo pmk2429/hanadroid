@@ -26,7 +26,7 @@ class FancyListActivity : AppCompatActivity() {
     private val fancyListViewModel: FancyListViewModel by viewModels()
 
     @Inject
-    lateinit var fancyAdapter: FancyAdapter
+    private lateinit var fancyAdapter: FancyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +44,7 @@ class FancyListActivity : AppCompatActivity() {
         recyclerViewFancyItem.apply {
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            fancyAdapter = FancyAdapter { fancyListViewModel.handleFancyItemClick() }
             adapter = fancyAdapter
 
             lifecycleScope.launch {

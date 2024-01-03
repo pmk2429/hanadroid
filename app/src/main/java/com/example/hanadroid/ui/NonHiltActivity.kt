@@ -6,9 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hanadroid.adapters.NonHiltListAdapter
 import com.example.hanadroid.databinding.ActivityNonHiltBinding
-import com.example.hanadroid.repository.NonHiltItemRepository
+import com.example.hanadroid.viewmodels.HanaViewModelFactory
 import com.example.hanadroid.viewmodels.NonHiltViewModel
-import com.example.hanadroid.viewmodels.ViewModelFactory
 
 class NonHiltActivity : AppCompatActivity() {
 
@@ -26,7 +25,7 @@ class NonHiltActivity : AppCompatActivity() {
         // Initialize ViewModel
         itemViewModel = ViewModelProvider(
             this,
-            ViewModelFactory(NonHiltItemRepository())
+            HanaViewModelFactory(this, savedInstanceState, this)
         )[NonHiltViewModel::class.java]
 
         initAdapter()

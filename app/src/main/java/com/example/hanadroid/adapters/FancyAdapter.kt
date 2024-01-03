@@ -13,13 +13,13 @@ import javax.inject.Inject
 
 @ActivityScoped
 class FancyAdapter @Inject constructor(
-
+    private val itemClick: () -> Unit
 ) : ListAdapter<FancyModel, RecyclerView.ViewHolder>(DiffUtilCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding =
             FancyItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return FancyViewHolder(binding)
+        return FancyViewHolder(binding, itemClick)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -36,13 +36,15 @@ class FancyAdapter @Inject constructor(
     }
 
     class FancyViewHolder(
-        val binding: FancyItemLayoutBinding
+        val binding: FancyItemLayoutBinding,
+        private val itemClick: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(fancyItem: FancyModel) {
             with(binding) {
                 fancyItemNumber.text = fancyItem.randomNum.toString()
                 fancyItemName.text = fancyItem.content
                 fancyItemCreatedAt.text = fancyItem.createdAt.toFormattedDateString()
+                root.setOnClickListener { itemClick.invoke() }
             }
         }
     }

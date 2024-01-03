@@ -39,4 +39,8 @@ class FancyListViewModel @Inject constructor() : ViewModel() {
             )
         }
     }
+
+    fun handleFancyItemClick() {
+        Log.i("~!@#$", "handleFancyItemClick: ")
+    }
 }
