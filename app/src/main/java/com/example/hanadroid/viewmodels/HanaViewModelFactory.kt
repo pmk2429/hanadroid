@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.example.hanadroid.Injection
+import com.example.hanadroid.repository.NonHiltItemRepository
 
 @Suppress("UNCHECKED_CAST")
 class HanaViewModelFactory(
@@ -20,9 +21,6 @@ class HanaViewModelFactory(
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
-        if (modelClass.isAssignableFrom(UniversityListViewModel::class.java)) {
-            return UniversityListViewModel(handle, Injection.createUniversityRepository()) as T
-        }
         if (modelClass.isAssignableFrom(BoredActivityViewModel::class.java)) {
             return BoredActivityViewModel(handle, Injection.createBoredActivityUseCase()) as T
         }
@@ -36,6 +34,10 @@ class HanaViewModelFactory(
         }
         if (modelClass.isAssignableFrom(DogsViewModel::class.java)) {
             return DogsViewModel(handle, Injection.createDogsUseCase()) as T
+        }
+        if (modelClass.isAssignableFrom(NonHiltViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return NonHiltViewModel(NonHiltItemRepository()) as T
         }
         throw IllegalArgumentException("Unknown Class Identifier")
     }

@@ -7,6 +7,5 @@ data class FancyItemsListUiState(
     val isLoading: Boolean = false,
     val isItemAdded: Boolean = false,
     val isItemRemoved: Boolean = false,
-    val itemRemovedAtIndex: Int = 0,
-    val onFancyItemClick: (() -> Unit)? = null
+    val itemRemovedAtIndex: Int = 0
 )
