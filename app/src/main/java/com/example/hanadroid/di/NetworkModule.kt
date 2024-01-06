@@ -16,6 +16,8 @@ import com.example.hanadroid.data.universityapi.UniversityApiService
 import com.example.hanadroid.networking.*
 import com.example.hanadroid.util.CoroutineDispatcherProvider
 import com.example.hanadroid.util.DefaultDispatcherProvider
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +26,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -41,6 +44,25 @@ class NetworkModule {
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
+            .build()
+    }
+
+    private fun createRetrofitServiceWithMoshi(baseUrl: String): Retrofit {
+        val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(logger)
+            .build()
+
+        // Build the Moshi object with Kotlin adapter factory that Retrofit will be using.
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 
