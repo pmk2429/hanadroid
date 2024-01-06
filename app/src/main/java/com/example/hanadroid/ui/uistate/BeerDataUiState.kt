@@ -8,3 +8,7 @@ data class BeerDataUiState(
     val failureMessage: String? = null,
     val onBeerInfoClick: (() -> Unit)? = null
 )
+
+data class BeerItemUiState(
+    val beerInfo: BeerInfo
+)

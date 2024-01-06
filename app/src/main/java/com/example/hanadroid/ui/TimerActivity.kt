@@ -252,7 +252,7 @@ class TimerActivity : AppCompatActivity() {
     private fun startSimpleCountdownTimer() {
         // Set the start time
         startTimeMillis = System.currentTimeMillis()
-        // start the countdown timer
+        // start the countdown timer which will be executed on Main Thread after 16ms delay
         simpleTimerHandler.postDelayed(
             countdownRunnable,
             refreshRate

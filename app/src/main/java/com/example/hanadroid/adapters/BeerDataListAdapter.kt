@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.hanadroid.databinding.BeerDataListItemLayoutBinding
 import com.example.hanadroid.model.BeerInfo
 import dagger.hilt.android.scopes.FragmentScoped
@@ -13,7 +12,7 @@ import javax.inject.Inject
 
 @FragmentScoped
 class BeerDataListAdapter @Inject constructor(
-
+    val itemClickListener: BeerItemClickListener
 ) : ListAdapter<BeerInfo, BeerDataListAdapter.BeerItemViewHolder>(BeerDataDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BeerItemViewHolder {
@@ -22,7 +21,7 @@ class BeerDataListAdapter @Inject constructor(
             parent,
             false
         )
-        return BeerItemViewHolder(binding)
+        return BeerItemViewHolder(binding, itemClickListener)
     }
 
     override fun onBindViewHolder(holder: BeerItemViewHolder, position: Int) {
@@ -40,17 +39,22 @@ class BeerDataListAdapter @Inject constructor(
         }
     }
 
+    class BeerItemClickListener @Inject constructor() {
+        var onItemClick: ((BeerInfo) -> Unit)? = null
+        fun onBeerItemClicked(data: BeerInfo) {
+            onItemClick?.invoke(data)
+        }
+    }
+
     class BeerItemViewHolder(
-        private val binding: BeerDataListItemLayoutBinding
+        private val binding: BeerDataListItemLayoutBinding,
+        private val clickListener: BeerItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(beerInfo: BeerInfo) {
             with(binding) {
+                itemClickListener = clickListener
+                beerItem = beerInfo
                 beerName.text = beerInfo.name
-                Glide.with(beerImage)
-                    .load(beerInfo.imageUrl)
-                    .fitCenter()
-                    .into(beerImage)
-                beerDescription.text = beerInfo.description
                 beerTagline.text = beerInfo.tagline
                 beerTips.text = beerInfo.brewerTips
             }
