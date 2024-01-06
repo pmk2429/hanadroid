@@ -32,6 +32,7 @@ class TimerActivity : AppCompatActivity() {
     private val refreshRate = 16L // Milliseconds
     private val countdownDurationMillis = 5 * 60 * 1000 // 5 minutes in milliseconds
     private var startTimeMillis = 0L
+    private var simpleTimerRunning: Boolean = false
     // END ---- Simple Timer using Handler and 16 ms Refresh Rate
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -238,14 +239,24 @@ class TimerActivity : AppCompatActivity() {
     // START ---- Simple Timer using Handler and 16 ms Refresh Rate
     private fun initSimpleCountdownTimer() {
         binding.btnSimpleCountdownStartStop.setOnClickListener {
-            // Set the start time
-            startTimeMillis = System.currentTimeMillis()
-            // start the countdown timer
-            simpleTimerHandler.postDelayed(
-                countdownRunnable,
-                refreshRate
-            )
+            if (!simpleTimerRunning) {
+                startSimpleCountdownTimer()
+            } else {
+                resetSimpleTimer()
+            }
+            simpleTimerRunning = !simpleTimerRunning
+            updateSimpleTimerButtonText()
         }
+    }
+
+    private fun startSimpleCountdownTimer() {
+        // Set the start time
+        startTimeMillis = System.currentTimeMillis()
+        // start the countdown timer
+        simpleTimerHandler.postDelayed(
+            countdownRunnable,
+            refreshRate
+        )
     }
 
     private val countdownRunnable = object : Runnable {
@@ -274,6 +285,12 @@ class TimerActivity : AppCompatActivity() {
 
     private fun resetSimpleTimer() {
         simpleTimerHandler.removeCallbacksAndMessages(countdownRunnable)
+        simpleTimerHandler.removeCallbacksAndMessages(null)
+        updateSimpleTimerUi(countdownDurationMillis.toLong())
+    }
+
+    private fun updateSimpleTimerButtonText() {
+        binding.btnSimpleCountdownStartStop.text = if (simpleTimerRunning) "Reset Simple Timer" else "Start Simple Timer"
     }
     // END ---- Simple Timer using Handler and 16 ms Refresh Rate
 
