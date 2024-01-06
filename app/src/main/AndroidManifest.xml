@@ -132,6 +132,13 @@
         <receiver
             android:name=".broadcastreceivers.HanaBroadcastReceiver"
             android:exported="false" />
+        <receiver
+            android:name=".broadcastreceivers.AirplaneModeBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

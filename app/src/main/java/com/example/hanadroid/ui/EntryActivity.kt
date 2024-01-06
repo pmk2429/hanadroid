@@ -137,7 +137,7 @@ class EntryActivity : AppCompatActivity() {
             launchWorkerActivity()
         }
 
-        binding.btnDownload.setOnClickListener {
+        binding.fabDownloadFile.setOnClickListener {
             launchDownloadActivity()
         }
 
@@ -201,7 +201,7 @@ class EntryActivity : AppCompatActivity() {
     }
 
     private fun launchDownloadActivity() {
-        launchDownloadActivity.launch(Intent(this, WorkerActivity::class.java))
+        launchDownloadActivity.launch(Intent(this, DownloadStuffActivity::class.java))
     }
 
     private fun initBroadcastReceiver() {

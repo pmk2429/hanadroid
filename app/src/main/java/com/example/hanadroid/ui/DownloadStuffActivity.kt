@@ -1,10 +1,12 @@
 package com.example.hanadroid.ui
 
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -26,7 +28,6 @@ class DownloadStuffActivity : AppCompatActivity() {
             override fun onReceive(context: Context, intent: Intent) {
                 val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
                 if (id == downloadId) {
-                    binding.downloadProgressBar.visibility = View.INVISIBLE
                     Toast.makeText(context, "Download completed!", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -38,7 +39,9 @@ class DownloadStuffActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnDownload.setOnClickListener {
-            downloadFile("https://example.com/image.jpg", "MyImage.jpg")
+            // Show progress bar while downloading
+            binding.downloadProgressBar.visibility = View.VISIBLE
+            downloadFile("http://speedtest.ftp.otenet.gr/files/test10Mb.db", "SpeedTest10Mb.db")
         }
     }
 
@@ -55,6 +58,12 @@ class DownloadStuffActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(downloadCompleteBroadcastReceiver)
+    }
+
+    @SuppressLint("Range")
     private fun downloadFile(url: String, fileName: String) {
         val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
@@ -66,12 +75,40 @@ class DownloadStuffActivity : AppCompatActivity() {
 
         downloadId = downloadManager.enqueue(request)
 
-        // Show progress bar while downloading
-        binding.downloadProgressBar.visibility = View.VISIBLE
-    }
+        // using query method to update the Progress for other states
+        var finishDownload = false
+        var progress = 0
+        while (!finishDownload) {
+            val cursor: Cursor =
+                downloadManager.query(DownloadManager.Query().setFilterById(downloadId));
+            if (cursor.moveToFirst()) {
+                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                when (status) {
+                    DownloadManager.STATUS_FAILED,
+                    DownloadManager.STATUS_PAUSED,
+                    DownloadManager.STATUS_PENDING -> {
+                        binding.downloadProgressBar.visibility = View.INVISIBLE
+                    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(downloadCompleteBroadcastReceiver)
+                    DownloadManager.STATUS_RUNNING -> {
+                        binding.downloadProgressBar.visibility = View.VISIBLE
+                        val total =
+                            cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
+                        if (total >= 0) {
+                            val downloaded =
+                                cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
+                            progress = ((downloaded * 100L) / total).toInt()
+                        }
+                    }
+
+                    DownloadManager.STATUS_SUCCESSFUL -> {
+                        progress = 100
+                        finishDownload = true
+                        Toast.makeText(this, "Download Completed", Toast.LENGTH_SHORT).show()
+                        binding.downloadProgressBar.visibility = View.INVISIBLE
+                    }
+                }
+            }
+        }
     }
 }

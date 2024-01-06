@@ -25,7 +25,6 @@ class FancyListActivity : AppCompatActivity() {
 
     private val fancyListViewModel: FancyListViewModel by viewModels()
 
-    @Inject
     private lateinit var fancyAdapter: FancyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
