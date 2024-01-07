@@ -155,11 +155,17 @@ class LaunchingIntentsActivity : AppCompatActivity() {
         startActivity(clockIntent);
     }
 
+    private fun launchGetLocation() {
+        val intent = Intent(this, LocationActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun ActivityLaunchingIntentsBinding.bindButtons() {
         btnLaunchWebview.setOnClickListener { launchWebView() }
         btnLaunchMaps.setOnClickListener { searchRestaurantsNearby() }
         btnLaunchAlarm.setOnClickListener { launchClockApp() }
         btnLaunchCalendar.setOnClickListener { launchCalendarToView() }
         btnLaunchTimer.setOnClickListener { launchTimer() }
+        btnLaunchLocation.setOnClickListener { launchGetLocation() }
     }
 }

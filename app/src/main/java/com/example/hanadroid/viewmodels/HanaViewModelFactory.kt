@@ -24,9 +24,6 @@ class HanaViewModelFactory(
         if (modelClass.isAssignableFrom(BoredActivityViewModel::class.java)) {
             return BoredActivityViewModel(handle, Injection.createBoredActivityUseCase()) as T
         }
-        if (modelClass.isAssignableFrom(ArticleViewModel::class.java)) {
-            return ArticleViewModel(Injection.provideArticleRepository()) as T
-        }
         if (modelClass.isAssignableFrom(RickAndMortyViewModel::class.java)) {
             return RickAndMortyViewModel(
                 Injection.provideRickAndMortyCharactersRepository(context!!)

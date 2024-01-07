@@ -19,7 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="#142998"
             android:text="Launch WebView"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +30,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="#142998"
             android:text="Launch Maps"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="#142998"
             android:text="Launch Alarm"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +52,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="#142998"
             android:text="Launch Calendar"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,12 +63,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="#142998"
             android:text="Launch Timer"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_launch_calendar" />
+
+        <Button
+            android:id="@+id/btn_launch_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Get Your Location"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_launch_timer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

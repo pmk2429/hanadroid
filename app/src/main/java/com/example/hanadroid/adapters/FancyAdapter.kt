@@ -14,7 +14,7 @@ import javax.inject.Inject
 @ActivityScoped
 class FancyAdapter @Inject constructor(
     private val itemClick: () -> Unit
-) : ListAdapter<FancyModel, RecyclerView.ViewHolder>(DiffUtilCallBack()) {
+) : ListAdapter<FancyModel, RecyclerView.ViewHolder>(FANCY_ITEM_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding =
@@ -49,13 +49,13 @@ class FancyAdapter @Inject constructor(
         }
     }
 
-    class DiffUtilCallBack : DiffUtil.ItemCallback<FancyModel>() {
-        override fun areItemsTheSame(oldItem: FancyModel, newItem: FancyModel): Boolean {
-            return oldItem.content == newItem.content
-        }
+    companion object {
+        private val FANCY_ITEM_COMPARATOR = object : DiffUtil.ItemCallback<FancyModel>() {
+            override fun areItemsTheSame(oldItem: FancyModel, newItem: FancyModel): Boolean =
+                oldItem.content == newItem.content
 
-        override fun areContentsTheSame(oldItem: FancyModel, newItem: FancyModel): Boolean {
-            return oldItem == newItem
+            override fun areContentsTheSame(oldItem: FancyModel, newItem: FancyModel): Boolean =
+                oldItem == newItem
         }
     }
 }

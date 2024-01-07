@@ -28,69 +28,26 @@ class EntryActivity : AppCompatActivity() {
 
     private val myBroadcastReceiver by lazy { AirplaneModeBroadcastReceiver() }
 
-    private val universityActivityLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            // handle the Result
-            if (result.resultCode == Activity.RESULT_OK) {
-                val intent = result.data
-            }
-        }
-
-    private val paginationActivityLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val intent = result.data
-            }
-        }
-
-    private val dogsActivityLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let {
-                    val dogUrl = it.getStringExtra("DOGGO")
-                    Log.i("~!@#$", "Doggo Data --- : $dogUrl")
-                }
-            }
-        }
-
-    private val boredActivityLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let {
-                    val boredActivity =
-                        it.getStringExtra(BoredActivityLauncherActivity.BORED_ACTIVITY_NAME)
-                    Log.i("~!@#$", "Bored Activity --- : $boredActivity")
-                }
-            }
-        }
-
-    private val disneyCharacterActivityLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let {
-                }
-            }
-        }
-
-    private val workerActivityLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val intent = result.data
-            }
-        }
-
-    private val launchDownloadActivity =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let {
-                }
-            }
-        }
-
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) createNotificationChannel(this)
             else Toast.makeText(this, "No Notif Permission", Toast.LENGTH_LONG)
+        }
+
+    private val activityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let {
+                    if (it.getIntExtra(ACTIVITY_RESULT_CODE, -1) == 24) {
+                        val boredActivity =
+                            it.getStringExtra(BoredActivityLauncherActivity.BORED_ACTIVITY_NAME)
+                        Log.i("~!@#$", "Bored Activity --- : $boredActivity")
+                    } else if (it.getIntExtra(ACTIVITY_RESULT_CODE, -1) == 25) {
+                        val dogUrl = it.getStringExtra("DOGGO")
+                        Log.i("~!@#$", "Doggo Data --- : $dogUrl")
+                    } else Unit
+                }
+            }
         }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -99,50 +56,9 @@ class EntryActivity : AppCompatActivity() {
         _binding = ActivityEntryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.fab.apply {
-            setOnTouchListener(handleTouchListener)
-            setOnClickListener { launchUniversityActivity() }
-        }
-
-        binding.fabBoredActivity.apply {
-            setOnTouchListener(handleTouchListener)
-            setOnClickListener { launchBoredActivity() }
-        }
-
-        binding.fabFetchDogs.apply {
-            setOnClickListener { launchDogsActivity() }
-        }
-
-        binding.fabRedditPosts.apply {
-            setOnClickListener { launchRedditPostsActivity() }
-        }
-
-        binding.fabBeerData.apply {
-            setOnClickListener { launchBeerDataActivity() }
-        }
-
-        binding.fabFancyItem.apply {
-            setOnClickListener { launchFancyItemActivity() }
-        }
-
-        binding.startLauncherActivity.setOnClickListener {
-            launchImplicitIntentsActivity()
-        }
-
-        binding.startTimerActivity.setOnClickListener {
-            launchTimerActivity()
-        }
-
-        binding.startLongRunningTaskActivity.setOnClickListener {
-            launchWorkerActivity()
-        }
-
-        binding.fabDownloadFile.setOnClickListener {
-            launchDownloadActivity()
-        }
-
-        checkPermissions()
+        checkAllPermissions()
         checkNotificationPermission()
+        bindOnClicks()
     }
 
     override fun onResume() {
@@ -150,58 +66,41 @@ class EntryActivity : AppCompatActivity() {
         initBroadcastReceiver()
     }
 
-    private fun launchUniversityActivity() {
-        universityActivityLauncher.launch(Intent(this, UniversityMainActivity::class.java))
+    private fun bindOnClicks() {
+        binding.apply {
+
+            fab.apply {
+                setOnTouchListener(handleTouchListener)
+                setOnClickListener { launchActivity(UniversityMainActivity::class.java) }
+            }
+
+            fabBoredActivity.apply {
+                setOnTouchListener(handleTouchListener)
+                setOnClickListener { launchActivity(BoredActivityLauncherActivity::class.java) }
+            }
+
+            fabFetchDogs.setOnClickListener { launchActivity(DogsMediaActivity::class.java) }
+
+            fabRedditPosts.setOnClickListener { launchActivity(RickAndMortyCharactersActivity::class.java) }
+
+            fabBeerData.setOnClickListener { launchActivity(BeerDataActivity::class.java) }
+
+            fabFancyItem.setOnClickListener { launchActivity(FancyListActivity::class.java) }
+
+            fabDownloadFile.setOnClickListener { launchActivity(DownloadStuffActivity::class.java) }
+
+            fabMusic.setOnClickListener { launchActivity(MusicPlayerActivity::class.java) }
+
+            startLauncherActivity.setOnClickListener { launchActivity(LaunchingIntentsActivity::class.java) }
+
+            startTimerActivity.setOnClickListener { launchActivity(TimerActivity::class.java) }
+
+            startLongRunningTaskActivity.setOnClickListener { launchActivity(WorkerActivity::class.java) }
+        }
     }
 
-    private fun launchBoredActivity() {
-        boredActivityLauncher.launch(Intent(this, BoredActivityLauncherActivity::class.java))
-    }
-
-    private fun launchPaginationActivity() {
-        paginationActivityLauncher.launch(Intent(this, ArticleListPaginationActivity::class.java))
-    }
-
-    private fun launchDogsActivity() {
-        dogsActivityLauncher.launch(Intent(this, DogsMediaActivity::class.java))
-    }
-
-    private fun launchRedditPostsActivity() {
-        val intent = Intent(this, RickAndMortyCharactersActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun launchDisneyCharactersActivity() {
-        val intent = Intent(this, DisneyCharactersActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun launchBeerDataActivity() {
-        val intent = Intent(this, BeerDataActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun launchFancyItemActivity() {
-        val intent = Intent(this, FancyListActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun launchImplicitIntentsActivity() {
-        val intent = Intent(this, LaunchingIntentsActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun launchTimerActivity() {
-        val intent = Intent(this, TimerActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun launchWorkerActivity() {
-        workerActivityLauncher.launch(Intent(this, WorkerActivity::class.java))
-    }
-
-    private fun launchDownloadActivity() {
-        launchDownloadActivity.launch(Intent(this, DownloadStuffActivity::class.java))
+    private fun launchActivity(activityClass: Class<*>?) {
+        activityLauncher.launch(Intent(this, activityClass))
     }
 
     private fun initBroadcastReceiver() {
@@ -243,7 +142,7 @@ class EntryActivity : AppCompatActivity() {
         false
     }
 
-    private fun checkPermissions() {
+    private fun checkAllPermissions() {
         val packageManager = packageManager
         val packageName = packageName
 
@@ -278,5 +177,9 @@ class EntryActivity : AppCompatActivity() {
                 requestNotificationPermission.launch(permission)
             }
         }
+    }
+
+    companion object {
+        const val ACTIVITY_RESULT_CODE = "ACTIVITY_RESULT_CODE" // 24 for Bored Activity
     }
 }

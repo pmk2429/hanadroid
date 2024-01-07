@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.example.hanadroid.databinding.ActivityDogMediaBinding
+import com.example.hanadroid.ui.EntryActivity.Companion.ACTIVITY_RESULT_CODE
 import com.example.hanadroid.ui.uistate.DogsUiState
 import com.example.hanadroid.viewmodels.DogsViewModel
 import com.example.hanadroid.viewmodels.HanaViewModelFactory
@@ -58,10 +59,15 @@ class DogsMediaActivity : AppCompatActivity() {
     private fun finishAndReturn(woofImageUrl: String?) {
         lifecycleScope.launch {
             setResult(RESULT_OK, Intent().apply {
-                putExtra("DOGGO", woofImageUrl)
+                putExtra(DOG_ACTIVITY_NAME, woofImageUrl)
+                putExtra(ACTIVITY_RESULT_CODE, 25)
             })
             delay(3000)
             finish()
         }
+    }
+
+    companion object {
+        const val DOG_ACTIVITY_NAME = "DOG_ACTIVITY_NAME"
     }
 }

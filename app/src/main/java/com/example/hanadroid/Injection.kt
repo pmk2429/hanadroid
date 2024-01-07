@@ -6,7 +6,6 @@ import com.example.hanadroid.data.dogapi.DogApiHelperImpl
 import com.example.hanadroid.data.universityapi.UniversityApiHelperImpl
 import com.example.hanadroid.db.RickMortyDatabase
 import com.example.hanadroid.networking.RetrofitBuilder
-import com.example.hanadroid.repository.ArticleRepository
 import com.example.hanadroid.repository.BoredActivityRepository
 import com.example.hanadroid.repository.DogsRepository
 import com.example.hanadroid.repository.RickAndMortyRepository
@@ -35,18 +34,10 @@ object Injection {
             DefaultDispatcherProvider()
         )
 
-    fun provideArticleRepository(): ArticleRepository = ArticleRepository()
-
     fun provideRickAndMortyCharactersRepository(context: Context): RickAndMortyRepository =
         RickAndMortyRepository(
             RetrofitBuilder.rickAndMortyApiService,
             RickMortyDatabase.getInstance(context)
-        )
-
-    fun createUniversityRepository(): UniversityRepository =
-        UniversityRepository(
-            UniversityApiHelperImpl(RetrofitBuilder.universityApiService),
-            DefaultDispatcherProvider()
         )
 
     private fun createBoredActivityRepository(): BoredActivityRepository =
