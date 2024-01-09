@@ -112,14 +112,17 @@ class BoredActivityFragment @JvmOverloads constructor(
     }
 
     private fun testLambda() {
-        val summation = sum(10, 20, addTwoNumbers())
+        val summation = mathOperation(10, 20, addTwoNumbers())
         println(summation)
+        val multiplication = mathOperation(2, 12, mulTwoNumbers())
+        println(multiplication)
     }
 
     /** val lambdaName : () -> ReturnType = { args1, args2, ... -> codeBody } */
     private fun addTwoNumbers(): (Int, Int) -> Int = { first, second -> first + second }
+    private fun mulTwoNumbers(): (Int, Int) -> Int = { first, second -> first * second }
 
-    private fun sum(
+    private fun mathOperation(
         x: Int,
         y: Int,
         action: (Int, Int) -> Int // Notice how we are passing the lambda as a parameter to sum() method.

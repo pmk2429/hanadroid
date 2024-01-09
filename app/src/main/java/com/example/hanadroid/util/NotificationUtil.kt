@@ -6,8 +6,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.hanadroid.R
 
 const val WORKER_CHANNEL_ID = "123425"
@@ -102,8 +104,17 @@ fun NotificationManager.createNotificationWithIntentForForegroundService(
     return NotificationCompat.Builder(context, CHANNEL_ID)
         .setContentTitle(title)
         .setContentText(desc)
-        .setSmallIcon(R.drawable.ic_launcher_foreground)
+        .setSmallIcon(R.drawable.baseline_music_note_red_a700_24dp)
         .setContentIntent(pendingIntent)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .build()
+}
+
+fun isNotificationPermissionGranted(context: Context): Boolean {
+    return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+        NotificationManagerCompat.from(context).areNotificationsEnabled()
+    } else {
+        // Notification channels were not introduced before Android O
+        true
+    }
 }

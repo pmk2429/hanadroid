@@ -1,7 +1,5 @@
 package com.example.hanadroid.ui
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.hanadroid.R
 import com.example.hanadroid.databinding.ActivityBoredActivityLauncherBinding
+import com.example.hanadroid.ui.EntryActivity.Companion.ACTIVITY_RESULT_CODE
 
 class BoredActivityLauncherActivity : AppCompatActivity() {
 
@@ -46,6 +45,7 @@ class BoredActivityLauncherActivity : AppCompatActivity() {
 
     private fun onBoredActivityFetched() {
         setResult(RESULT_OK, Intent().apply {
+            putExtra(ACTIVITY_RESULT_CODE, 24)
             putExtra(BORED_ACTIVITY_NAME, "PMK Main")
         })
         finish()

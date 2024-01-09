@@ -39,8 +39,8 @@ class PreferenceDataStoreHelper(
             result
         }
 
-    override suspend fun <T> getFirstPreference(key: Preferences.Key<T>, defaultValue: T):
-            T = dataSource.data.first()[key] ?: defaultValue
+    override suspend fun <T> getFirstPreference(key: Preferences.Key<T>, defaultValue: T): T =
+        dataSource.data.first()[key] ?: defaultValue
 
     override suspend fun <T> putPreference(key: Preferences.Key<T>, value: T) {
         dataSource.edit { preferences ->

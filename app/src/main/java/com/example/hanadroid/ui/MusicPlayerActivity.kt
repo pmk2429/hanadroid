@@ -18,21 +18,20 @@ class MusicPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val isServiceRunning = isServiceRunning(MusicPlayerService::class.java)
+        val musicServiceIntent = Intent(this@MusicPlayerActivity, MusicPlayerService::class.java)
 
         binding.apply {
             startServiceButton.isEnabled = !isServiceRunning
             stopServiceButton.isEnabled = isServiceRunning
 
             startServiceButton.setOnClickListener {
-                val serviceIntent = Intent(this@MusicPlayerActivity, MusicPlayerService::class.java)
-                startService(serviceIntent)
+                startForegroundService(musicServiceIntent)
                 startServiceButton.isEnabled = false
                 stopServiceButton.isEnabled = true
             }
 
             stopServiceButton.setOnClickListener {
-                val serviceIntent = Intent(this@MusicPlayerActivity, MusicPlayerService::class.java)
-                stopService(serviceIntent)
+                stopService(musicServiceIntent)
                 startServiceButton.isEnabled = true
                 stopServiceButton.isEnabled = false
             }
