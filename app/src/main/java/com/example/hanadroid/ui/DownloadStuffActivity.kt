@@ -79,8 +79,7 @@ class DownloadStuffActivity : AppCompatActivity() {
         var finishDownload = false
         var progress = 0
         while (!finishDownload) {
-            val cursor: Cursor =
-                downloadManager.query(DownloadManager.Query().setFilterById(downloadId));
+            val cursor = downloadManager.query(DownloadManager.Query().setFilterById(downloadId))
             if (cursor.moveToFirst()) {
                 val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                 when (status) {

@@ -96,6 +96,8 @@ class EntryActivity : AppCompatActivity() {
             startTimerActivity.setOnClickListener { launchActivity(TimerActivity::class.java) }
 
             startLongRunningTaskActivity.setOnClickListener { launchActivity(WorkerActivity::class.java) }
+
+            startTabbedFragmentsActivity.setOnClickListener { launchActivity(TabbedFragmentActivity::class.java) }
         }
     }
 
