@@ -13,7 +13,7 @@ import javax.inject.Inject
 @FragmentScoped
 class UniversityAdapter @Inject constructor(
     var universityItemClickListener: UniversityItemClickListener
-) : ListAdapter<University, UniversityAdapter.UniversityViewHolder>(UniversityListDiffUtil()) {
+) : ListAdapter<University, UniversityAdapter.UniversityViewHolder>(UNIVERSITY_ITEM_DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UniversityViewHolder {
         val binding =
@@ -28,22 +28,11 @@ class UniversityAdapter @Inject constructor(
         )
     }
 
-    class UniversityListDiffUtil : DiffUtil.ItemCallback<University>() {
-        override fun areItemsTheSame(oldItem: University, newItem: University): Boolean {
-            return oldItem.name == newItem.name
-        }
-
-        override fun areContentsTheSame(oldItem: University, newItem: University): Boolean {
-            return oldItem == newItem
-        }
-
-    }
-
     class UniversityItemClickListener @Inject constructor() {
         var onItemClick: ((University) -> Unit)? = null
 
-        fun onUniversityClick(data: University) {
-            onItemClick?.invoke(data)
+        fun onUniversityClick(university: University) {
+            onItemClick?.invoke(university)
         }
     }
 
@@ -56,6 +45,19 @@ class UniversityAdapter @Inject constructor(
                 itemClickListener = universityItemClickListener
                 executePendingBindings()
             }
+        }
+    }
+
+    companion object {
+        private val UNIVERSITY_ITEM_DIFF_UTIL = object : DiffUtil.ItemCallback<University>() {
+            override fun areItemsTheSame(oldItem: University, newItem: University): Boolean {
+                return oldItem.name == newItem.name
+            }
+
+            override fun areContentsTheSame(oldItem: University, newItem: University): Boolean {
+                return oldItem == newItem
+            }
+
         }
     }
 }

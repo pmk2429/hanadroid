@@ -6,7 +6,7 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
-import com.example.hanadroid.Injection
+import com.example.hanadroid.di.Injection
 import com.example.hanadroid.repository.NonHiltItemRepository
 
 @Suppress("UNCHECKED_CAST")

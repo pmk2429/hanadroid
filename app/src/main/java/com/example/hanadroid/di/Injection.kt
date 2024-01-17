@@ -1,15 +1,13 @@
-package com.example.hanadroid
+package com.example.hanadroid.di
 
 import android.content.Context
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiHelperImpl
 import com.example.hanadroid.data.dogapi.DogApiHelperImpl
-import com.example.hanadroid.data.universityapi.UniversityApiHelperImpl
 import com.example.hanadroid.db.RickMortyDatabase
 import com.example.hanadroid.networking.RetrofitBuilder
 import com.example.hanadroid.repository.BoredActivityRepository
 import com.example.hanadroid.repository.DogsRepository
 import com.example.hanadroid.repository.RickAndMortyRepository
-import com.example.hanadroid.repository.UniversityRepository
 import com.example.hanadroid.usecases.FetchBoredActivityUseCases
 import com.example.hanadroid.usecases.FetchPawDogsUseCases
 import com.example.hanadroid.util.DefaultDispatcherProvider
