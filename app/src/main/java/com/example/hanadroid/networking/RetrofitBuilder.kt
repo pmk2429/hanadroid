@@ -4,7 +4,6 @@ import com.example.hanadroid.data.boredactivityapi.BoredActivityApiService
 import com.example.hanadroid.data.dogapi.DogCeoApiService
 import com.example.hanadroid.data.dogapi.DogWoofApiService
 import com.example.hanadroid.data.rickandmorty.RickAndMortyApiService
-import com.example.hanadroid.data.universityapi.UniversityApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -30,9 +29,6 @@ object RetrofitBuilder {
             .build()
     }
 
-    private fun createUniversityRetrofit(): Retrofit =
-        createRetrofitService(UNIVERSITY_BASE_URL)
-
     private fun createBoredActivityRetrofit(): Retrofit =
         createRetrofitService(BORED_ACTIVITY_BASE_URL)
 
@@ -41,10 +37,6 @@ object RetrofitBuilder {
 
     private fun createRickAndMortyRetrofit(): Retrofit =
         createRetrofitService(RICK_AND_MORTY_BASE_URL)
-
-    val universityApiService: UniversityApiService by lazy {
-        createUniversityRetrofit().create(UniversityApiService::class.java)
-    }
 
     val boredActivityApiService: BoredActivityApiService by lazy {
         createBoredActivityRetrofit().create(BoredActivityApiService::class.java)

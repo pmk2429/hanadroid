@@ -1,14 +1,11 @@
 package com.example.hanadroid.viewmodels
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.load.engine.Resource
-import com.example.hanadroid.networking.ResponseWrapper
+import com.example.hanadroid.networking.NetworkResult
 import com.example.hanadroid.repository.BeerDataRepository
 import com.example.hanadroid.ui.uistate.BeerDataUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +15,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BeerViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val beerDataRepository: BeerDataRepository
 ) : ViewModel() {
 
@@ -41,7 +37,7 @@ class BeerViewModel @Inject constructor(
         getBeerDataJob = viewModelScope.launch {
             val result = beerDataRepository.getBeerDataList()
             when (result) {
-                is ResponseWrapper.Success -> {
+                is NetworkResult.Success -> {
                     _beerDataUiStateFlow.update { currentUiState ->
                         currentUiState.copy(
                             isLoading = false,
@@ -50,11 +46,20 @@ class BeerViewModel @Inject constructor(
                     }
                 }
 
-                is ResponseWrapper.Error -> {
+                is NetworkResult.Error -> {
                     _beerDataUiStateFlow.update { currentUiState ->
                         currentUiState.copy(
                             isLoading = false,
-                            failureMessage = result.failureMessage
+                            failureMessage = result.message
+                        )
+                    }
+                }
+
+                is NetworkResult.Exception -> {
+                    _beerDataUiStateFlow.update { currentUiState ->
+                        currentUiState.copy(
+                            isLoading = false,
+                            failureMessage = result.e.message
                         )
                     }
                 }

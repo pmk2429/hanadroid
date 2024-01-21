@@ -22,7 +22,7 @@ class HanaViewModelFactory(
         handle: SavedStateHandle
     ): T {
         if (modelClass.isAssignableFrom(BoredActivityViewModel::class.java)) {
-            return BoredActivityViewModel(handle, Injection.createBoredActivityUseCase()) as T
+            return BoredActivityViewModel(Injection.createBoredActivityUseCase()) as T
         }
         if (modelClass.isAssignableFrom(RickAndMortyViewModel::class.java)) {
             return RickAndMortyViewModel(

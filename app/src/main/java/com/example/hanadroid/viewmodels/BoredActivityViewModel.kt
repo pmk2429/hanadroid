@@ -1,19 +1,20 @@
 package com.example.hanadroid.viewmodels
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hanadroid.networking.ResponseWrapper
+import com.example.hanadroid.networking.NetworkResult
 import com.example.hanadroid.ui.uistate.BoredActivityUiState
 import com.example.hanadroid.usecases.FetchBoredActivityUseCases
-import com.example.hanadroid.util.toAppError
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class BoredActivityViewModel(
-    savedStateHandle: SavedStateHandle,
     private val boredActivityUseCases: FetchBoredActivityUseCases
 ) : ViewModel() {
 
@@ -30,7 +31,7 @@ class BoredActivityViewModel(
 
         getBoredActivityJob = viewModelScope.launch {
             when (val result = boredActivityUseCases.invoke()) {
-                is ResponseWrapper.Success -> {
+                is NetworkResult.Success -> {
                     _boredActivityUiState.update { currentUiState ->
                         currentUiState.copy(
                             name = result.data.activity,
@@ -42,40 +43,17 @@ class BoredActivityViewModel(
                         )
                     }
                 }
-                is ResponseWrapper.Error -> {
+
+                is NetworkResult.Error -> {
                     _boredActivityUiState.update { currentUiState ->
-                        currentUiState.copy(failureMessage = result.failureMessage)
+                        currentUiState.copy(failureMessage = result.message)
                     }
                 }
-            }
-        }
-    }
 
-    fun fetchRandomBoredActivityForResult() {
-        if (getBoredActivityJob?.isActive == true) {
-            return
-        }
-
-        getBoredActivityJob = viewModelScope.launch {
-            val boredActivityResult = boredActivityUseCases.invokeForResult()
-            if (boredActivityResult.isSuccess) {
-                boredActivityResult.getOrThrow().apply {
+                is NetworkResult.Exception -> {
                     _boredActivityUiState.update { currentUiState ->
-                        currentUiState.copy(
-                            name = activity,
-                            type = type,
-                            participants = participants,
-                            price = price,
-                            url = link,
-                            isLoading = false
-                        )
+                        currentUiState.copy(failureMessage = result.e.message)
                     }
-                }
-            } else {
-                _boredActivityUiState.update { currentUiState ->
-                    currentUiState.copy(
-                        failureMessage = boredActivityResult.exceptionOrNull().toAppError().message
-                    )
                 }
             }
         }
