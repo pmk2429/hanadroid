@@ -81,7 +81,7 @@ class EntryActivity : AppCompatActivity() {
 
             fabFetchDogs.setOnClickListener { launchActivity(DogsMediaActivity::class.java) }
 
-            fabRedditPosts.setOnClickListener { launchActivity(RickAndMortyCharactersActivity::class.java) }
+            fabRickAndMorty.setOnClickListener { launchActivity(RickAndMortyCharactersActivity::class.java) }
 
             fabBeerData.setOnClickListener { launchActivity(BeerDataActivity::class.java) }
 
@@ -91,11 +91,11 @@ class EntryActivity : AppCompatActivity() {
 
             fabMusic.setOnClickListener { launchActivity(MusicPlayerActivity::class.java) }
 
-            startLauncherActivity.setOnClickListener { launchActivity(LaunchingIntentsActivity::class.java) }
+            startIntentsLauncherActivity.setOnClickListener { launchActivity(LaunchingIntentsActivity::class.java) }
 
             startTimerActivity.setOnClickListener { launchActivity(TimerActivity::class.java) }
 
-            startLongRunningTaskActivity.setOnClickListener { launchActivity(WorkerActivity::class.java) }
+            startWorkerActivity.setOnClickListener { launchActivity(WorkerActivity::class.java) }
 
             startTabbedFragmentsActivity.setOnClickListener { launchActivity(TabbedFragmentActivity::class.java) }
 
