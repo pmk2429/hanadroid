@@ -7,7 +7,8 @@ import com.bumptech.glide.Glide
 import com.example.hanadroid.databinding.ImageCarouselItemLayoutBinding
 
 /**
- * Adapter to provide for ViewPager2
+ * Adapter to provide for ViewPager2.
+ * Displays dynamic count carousel of images into an ImageView.
  */
 class ImagePagerAdapter(
     private val imageUrls: List<String>
