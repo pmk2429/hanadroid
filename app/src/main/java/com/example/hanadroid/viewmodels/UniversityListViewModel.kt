@@ -3,7 +3,7 @@ package com.example.hanadroid.viewmodels
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hanadroid.networking.ResponseWrapper
+import com.example.hanadroid.networking.NetworkResult
 import com.example.hanadroid.repository.UniversityRepository
 import com.example.hanadroid.ui.fragments.UniversityListFragment.Companion.ARGS_UNIVERSITY_COUNTRY_KEY
 import com.example.hanadroid.ui.uistate.UniversityListUiState
@@ -45,16 +45,25 @@ class UniversityListViewModel @Inject constructor(
 
         getUniversitiesJob = viewModelScope.launch {
             when (val result = universityRepository.fetchUniversities(country)) {
-                is ResponseWrapper.Success -> {
+                is NetworkResult.Success -> {
                     _universityUiState.update { currentUiState ->
                         currentUiState.copy(universities = result.data, isLoading = false)
                     }
                 }
 
-                is ResponseWrapper.Error -> {
+                is NetworkResult.Error -> {
                     _universityUiState.update { currentUiState ->
                         currentUiState.copy(
-                            failureMessage = result.failureMessage,
+                            failureMessage = result.message,
+                            isLoading = false
+                        )
+                    }
+                }
+
+                is NetworkResult.Exception -> {
+                    _universityUiState.update { currentUiState ->
+                        currentUiState.copy(
+                            failureMessage = result.e.message,
                             isLoading = false
                         )
                     }

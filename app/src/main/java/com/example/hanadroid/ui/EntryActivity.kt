@@ -98,6 +98,8 @@ class EntryActivity : AppCompatActivity() {
             startLongRunningTaskActivity.setOnClickListener { launchActivity(WorkerActivity::class.java) }
 
             startTabbedFragmentsActivity.setOnClickListener { launchActivity(TabbedFragmentActivity::class.java) }
+
+            mediaActivity.setOnClickListener { launchActivity(MediaActivity::class.java) }
         }
     }
 

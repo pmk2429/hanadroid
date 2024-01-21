@@ -5,31 +5,47 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.example.hanadroid.R
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.hanadroid.adapters.ImageCarouselAdapter
 import com.example.hanadroid.databinding.FragmentLoadImageBinding
+import com.example.hanadroid.repository.HanaImagesRepository
+import kotlinx.coroutines.launch
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class LoadImageFragment : Fragment() {
 
     private var _binding: FragmentLoadImageBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var carouselAdapter: ImageCarouselAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoadImageBinding.inflate(inflater, container, false)
+        carouselAdapter = ImageCarouselAdapter(HanaImagesRepository.hanaImageList)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_loadImage_to_loadVideoGif)
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                binding.recyclerViewImageCarousel.apply {
+                    layoutManager = LinearLayoutManager(requireContext())
+                    addItemDecoration(
+                        DividerItemDecoration(
+                            context,
+                            DividerItemDecoration.VERTICAL
+                        )
+                    )
+                    adapter = carouselAdapter
+                }
+            }
         }
     }
 

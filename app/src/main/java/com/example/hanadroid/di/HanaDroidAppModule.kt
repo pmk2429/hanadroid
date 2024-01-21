@@ -23,6 +23,8 @@ import com.example.hanadroid.networking.WOOF_DOG_BASE_URL
 import com.example.hanadroid.repository.UniversityRepository
 import com.example.hanadroid.util.CoroutineDispatcherProvider
 import com.example.hanadroid.util.DefaultDispatcherProvider
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,10 +61,14 @@ class HanaDroidAppModule {
             .addInterceptor(logger)
             .build()
 
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
         return Retrofit.Builder()
             .baseUrl(baseUrl)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(client)
-            .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
 

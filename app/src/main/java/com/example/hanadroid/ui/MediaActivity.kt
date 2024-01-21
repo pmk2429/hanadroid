@@ -11,9 +11,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.hanadroid.R
 import com.example.hanadroid.databinding.ActivityImageLoaderBinding
-import com.google.android.material.snackbar.Snackbar
 
-class ImageLoaderActivity : AppCompatActivity() {
+class MediaActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private var _binding: ActivityImageLoaderBinding? = null
@@ -31,12 +30,6 @@ class ImageLoaderActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_image_loader)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.fab)
-                .setAction("Action", null).show()
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -45,7 +38,7 @@ class ImageLoaderActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    private fun navigateToImageDetails(view: View) {
+    private fun navigateToVideoRendering(view: View) {
         Navigation.findNavController(view)
             .navigate(R.id.action_loadImage_to_loadVideoGif, Bundle().apply {
                 putString("DEMO", "DEMO")
