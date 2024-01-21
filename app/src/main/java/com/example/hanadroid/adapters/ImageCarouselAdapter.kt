@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hanadroid.databinding.ImageCarouselLayoutBinding
 import com.example.hanadroid.model.HanaImage
+import com.google.android.material.tabs.TabLayoutMediator
 
 class ImageCarouselAdapter(
     private val items: List<HanaImage>
@@ -35,6 +36,12 @@ class ImageCarouselAdapter(
             with(binding) {
                 val imageAdapter = ImagePagerAdapter(imageItem.imageUrls)
                 carouselViewPager.adapter = imageAdapter
+                TabLayoutMediator(tabLayout, carouselViewPager) { tab, position ->
+                    // Enable switching tabs when clicked
+                    tab.view.setOnClickListener {
+                        carouselViewPager.currentItem = position
+                    }
+                }.attach()
             }
         }
     }

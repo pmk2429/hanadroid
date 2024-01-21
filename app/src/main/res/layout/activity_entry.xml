@@ -7,13 +7,12 @@
     tools:context=".ui.EntryActivity">
 
     <Button
-        android:id="@+id/start_launcher_activity"
+        android:id="@+id/start_intents_launcher_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Launch Intents"
-        app:layout_constraintBaseline_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:text="@string/btn_intents_activity_text"
+        app:layout_constraintEnd_toStartOf="@id/start_timer_activity"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,40 +21,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Launch Timer"
-        app:layout_constraintBaseline_toTopOf="parent"
+        android:text="@string/btn_timer_activity_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/start_launcher_activity" />
+        app:layout_constraintStart_toEndOf="@id/start_intents_launcher_activity"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/start_long_running_task_activity"
+        android:id="@+id/start_worker_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Launch Worker"
-        app:layout_constraintBaseline_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/btn_workers_activity_text"
+        app:layout_constraintEnd_toStartOf="@id/start_tabbed_fragments_activity"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/start_timer_activity" />
+        app:layout_constraintTop_toBottomOf="@id/start_intents_launcher_activity" />
 
     <Button
         android:id="@+id/start_tabbed_fragments_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Tabs"
-        app:layout_constraintBaseline_toTopOf="parent"
+        android:text="@string/btn_tabbed_fragments_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/start_long_running_task_activity" />
+        app:layout_constraintStart_toEndOf="@id/start_worker_activity"
+        app:layout_constraintTop_toBottomOf="@id/start_timer_activity" />
 
     <Button
         android:id="@+id/media_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Media"
+        android:text="@string/btn_media_activity_text"
         app:layout_constraintBaseline_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +66,7 @@
         android:layout_marginBottom="@dimen/fab_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_map" />
+        app:srcCompat="@drawable/baseline_menu_book_white_24dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_bored_activity"
@@ -92,10 +88,10 @@
         android:layout_marginBottom="@dimen/fab_margin"
         app:layout_constraintBottom_toTopOf="@id/fab_bored_activity"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_popup_disk_full" />
+        app:srcCompat="@drawable/baseline_emoji_nature_white_24dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_reddit_posts"
+        android:id="@+id/fab_rick_and_morty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -103,7 +99,7 @@
         android:layout_marginBottom="@dimen/fab_margin"
         app:layout_constraintBottom_toTopOf="@id/fab_fetch_dogs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_slideshow" />
+        app:srcCompat="@drawable/baseline_emoji_emotions_white_24dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_beer_data"
@@ -112,9 +108,9 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
-        app:layout_constraintBottom_toTopOf="@id/fab_reddit_posts"
+        app:layout_constraintBottom_toTopOf="@id/fab_rick_and_morty"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        app:srcCompat="@drawable/baseline_emoji_food_beverage_white_24dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_fancy_item"
