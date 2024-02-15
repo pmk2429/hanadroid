@@ -14,16 +14,7 @@ import javax.inject.Inject
 
 @FragmentScoped
 class DisneyCharactersAdapter @Inject constructor(
-
-) : ListAdapter<DisneyCharacter, RecyclerView.ViewHolder>(
-    DisneyCharacterListDiffUtil()
-) {
-
-    companion object {
-        const val VIEW_TYPE_TEXT = 1
-        const val VIEW_TYPE_IMAGE = 2
-    }
-
+) : ListAdapter<DisneyCharacter, RecyclerView.ViewHolder>(DISNEY_CHARACTER_DIFF_UTIL) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_TEXT -> {
@@ -34,6 +25,7 @@ class DisneyCharactersAdapter @Inject constructor(
                 )
                 CharacterTextViewHolder(binding)
             }
+
             VIEW_TYPE_IMAGE -> {
                 val binding = DisneyImageListItemLayoutBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -42,6 +34,7 @@ class DisneyCharactersAdapter @Inject constructor(
                 )
                 CharacterImageViewHolder(binding)
             }
+
             else -> throw IllegalArgumentException("Unknown view type")
         }
     }
@@ -51,6 +44,7 @@ class DisneyCharactersAdapter @Inject constructor(
             is CharacterImageViewHolder -> {
                 holder.bind(character = getItem(position))
             }
+
             is CharacterTextViewHolder -> {
                 holder.bind(character = getItem(position))
             }
@@ -63,20 +57,6 @@ class DisneyCharactersAdapter @Inject constructor(
             VIEW_TYPE_TEXT
         } else {
             VIEW_TYPE_IMAGE
-        }
-    }
-
-    class DisneyCharacterListDiffUtil : DiffUtil.ItemCallback<DisneyCharacter>() {
-
-        override fun areItemsTheSame(oldItem: DisneyCharacter, newItem: DisneyCharacter): Boolean {
-            return oldItem.name == newItem.name
-        }
-
-        override fun areContentsTheSame(
-            oldItem: DisneyCharacter,
-            newItem: DisneyCharacter
-        ): Boolean {
-            return oldItem == newItem
         }
     }
 
@@ -105,6 +85,27 @@ class DisneyCharactersAdapter @Inject constructor(
                     .load(character.imageUrl)
                     .circleCrop()
                     .into(characterImage)
+            }
+        }
+    }
+
+    companion object {
+        const val VIEW_TYPE_TEXT = 1
+        const val VIEW_TYPE_IMAGE = 2
+
+        private val DISNEY_CHARACTER_DIFF_UTIL = object : DiffUtil.ItemCallback<DisneyCharacter>() {
+            override fun areItemsTheSame(
+                oldItem: DisneyCharacter,
+                newItem: DisneyCharacter
+            ): Boolean {
+                return oldItem.name == newItem.name
+            }
+
+            override fun areContentsTheSame(
+                oldItem: DisneyCharacter,
+                newItem: DisneyCharacter
+            ): Boolean {
+                return oldItem == newItem
             }
         }
     }

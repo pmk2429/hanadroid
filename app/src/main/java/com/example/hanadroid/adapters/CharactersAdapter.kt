@@ -3,12 +3,12 @@ package com.example.hanadroid.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import com.example.hanadroid.databinding.RickMortyCharacterRecyclerRowItemBinding
 import com.example.hanadroid.model.RickMortyCharacter
-import com.example.hanadroid.util.DiffUtilCallBack
 
-class CharactersAdapter :
-    PagingDataAdapter<RickMortyCharacter, CharactersViewHolder>(DiffUtilCallBack()) {
+class CharactersAdapter(
+) : PagingDataAdapter<RickMortyCharacter, CharactersViewHolder>(CHARACTERS_DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersViewHolder {
         val binding = RickMortyCharacterRecyclerRowItemBinding.inflate(
@@ -23,6 +23,25 @@ class CharactersAdapter :
         val rickMortyCharacter = getItem(position)
         rickMortyCharacter?.let {
             holder.bind(it)
+        }
+    }
+
+    companion object {
+        private val CHARACTERS_DIFF_UTIL = object : DiffUtil.ItemCallback<RickMortyCharacter>() {
+            override fun areItemsTheSame(
+                oldItem: RickMortyCharacter,
+                newItem: RickMortyCharacter
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(
+                oldItem: RickMortyCharacter,
+                newItem: RickMortyCharacter
+            ): Boolean {
+                return oldItem == newItem
+            }
+
         }
     }
 }

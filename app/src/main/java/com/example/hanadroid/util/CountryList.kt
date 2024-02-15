@@ -1,9 +1,7 @@
 package com.example.hanadroid.util
 
 object CountryList {
-    private val countriesList = listOf("United States", "France", "India", "Switzerland", "Italy", "Norway")
-
     const val unitedStates = "United States"
-
-    val randomCountry = countriesList[(countriesList.indices).random()]
+    private val countriesList = listOf("United States", "France", "India", "Switzerland", "Italy", "Norway")
+    val randomCountry = countriesList.random()
 }

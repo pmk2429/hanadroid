@@ -99,7 +99,8 @@ class EntryActivity : AppCompatActivity() {
 
             startTabbedFragmentsActivity.setOnClickListener { launchActivity(TabbedFragmentActivity::class.java) }
 
-            mediaActivity.setOnClickListener { launchActivity(MediaActivity::class.java) }
+            //mediaActivity.setOnClickListener { launchActivity(MediaActivity::class.java) }
+            mediaActivity.setOnClickListener { launchActivity(MarsDataActivity::class.java) }
         }
     }
 

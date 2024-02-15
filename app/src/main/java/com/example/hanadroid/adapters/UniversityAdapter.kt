@@ -42,6 +42,9 @@ class UniversityAdapter @Inject constructor(
         fun bind(university: University, universityItemClickListener: UniversityItemClickListener) {
             with(binding) {
                 universityItem = university
+                itemView.setOnClickListener {
+                    universityItemClickListener.onUniversityClick(university)
+                }
                 itemClickListener = universityItemClickListener
                 executePendingBindings()
             }

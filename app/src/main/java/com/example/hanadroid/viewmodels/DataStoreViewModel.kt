@@ -2,6 +2,7 @@ package com.example.hanadroid.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hanadroid.sharedprefs.PreferenceDataStoreConstants.AGE_KEY
 import com.example.hanadroid.sharedprefs.PreferenceDataStoreConstants.NAME_KEY
 import com.example.hanadroid.sharedprefs.PreferenceDataStoreHelper
 import kotlinx.coroutines.launch
@@ -31,6 +32,8 @@ class DataStoreViewModel(
 
     fun setPreference(value: String) {
         viewModelScope.launch {
+            preferenceDataStoreHelper.putPreference(NAME_KEY, value)
+            preferenceDataStoreHelper.putPreference(AGE_KEY, 1)
             preferenceDataStoreHelper.putPreference(NAME_KEY, value)
         }
     }
