@@ -1,6 +1,5 @@
 package com.example.hanadroid.ui.fragments
 
-import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -18,8 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -29,13 +27,13 @@ import com.example.hanadroid.R
 import com.example.hanadroid.adapters.UniversityAdapter
 import com.example.hanadroid.databinding.FragmentUniversityListBinding
 import com.example.hanadroid.model.University
+import com.example.hanadroid.repository.SortOrder
 import com.example.hanadroid.ui.uistate.UniversityListUiState
 import com.example.hanadroid.util.launchAndRepeatWithLifecycleOwner
 import com.example.hanadroid.viewmodels.UniversityListViewModel
 import com.example.hanadroid.viewmodels.UniversitySharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -60,7 +58,17 @@ class UniversityListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUniversityListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        universityListViewModel.initialSetupEvent.observe(viewLifecycleOwner) { initialSetupEvent ->
+            updateTaskFilters(initialSetupEvent.sortOrder)
+            setupOnCheckedChangeListener()
+        }
+
+        // hook the Item click listener
         universityAdapter.universityItemClickListener.onItemClick = {
             sharedViewModel.updateUniversity(it)
             findNavController().navigate(
@@ -70,32 +78,10 @@ class UniversityListFragment : Fragment() {
                 })
         }
 
+        // fetch and bind the backend data to Adapter
         binding.bindAdapter(universityListViewModel.universityUiState)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                // Add menu items here
-                menuInflater.inflate(R.menu.menu_main, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Handle the menu selection
-                return when (menuItem.itemId) {
-                    R.id.action_search -> {
-                        val searchManager =
-                            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-                        true
-                    }
-
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        bindMenuItem()
     }
 
     private fun hideSoftKeyboard() {
@@ -112,11 +98,9 @@ class UniversityListFragment : Fragment() {
         _binding = null
     }
 
-    private fun FragmentUniversityListBinding.bindAdapter(universityUiState: StateFlow<UniversityListUiState>) {
-        swipeRefreshLayout.setOnRefreshListener {
-            universityListViewModel.fetchUniversitiesByCountry()
-        }
-
+    private fun FragmentUniversityListBinding.bindAdapter(
+        universityUiState: StateFlow<UniversityListUiState>
+    ) {
         universityRecyclerView.apply {
 //            layoutManager = object : LinearLayoutManager(context) {
 //                override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
@@ -133,51 +117,92 @@ class UniversityListFragment : Fragment() {
                 RecyclerView.Adapter.StateRestorationPolicy.ALLOW
             adapter = universityAdapter
 
-            lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    universityUiState.collect { uiState ->
-                        swipeRefreshLayout.isRefreshing = false
-                        loadingProgress.isVisible = uiState.isLoading
-                    }
-                }
-            }
-
             // Sample use of the Kotlin Coroutine Extension to launch and repeat
             launchAndRepeatWithLifecycleOwner(
                 universityUiState
             ) { uiState ->
-                Log.i("~!@#", "SUCCESS --> ${uiState.universities}")
-                Log.i("~!@#", "LOADING --> ${uiState.isLoading}")
-                Log.i("~!@#", "ERROR --> ${uiState.failureMessage}")
-                universityAdapter.submitList(uiState.universities)
-                setRecyclerViewItemTouchListener(
-                    this@apply,
-                    uiState.universities
-                )
+                when (uiState) {
+                    is UniversityListUiState.LoadingState -> {
+                        Log.i("~!@#", "LOADING...")
+                        swipeRefreshLayout.isRefreshing = false
+                        loadingProgress.isVisible = true
+                    }
+
+                    is UniversityListUiState.ListState -> {
+                        loadingProgress.isVisible = false
+                        Log.i("~!@#", "SUCCESS --> ${uiState.universitiesList}")
+                        universityAdapter.submitList(uiState.universitiesList)
+                        setRecyclerViewItemTouchListener(
+                            this@apply,
+                            uiState.universitiesList
+                        )
+                    }
+
+                    is UniversityListUiState.ErrorState -> {
+                        loadingProgress.isVisible = false
+                        Log.i("~!@#", "ERROR --> ${uiState.failureMessage}")
+                    }
+
+                    is UniversityListUiState.EmptyListState -> {
+                        loadingProgress.isVisible = false
+                    }
+                }
             }
 
-            /* Smooth scroll to a position in Recycler Adapter when the data set changes
-               using an AdapterDataObserver to automatically scroll the RecyclerView when items
-               are added or removed from the adapter.
-             */
-            universityAdapter.registerAdapterDataObserver(object :
-                RecyclerView.AdapterDataObserver() {
-                override fun onItemRangeInserted(
-                    positionStart: Int,
-                    itemCount: Int
-                ) {
-                    this@apply.scrollToPosition(0)
-                }
+            swipeRefreshLayout.setOnRefreshListener {
+                universityListViewModel.refreshUniversitiesFetch()
+            }
+        }
+    }
 
-                override fun onItemRangeRemoved(
-                    positionStart: Int,
-                    itemCount: Int
-                ) {
-                    // Scroll to the last item after removal
-                    val lastItemPosition = adapter!!.itemCount - 1
-                    this@apply.smoothScrollToPosition(lastItemPosition)
+    private fun bindMenuItem() {
+        // Setup Menu item
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Add menu items here
+                menuInflater.inflate(R.menu.menu_main, menu)
+                val searchView = menu.findItem(R.id.action_search).actionView as SearchView
+                searchView.isSubmitButtonEnabled = true
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        if (!query.isNullOrEmpty()) {
+                            Log.i("~!@#", "query: $query")
+                            // get items form ViewModel and update using the query
+                            universityListViewModel.filterUniversities(query)
+                        }
+                        return true
+                    }
+
+                    override fun onQueryTextChange(query: String?): Boolean {
+                        if (!query.isNullOrEmpty()) {
+                            Log.i("~!@#", "query: $query")
+                        }
+                        return true
+                    }
+                })
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    R.id.action_search -> {
+                        true
+                    }
+
+                    else -> false
                 }
-            })
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun updateTaskFilters(sortOrder: SortOrder) {
+        binding.sortUniversity.isChecked = sortOrder == SortOrder.BY_UNIVERSITY_NAME
+    }
+
+    private fun setupOnCheckedChangeListener() {
+        binding.sortUniversity.setOnCheckedChangeListener { _, checked ->
+            universityListViewModel.enableSortByUniversityName(checked)
         }
     }
 

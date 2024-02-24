@@ -127,22 +127,6 @@ fun View.delayOnLifecycle(
 /**
  * Extension to call to launch Coroutine with LifecycleScope when it's atleast STARTED from Fragment.
  */
-fun <T> AppCompatActivity.launchAndRepeatWithLifecycleOwner(
-    flow: Flow<T?>,
-    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    block: (T) -> Unit
-) {
-    lifecycleScope.launch {
-        flow.flowWithLifecycle(this@launchAndRepeatWithLifecycleOwner.lifecycle, minActiveState)
-            .collect {
-                it?.let(block)
-            }
-    }
-}
-
-/**
- * Extension to call to launch Coroutine with LifecycleScope when it's atleast STARTED from Fragment.
- */
 fun <T> Fragment.launchAndRepeatWithLifecycleOwner(
     flow: Flow<T?>,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
@@ -200,10 +184,6 @@ fun isInternetConnected(context: Context): Boolean {
 
 fun Fragment.hideKeyboard() {
     view?.let { activity?.hideKeyboard(it) }
-}
-
-fun Activity.hideKeyboard() {
-    hideKeyboard(currentFocus ?: View(this))
 }
 
 fun Context.hideKeyboard(view: View) {

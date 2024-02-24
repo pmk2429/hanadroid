@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.hanadroid.adapters.FancyAdapter
 import com.example.hanadroid.databinding.ActivityFancyListBinding
 import com.example.hanadroid.ui.uistate.FancyItemsListUiState
@@ -15,7 +16,6 @@ import com.example.hanadroid.viewmodels.FancyListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FancyListActivity : AppCompatActivity() {
@@ -63,6 +63,30 @@ class FancyListActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            /* Smooth scroll to a position in Recycler Adapter when the data set changes
+               using an AdapterDataObserver to automatically scroll the RecyclerView when items
+               are added or removed from the adapter.
+             */
+            fancyAdapter.registerAdapterDataObserver(
+                object : RecyclerView.AdapterDataObserver() {
+                    override fun onItemRangeInserted(
+                        positionStart: Int,
+                        itemCount: Int
+                    ) {
+                        this@apply.scrollToPosition(0)
+                    }
+
+                    override fun onItemRangeRemoved(
+                        positionStart: Int,
+                        itemCount: Int
+                    ) {
+                        // Scroll to the last item after removal
+                        val lastItemPosition = adapter!!.itemCount - 1
+                        this@apply.smoothScrollToPosition(lastItemPosition)
+                    }
+                }
+            )
         }
     }
 

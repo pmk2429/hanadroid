@@ -10,6 +10,9 @@ import okio.IOException
 import retrofit2.HttpException
 import retrofit2.Response
 
+/**
+ * Base class to handle the Safe Network Call and capture the [Response].
+ */
 abstract class BaseRepository(
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) {

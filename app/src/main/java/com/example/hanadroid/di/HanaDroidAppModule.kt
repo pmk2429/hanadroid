@@ -1,5 +1,13 @@
 package com.example.hanadroid.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.example.hanadroid.data.beerapi.BeerDataApiHelper
 import com.example.hanadroid.data.beerapi.BeerDataApiHelperImpl
 import com.example.hanadroid.data.beerapi.BeerDataApiService
@@ -9,6 +17,9 @@ import com.example.hanadroid.data.disney.DisneyCharactersApiHelperImpl
 import com.example.hanadroid.data.disney.DisneyCharactersApiService
 import com.example.hanadroid.data.dogapi.DogCeoApiService
 import com.example.hanadroid.data.dogapi.DogWoofApiService
+import com.example.hanadroid.data.marsapi.MarsApiDataHelper
+import com.example.hanadroid.data.marsapi.MarsApiDataHelperImpl
+import com.example.hanadroid.data.marsapi.MarsApiService
 import com.example.hanadroid.data.rickandmorty.RickAndMortyApiService
 import com.example.hanadroid.data.universityapi.UniversityApiHelper
 import com.example.hanadroid.data.universityapi.UniversityApiHelperImpl
@@ -17,10 +28,12 @@ import com.example.hanadroid.networking.BEER_INFO_BASE_URL
 import com.example.hanadroid.networking.BORED_ACTIVITY_BASE_URL
 import com.example.hanadroid.networking.CEO_DOG_BASE_URL
 import com.example.hanadroid.networking.DISNEY_BASE_URL
+import com.example.hanadroid.networking.MARS_REAL_ESTATE_URL
 import com.example.hanadroid.networking.RICK_AND_MORTY_BASE_URL
 import com.example.hanadroid.networking.UNIVERSITY_BASE_URL
 import com.example.hanadroid.networking.WOOF_DOG_BASE_URL
 import com.example.hanadroid.repository.UniversityRepository
+import com.example.hanadroid.repository.UserPreferencesRepository
 import com.example.hanadroid.util.CoroutineDispatcherProvider
 import com.example.hanadroid.util.DefaultDispatcherProvider
 import com.squareup.moshi.Moshi
@@ -28,13 +41,19 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
+
+private const val USER_PREFERENCES_NAME = "user_preferences"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -45,6 +64,7 @@ class HanaDroidAppModule {
 
         val client = OkHttpClient.Builder()
             .addInterceptor(logger)
+            //.addInterceptor(ChuckerInterceptor(context))
             .build()
 
         return Retrofit.Builder()
@@ -141,8 +161,39 @@ class HanaDroidAppModule {
 
     @Singleton
     @Provides
+    fun provideMarsDataApiService(): MarsApiService {
+        return createRetrofitServiceWithMoshi(MARS_REAL_ESTATE_URL).create(MarsApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMarsDataApiHelper(): MarsApiDataHelper {
+        return MarsApiDataHelperImpl(provideMarsDataApiService())
+    }
+
+    @Singleton
+    @Provides
     fun provideCoroutineDispatcher(): CoroutineDispatcherProvider {
         return DefaultDispatcherProvider()
+    }
+
+    @Singleton
+    @Provides
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler(
+                produceNewData = { emptyPreferences() }
+            ),
+            migrations = listOf(SharedPreferencesMigration(context, USER_PREFERENCES_NAME)),
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(USER_PREFERENCES_NAME) }
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserPreferencesRepository(dataStore: DataStore<Preferences>): UserPreferencesRepository {
+        return UserPreferencesRepository(dataStore)
     }
 
 }
