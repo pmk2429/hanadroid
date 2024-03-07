@@ -3,15 +3,19 @@ package com.example.hanadroid.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.hanadroid.databinding.ActivityLocationBinding
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -25,6 +29,7 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
     val binding get() = _binding!!
 
     private lateinit var googleMap: GoogleMap
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val requestFineAndCoarseLocationPermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -45,36 +50,93 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
         _binding = ActivityLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.mapView.apply {
-            onCreate(savedInstanceState)
-            getMapAsync(this@LocationActivity)
-        }
+//        binding.mapView.apply {
+//            onCreate(savedInstanceState)
+//            getMapAsync(this@LocationActivity)
+//        }
+        // Initialize the FusedLocationProviderClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        binding.btnSearch.setOnClickListener { onSearchClicked() }
     }
 
     override fun onResume() {
         super.onResume()
-        binding.mapView.onResume()
+        // binding.mapView.onResume()
     }
 
     override fun onMapReady(gMap: GoogleMap) {
-        googleMap = gMap
-        checkLocationPermission()
+        // googleMap = gMap
+        // checkLocationPermission()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // binding.mapView.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // binding.mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        // binding.mapView.onLowMemory()
+    }
+
+    private fun onSearchClicked() {
+        // Check for permissions before requesting location updates
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                REQUEST_LOCATION_PERMISSION
+            )
+            return
+        }
+        captureLocation()
     }
 
     @SuppressLint("MissingPermission")
     private fun captureLocation() {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         // Permissions are granted -- capture last known location and show it on a Map
         fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                location?.let {
-                    val latitude = it.latitude
-                    val longitude = it.longitude
-                    showLocationOnMap(latitude, longitude)
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    // Use the current location
+                    binding.latLng.text =
+                        "Lat ${location.latitude}, Long ${location.longitude}"
+                } else {
+                    // Request a new location update
+                    fusedLocationClient.requestLocationUpdates(
+                        LocationRequest.create(),
+                        object : LocationCallback() {
+                            override fun onLocationResult(locationResult: LocationResult) {
+                                for (newLocation in locationResult.locations) {
+                                    binding.latLng.text =
+                                        "Lat ${newLocation.latitude}, Long ${newLocation.longitude}"
+                                    // Stop location updates
+                                    fusedLocationClient.removeLocationUpdates(this)
+                                }
+                            }
+                        },
+                        null
+                    )
                 }
             }
-            .addOnFailureListener { e: Exception ->
-                e.printStackTrace()
+            .addOnFailureListener { e ->
+                showToast("Failed to get location: ${e.message}")
             }
     }
 
@@ -101,6 +163,7 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if (fineLocationGranted && coarseLocationGranted) {
             showToast("Location permissions already granted")
+            // capture location if permission is already granted
             captureLocation()
         } else {
             // Request both fine and coarse location permissions
@@ -110,6 +173,22 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 )
             )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, get the location
+                onSearchClicked()
+            } else {
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -142,6 +221,10 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
                 requestLocationPermission.launch(permission)
             }
         }
+    }
+
+    companion object {
+        private const val REQUEST_LOCATION_PERMISSION = 1
     }
 
 }

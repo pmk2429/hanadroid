@@ -20,6 +20,9 @@ import com.example.hanadroid.data.dogapi.DogWoofApiService
 import com.example.hanadroid.data.marsapi.MarsApiDataHelper
 import com.example.hanadroid.data.marsapi.MarsApiDataHelperImpl
 import com.example.hanadroid.data.marsapi.MarsApiService
+import com.example.hanadroid.data.nextdoor.NewsApiHelperImpl
+import com.example.hanadroid.data.nextdoor.NewsFeedApiHelper
+import com.example.hanadroid.data.nextdoor.NewsFeedApiService
 import com.example.hanadroid.data.rickandmorty.RickAndMortyApiService
 import com.example.hanadroid.data.universityapi.UniversityApiHelper
 import com.example.hanadroid.data.universityapi.UniversityApiHelperImpl
@@ -29,6 +32,7 @@ import com.example.hanadroid.networking.BORED_ACTIVITY_BASE_URL
 import com.example.hanadroid.networking.CEO_DOG_BASE_URL
 import com.example.hanadroid.networking.DISNEY_BASE_URL
 import com.example.hanadroid.networking.MARS_REAL_ESTATE_URL
+import com.example.hanadroid.networking.NEWS_FEED_BASE_URL
 import com.example.hanadroid.networking.RICK_AND_MORTY_BASE_URL
 import com.example.hanadroid.networking.UNIVERSITY_BASE_URL
 import com.example.hanadroid.networking.WOOF_DOG_BASE_URL
@@ -169,6 +173,18 @@ class HanaDroidAppModule {
     @Provides
     fun provideMarsDataApiHelper(): MarsApiDataHelper {
         return MarsApiDataHelperImpl(provideMarsDataApiService())
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewsFeedApiService(): NewsFeedApiService {
+        return createRetrofitServiceWithMoshi(NEWS_FEED_BASE_URL).create(NewsFeedApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesNewsFeedApiHelper(): NewsFeedApiHelper {
+        return NewsApiHelperImpl(provideNewsFeedApiService())
     }
 
     @Singleton
