@@ -18,6 +18,7 @@ import com.example.hanadroid.R
 import com.example.hanadroid.adapters.BeerDataListAdapter
 import com.example.hanadroid.databinding.FragmentBeerDataListBinding
 import com.example.hanadroid.ui.uistate.BeerDataUiState
+import com.example.hanadroid.util.PaginationScrollListener
 import com.example.hanadroid.viewmodels.BeerSharedViewModel
 import com.example.hanadroid.viewmodels.BeerViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +58,9 @@ class BeerListFragment : Fragment() {
         }
     }
 
-    private fun FragmentBeerDataListBinding.bindAdapter(beerDataUiState: StateFlow<BeerDataUiState>) {
+    private fun FragmentBeerDataListBinding.bindAdapter(
+        beerDataUiState: StateFlow<BeerDataUiState>
+    ) {
         beerRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
@@ -72,6 +75,18 @@ class BeerListFragment : Fragment() {
                     }
                 }
             }
+
+            addOnScrollListener(object : PaginationScrollListener(
+                this.layoutManager as LinearLayoutManager
+            ) {
+                override fun loadMoreItems() {
+                    // fetch more items
+                }
+
+                override fun isLastPage() = false
+
+                override fun isLoading() = false
+            })
         }
     }
 
