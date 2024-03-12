@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hanadroid.adapters.StoryNewsFeedAdapter
 import com.example.hanadroid.databinding.FragmentNewsFeedBinding
 import com.example.hanadroid.viewmodels.NewsFeedViewModel
-import com.hana.nextdoor.models.StoryUiState
+import com.example.hanadroid.model.uistates.StoryUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

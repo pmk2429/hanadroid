@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/universityContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/character_image"
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/character_name"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="#0000FF"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/favorite_character"
+            app:layout_constraintStart_toEndOf="@id/character_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Mickey Mouse" />
+
+        <ImageView
+            android:id="@+id/favorite_character"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_8"
+            android:src="@drawable/baseline_star_yellow_700_24dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/character_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/movies_label"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="Movies:"
+            android:textColor="@color/grey"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/character_movies"
+            app:layout_constraintStart_toEndOf="@id/character_image"
+            app:layout_constraintTop_toBottomOf="@id/character_name"
+            tools:text="Movies:" />
+
+        <TextView
+            android:id="@+id/character_movies"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/movies_label"
+            app:layout_constraintTop_toBottomOf="@id/character_name" />
+
+        <TextView
+            android:id="@+id/tv_shows_label"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="Shows:"
+            android:textColor="@color/grey"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/character_tv_shows"
+            app:layout_constraintStart_toEndOf="@id/character_image"
+            app:layout_constraintTop_toBottomOf="@id/movies_label"
+            tools:text="Shows:" />
+
+        <TextView
+            android:id="@+id/character_tv_shows"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_shows_label"
+            app:layout_constraintTop_toBottomOf="@id/character_movies"
+            tools:text="Shows:" />
+
+        <TextView
+            android:id="@+id/games_label"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="Games:"
+            android:textColor="@color/grey"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/character_games"
+            app:layout_constraintStart_toEndOf="@id/character_image"
+            app:layout_constraintTop_toBottomOf="@id/character_tv_shows"
+            tools:text="Games:" />
+
+        <TextView
+            android:id="@+id/character_games"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/games_label"
+            app:layout_constraintTop_toBottomOf="@id/character_tv_shows"
+            tools:text="Games:" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

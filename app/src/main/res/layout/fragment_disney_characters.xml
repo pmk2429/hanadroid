@@ -6,13 +6,88 @@
     android:layout_height="match_parent"
     tools:context=".ui.DisneyCharactersActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/disney_characters_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_characters"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/sort_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/disney_characters_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/disney_character_list_item_layout" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/progressIndicator"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/sort_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightGreyAlpha"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/padding_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_reorder_24"
+            app:tint="?attr/colorOnSurface" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/sort_movies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_12"
+            android:checkable="true"
+            android:text="Films"
+            android:textColor="@color/white"
+            app:checkedIconEnabled="true"
+            app:chipBackgroundColor="@color/purple_700" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/sort_shows"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_12"
+            android:checkable="true"
+            android:text="TV"
+            android:textColor="@color/white"
+            app:checkedIconEnabled="true"
+            app:chipBackgroundColor="@color/purple_700" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/sort_games"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_12"
+            android:checkable="true"
+            android:text="Games"
+            android:textColor="@color/white"
+            app:checkedIconEnabled="true"
+            app:chipBackgroundColor="@color/purple_700" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

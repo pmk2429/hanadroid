@@ -1,4 +1,6 @@
-package com.hana.nextdoor.models
+package com.example.hanadroid.model.uistates
+
+import com.hana.nextdoor.models.Story
 
 data class StoryUiState(
     val stories: List<Story> = emptyList(),

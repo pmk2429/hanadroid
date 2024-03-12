@@ -10,12 +10,14 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Button
 import androidx.core.view.allViews
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -64,6 +66,28 @@ inline fun <reified T : View> View.allChildViews(): List<View> {
         .toList()
         .flatMap { it.allViews }
         .plus(this as View)
+}
+
+/**
+ * `debounceInterval` specifies the debounce interval in milliseconds (e.g., 2 seconds).
+ * The Handler is used to delay setting isClickable back to true until after the debounce
+ * interval has elapsed. This prevents rapid consecutive button clicks within the debounce
+ * interval from triggering the action multiple times.
+ */
+fun Button.setDebouncedOnClickListener(debounceInterval: Long = 2000L, onClick: (Button) -> Unit) {
+    val handler = Handler(Looper.getMainLooper())
+    var isClickable = true
+
+    setOnClickListener {
+        if (isClickable) {
+            isClickable = false
+            handler.postDelayed({
+                isClickable = true
+            }, debounceInterval)
+
+            onClick(this)
+        }
+    }
 }
 
 /**
