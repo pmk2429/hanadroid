@@ -12,9 +12,9 @@ import com.example.hanadroid.data.beerapi.BeerDataApiHelper
 import com.example.hanadroid.data.beerapi.BeerDataApiHelperImpl
 import com.example.hanadroid.data.beerapi.BeerDataApiService
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiService
-import com.example.hanadroid.data.disney.DisneyCharactersApiHelper
-import com.example.hanadroid.data.disney.DisneyCharactersApiHelperImpl
-import com.example.hanadroid.data.disney.DisneyCharactersApiService
+import com.example.hanadroid.data.disneyapi.DisneyApiHelper
+import com.example.hanadroid.data.disneyapi.DisneyApiHelperImpl
+import com.example.hanadroid.data.disneyapi.DisneyApiService
 import com.example.hanadroid.data.dogapi.DogCeoApiService
 import com.example.hanadroid.data.dogapi.DogWoofApiService
 import com.example.hanadroid.data.marsapi.MarsApiDataHelper
@@ -57,7 +57,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-private const val USER_PREFERENCES_NAME = "user_preferences"
+private const val HANA_PREFERENCES_NAME = "hana_preferences"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -141,18 +141,6 @@ class HanaDroidAppModule {
 
     @Singleton
     @Provides
-    fun providesDisneyCharactersApiService(): DisneyCharactersApiService {
-        return createRetrofitService(DISNEY_BASE_URL).create(DisneyCharactersApiService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideDisneyApiHelper(): DisneyCharactersApiHelper {
-        return DisneyCharactersApiHelperImpl(providesDisneyCharactersApiService())
-    }
-
-    @Singleton
-    @Provides
     fun providesBeerDataApiService(): BeerDataApiService {
         return createRetrofitService(BEER_INFO_BASE_URL).create(BeerDataApiService::class.java)
     }
@@ -187,6 +175,18 @@ class HanaDroidAppModule {
         return NewsApiHelperImpl(provideNewsFeedApiService())
     }
 
+    @Provides
+    @Singleton
+    fun provideDisneyApiService(): DisneyApiService {
+        return createRetrofitServiceWithMoshi(DISNEY_BASE_URL).create(DisneyApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDisneyApiHelper(): DisneyApiHelper {
+        return DisneyApiHelperImpl(provideDisneyApiService())
+    }
+
     @Singleton
     @Provides
     fun provideCoroutineDispatcher(): CoroutineDispatcherProvider {
@@ -195,14 +195,14 @@ class HanaDroidAppModule {
 
     @Singleton
     @Provides
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+    fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler(
                 produceNewData = { emptyPreferences() }
             ),
-            migrations = listOf(SharedPreferencesMigration(context, USER_PREFERENCES_NAME)),
+            migrations = listOf(SharedPreferencesMigration(context, HANA_PREFERENCES_NAME)),
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = { context.preferencesDataStoreFile(USER_PREFERENCES_NAME) }
+            produceFile = { context.preferencesDataStoreFile(HANA_PREFERENCES_NAME) }
         )
     }
 

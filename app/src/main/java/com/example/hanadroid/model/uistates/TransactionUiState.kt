@@ -1,4 +1,6 @@
-package com.example.hanadroid.model
+package com.example.hanadroid.model.uistates
+
+import com.example.hanadroid.model.University
 
 /**
  * * The main benefit of using Interface here as opposed to a UiState data class object is to do with

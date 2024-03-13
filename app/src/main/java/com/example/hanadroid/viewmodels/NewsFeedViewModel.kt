@@ -7,7 +7,7 @@ import com.example.hanadroid.networking.NetworkResult
 import com.example.hanadroid.repository.NewsFeedRepository
 import com.example.hanadroid.util.toStory
 import com.hana.nextdoor.models.Story
-import com.hana.nextdoor.models.StoryUiState
+import com.example.hanadroid.model.uistates.StoryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

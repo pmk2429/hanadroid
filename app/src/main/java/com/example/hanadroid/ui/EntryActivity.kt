@@ -20,6 +20,7 @@ import androidx.work.*
 import com.example.hanadroid.broadcastreceivers.AirplaneModeBroadcastReceiver
 import com.example.hanadroid.databinding.ActivityEntryBinding
 import com.example.hanadroid.util.createNotificationChannel
+import com.example.hanadroid.util.setDebouncedOnClickListener
 
 class EntryActivity : AppCompatActivity() {
 
@@ -91,7 +92,13 @@ class EntryActivity : AppCompatActivity() {
 
             fabMusic.setOnClickListener { launchActivity(MusicPlayerActivity::class.java) }
 
-            startIntentsLauncherActivity.setOnClickListener { launchActivity(LaunchingIntentsActivity::class.java) }
+            fabDisney.setOnClickListener { launchActivity(DisneyCharactersActivity::class.java) }
+
+            startIntentsLauncherActivity.setOnClickListener {
+                launchActivity(
+                    LaunchingIntentsActivity::class.java
+                )
+            }
 
             startTimerActivity.setOnClickListener { launchActivity(TimerActivity::class.java) }
 
@@ -99,8 +106,10 @@ class EntryActivity : AppCompatActivity() {
 
             startTabbedFragmentsActivity.setOnClickListener { launchActivity(TabbedFragmentActivity::class.java) }
 
-            //mediaActivity.setOnClickListener { launchActivity(MediaActivity::class.java) }
-            mediaActivity.setOnClickListener { launchActivity(MarsDataActivity::class.java) }
+            mediaActivity.setDebouncedOnClickListener {
+                Log.i("~!@#", "debounced clicked")
+                launchActivity(MediaActivity::class.java)
+            }
         }
     }
 

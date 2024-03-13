@@ -1,8 +1,10 @@
-package com.example.hanadroid.model
+package com.example.hanadroid.model.uistates
 
 import android.view.View
 import androidx.paging.CombinedLoadStates
 import androidx.paging.PagingData
+import com.example.hanadroid.model.BeerInfo
+import com.example.hanadroid.model.FancyModel
 import com.example.hanadroid.viewmodels.BaseEvent
 import com.example.hanadroid.viewmodels.BaseResult
 import com.example.hanadroid.viewmodels.BaseViewAction
