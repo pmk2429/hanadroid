@@ -201,11 +201,15 @@ class UniversityListViewModel @Inject constructor(
      * Filter Universities cached locally using provided query.
      */
     fun filterUniversities(query: String) {
-        val filteredUniversities = _localUniversities.filter { university ->
-            university.let {
-                it.state?.contains(query, ignoreCase = true) == true ||
-                        it.name?.contains(query, ignoreCase = true) == true ||
-                        it.country?.contains(query, ignoreCase = true) == true
+        val filteredUniversities = if (query.trim().isEmpty()) {
+            _localUniversities
+        } else {
+            _localUniversities.filter { university ->
+                university.let {
+                    it.state?.contains(query, ignoreCase = true) == true ||
+                            it.name?.contains(query, ignoreCase = true) == true ||
+                            it.country?.contains(query, ignoreCase = true) == true
+                }
             }
         }
         Log.i("~!@#", "filterUniversities: $filteredUniversities")

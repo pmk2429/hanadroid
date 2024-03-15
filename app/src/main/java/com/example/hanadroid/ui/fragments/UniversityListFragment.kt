@@ -162,6 +162,7 @@ class UniversityListFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.menu_main, menu)
+                val searchItem = menu.findItem(R.id.action_search)
                 val searchView = menu.findItem(R.id.action_search).actionView as SearchView
                 searchView.isSubmitButtonEnabled = true
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -181,6 +182,18 @@ class UniversityListFragment : Fragment() {
                         return true
                     }
                 })
+                searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                    override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                        return true
+                    }
+
+                    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                        // SearchView is collapsed, clear the query
+                        universityListViewModel.filterUniversities("")
+                        return true
+                    }
+                })
+                searchView.setIconifiedByDefault(true)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

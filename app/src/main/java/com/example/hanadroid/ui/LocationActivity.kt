@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import com.example.hanadroid.databinding.ActivityLocationBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -22,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.location.LocationRequest as LocationRequest1
 
 class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -84,6 +84,22 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
         // binding.mapView.onLowMemory()
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, get the location
+                onSearchClicked()
+            } else {
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun onSearchClicked() {
         // Check for permissions before requesting location updates
         if (ActivityCompat.checkSelfPermission(
@@ -120,7 +136,7 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
                 } else {
                     // Request a new location update
                     fusedLocationClient.requestLocationUpdates(
-                        LocationRequest.create(),
+                        LocationRequest1.create(),
                         object : LocationCallback() {
                             override fun onLocationResult(locationResult: LocationResult) {
                                 for (newLocation in locationResult.locations) {
@@ -173,22 +189,6 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 )
             )
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, get the location
-                onSearchClicked()
-            } else {
-                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
