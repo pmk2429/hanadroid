@@ -47,6 +47,10 @@ class DisneyCharactersViewModel @Inject constructor(
     }
 
     init {
+        combinePreferencesAndResponse()
+    }
+
+    private fun combinePreferencesAndResponse() {
         viewModelScope.launch {
             combine(
                 _charactersList,
