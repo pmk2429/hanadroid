@@ -220,3 +220,30 @@ fun <T> Context.isServiceRunning(service: Class<T>) =
     (getSystemService(ACTIVITY_SERVICE) as ActivityManager)
         .getRunningServices(Integer.MAX_VALUE)
         .any { it.service.className == service.name }
+
+
+fun View.findViewById(id: Int): View? {
+    return if (id == View.NO_ID) {
+        null
+    } else findViewTraversal(id)
+
+    // Traverse the view hierarchy to find the view with the given id
+}
+
+private fun View.findViewTraversal(id: Int): View? {
+    if (id == this.id) {
+        return this
+    }
+    if (this is ViewGroup) {
+        val parent = this as ViewGroup
+        val count = parent.childCount
+        for (i in 0 until count) {
+            val child = parent.getChildAt(i)
+            val view: View? = child.findViewTraversal(id)
+            if (view != null) {
+                return view
+            }
+        }
+    }
+    return null
+}
