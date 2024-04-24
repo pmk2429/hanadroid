@@ -31,6 +31,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="32">
         <activity
+            android:name=".ui.DispatcherActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.UserInteractionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.UiExplorationActivity"
             android:exported="false" />
         <activity

@@ -34,6 +34,7 @@ import com.example.hanadroid.networking.DISNEY_BASE_URL
 import com.example.hanadroid.networking.MARS_REAL_ESTATE_URL
 import com.example.hanadroid.networking.NEWS_FEED_BASE_URL
 import com.example.hanadroid.networking.RICK_AND_MORTY_BASE_URL
+import com.example.hanadroid.networking.RetryInterceptor
 import com.example.hanadroid.networking.UNIVERSITY_BASE_URL
 import com.example.hanadroid.networking.WOOF_DOG_BASE_URL
 import com.example.hanadroid.repository.UniversityRepository
@@ -83,6 +84,7 @@ class HanaDroidAppModule {
 
         val client = OkHttpClient.Builder()
             .addInterceptor(logger)
+            .addInterceptor(RetryInterceptor(maxRetries = 3)) // Retry up to 3 times
             .build()
 
         val moshi = Moshi.Builder()
