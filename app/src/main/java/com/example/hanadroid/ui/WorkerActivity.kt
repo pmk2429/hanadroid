@@ -21,7 +21,6 @@ import androidx.work.WorkManager
 import com.example.hanadroid.R
 import com.example.hanadroid.broadcastreceivers.HanaBroadcastReceiver
 import com.example.hanadroid.databinding.ActivityWorkerBinding
-import com.example.hanadroid.util.LruCacheManager
 import com.example.hanadroid.util.sendNotification
 import com.example.hanadroid.workers.EmotionalAnalysisWorker
 import com.example.hanadroid.workers.EmotionalAnalysisWorker.Companion.EMOTIONAL_ANALYSIS_WORK_TAG
@@ -142,6 +141,7 @@ class WorkerActivity : AppCompatActivity() {
     private fun startLongRunningTask() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
             .build()
 
         val inputData = Data.Builder()

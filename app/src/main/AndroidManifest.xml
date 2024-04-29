@@ -164,6 +164,9 @@
             android:name=".broadcastreceivers.HanaBroadcastReceiver"
             android:exported="false" />
         <receiver
+            android:name=".broadcastreceivers.NotificationIntentReceiver"
+            android:exported="false" />
+        <receiver
             android:name=".broadcastreceivers.AirplaneModeBroadcastReceiver"
             android:exported="false">
             <intent-filter>

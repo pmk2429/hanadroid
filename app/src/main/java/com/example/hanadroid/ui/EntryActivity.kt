@@ -3,6 +3,7 @@ package com.example.hanadroid.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -18,9 +19,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.work.*
 import com.example.hanadroid.broadcastreceivers.AirplaneModeBroadcastReceiver
+import com.example.hanadroid.broadcastreceivers.NotificationIntentReceiver
 import com.example.hanadroid.databinding.ActivityEntryBinding
 import com.example.hanadroid.util.createNotificationChannel
 import com.example.hanadroid.util.setDebouncedOnClickListener
+import com.example.hanadroid.util.showNotificationWithAcceptAndDeclineActionsPendingIntent
 
 class EntryActivity : AppCompatActivity() {
 
@@ -28,6 +31,11 @@ class EntryActivity : AppCompatActivity() {
     private val binding get() = _binding!!
 
     private val myBroadcastReceiver by lazy { AirplaneModeBroadcastReceiver() }
+    private val notificationIntentReceiver by lazy { NotificationIntentReceiver() }
+
+    private val notificationManager: NotificationManager by lazy {
+        getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    }
 
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -64,7 +72,7 @@ class EntryActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        initBroadcastReceiver()
+        initBroadcastReceivers()
     }
 
     private fun bindOnClicks() {
@@ -110,6 +118,13 @@ class EntryActivity : AppCompatActivity() {
                 Log.i("~!@#", "debounced clicked")
                 launchActivity(MediaActivity::class.java)
             }
+
+            customMediaNotification.setOnClickListener {
+                notificationManager.showNotificationWithAcceptAndDeclineActionsPendingIntent(
+                    this@EntryActivity,
+                    EntryActivity::class.java
+                )
+            }
         }
     }
 
@@ -117,7 +132,7 @@ class EntryActivity : AppCompatActivity() {
         activityLauncher.launch(Intent(this, activityClass))
     }
 
-    private fun initBroadcastReceiver() {
+    private fun initBroadcastReceivers() {
         val listenToBroadcastsFromOtherApps = false
         val receiverFlags = if (listenToBroadcastsFromOtherApps) {
             ContextCompat.RECEIVER_EXPORTED
@@ -127,11 +142,20 @@ class EntryActivity : AppCompatActivity() {
         IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
             registerReceiver(myBroadcastReceiver, it, receiverFlags)
         }
+
+        // register Notification Receiver
+        // In this case, sendBroadcast(intent) will be called by Android System and delivers the Intent
+        val intentFilter = IntentFilter().apply {
+            addAction(NotificationIntentReceiver.ACCEPT_NOTIFICATION_ACTION)
+            addAction(NotificationIntentReceiver.DECLINE_NOTIFICATION_ACTION)
+        }
+        registerReceiver(notificationIntentReceiver, intentFilter)
     }
 
     override fun onStop() {
         super.onStop()
         unregisterReceiver(myBroadcastReceiver)
+        unregisterReceiver(notificationIntentReceiver)
     }
 
     /**

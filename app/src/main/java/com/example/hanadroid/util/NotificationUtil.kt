@@ -7,13 +7,18 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.RemoteViews
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.hanadroid.R
+import com.example.hanadroid.broadcastreceivers.NotificationIntentReceiver
+import com.example.hanadroid.ui.BeerDataActivity
+import com.example.hanadroid.ui.UniversityMainActivity
 
 const val WORKER_CHANNEL_ID = "123425"
 const val PENDING_INTENT_CHANNEL_ID = "789"
+const val REMOTE_VIEWS_CHANNEL_ID = "remote_views_channel_id"
 
 /**
  * Create the NotificationChannel, but only on API 26+ because
@@ -117,4 +122,89 @@ fun isNotificationPermissionGranted(context: Context): Boolean {
         // Notification channels were not introduced before Android O
         true
     }
+}
+
+fun NotificationManager.showNotificationWithAcceptAndDeclineActionsPendingIntentBroadcastReceiver(
+    context: Context,
+    activityClass: Class<*>?
+) {
+    val NOTIFICATION_ID = 2429
+
+    val serviceChannel = NotificationChannel(
+        REMOTE_VIEWS_CHANNEL_ID,
+        "Custom Notification Channel",
+        NotificationManager.IMPORTANCE_DEFAULT
+    )
+    createNotificationChannel(serviceChannel)
+
+    val intent = Intent(context, activityClass)
+    val pendingIntent =
+        PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+    val declineIntent = Intent(context, NotificationIntentReceiver::class.java).apply {
+        action = NotificationIntentReceiver.DECLINE_NOTIFICATION_ACTION
+    }
+    val declinePendingIntent =
+        PendingIntent.getBroadcast(context, 0, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+    val acceptIntent = Intent(context, NotificationIntentReceiver::class.java).apply {
+        action = NotificationIntentReceiver.ACCEPT_NOTIFICATION_ACTION
+    }
+    val acceptPendingIntent =
+        PendingIntent.getBroadcast(context, 0, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+    val remoteViews = RemoteViews(context.packageName, R.layout.notification_layout)
+    remoteViews.setTextViewText(R.id.notification_title, "Register for Bounty")
+    remoteViews.setTextViewText(R.id.notification_text, "Want to play Bounty Hunter?")
+    remoteViews.setImageViewResource(R.id.notification_icon, R.drawable.ic_star)
+    remoteViews.setOnClickPendingIntent(R.id.btn_decline, declinePendingIntent)
+    remoteViews.setOnClickPendingIntent(R.id.btn_accept, acceptPendingIntent)
+
+    val builder = NotificationCompat.Builder(context, REMOTE_VIEWS_CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_star)
+        .setContentIntent(pendingIntent)
+        .setCustomContentView(remoteViews)
+        .setAutoCancel(true)
+        .build()
+
+    notify(NOTIFICATION_ID, builder)
+}
+
+fun NotificationManager.showNotificationWithAcceptAndDeclineActionsPendingIntent(
+    context: Context,
+    activityClass: Class<*>?
+) {
+    val NOTIFICATION_ID = 242920
+
+    val serviceChannel = NotificationChannel(
+        REMOTE_VIEWS_CHANNEL_ID,
+        "Custom Notification Channel",
+        NotificationManager.IMPORTANCE_DEFAULT
+    )
+    createNotificationChannel(serviceChannel)
+
+    val declineIntent = Intent(context, UniversityMainActivity::class.java)
+    val declinePendingIntent =
+        PendingIntent.getActivity(context, 0, declineIntent, PendingIntent.FLAG_IMMUTABLE)
+
+    val acceptIntent = Intent(context, BeerDataActivity::class.java)
+    val acceptPendingIntent =
+        PendingIntent.getActivity(context, 0, acceptIntent, PendingIntent.FLAG_IMMUTABLE)
+
+
+    val remoteViews = RemoteViews(context.packageName, R.layout.notification_layout)
+    remoteViews.setTextViewText(R.id.notification_title, "Register for Bounty")
+    remoteViews.setTextViewText(R.id.notification_text, "Want to play Bounty Hunter?")
+    remoteViews.setImageViewResource(R.id.notification_icon, R.drawable.ic_star)
+    remoteViews.setOnClickPendingIntent(R.id.btn_decline, declinePendingIntent)
+    remoteViews.setOnClickPendingIntent(R.id.btn_accept, acceptPendingIntent)
+
+    val notification = NotificationCompat.Builder(context, REMOTE_VIEWS_CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_star)
+        .setCustomContentView(remoteViews)
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setAutoCancel(true)
+        .build()
+
+    notify(NOTIFICATION_ID, notification)
 }
