@@ -70,15 +70,15 @@ android {
 dependencies {
 
     implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.work:work-runtime-ktx:2.9.0")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
     // Kotlinx
@@ -93,11 +93,15 @@ dependencies {
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation("com.github.bumptech.glide:recyclerview-integration:4.14.2") {
+        // Excludes the support library because it's already included by Glide.
+        isTransitive = false
+    }
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.50")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    implementation("com.google.android.gms:play-services-location:21.1.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     kapt("com.google.dagger:hilt-compiler:2.50")
 

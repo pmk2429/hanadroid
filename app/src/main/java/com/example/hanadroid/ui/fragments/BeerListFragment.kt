@@ -14,9 +14,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
+import com.bumptech.glide.util.FixedPreloadSizeProvider
 import com.example.hanadroid.R
 import com.example.hanadroid.adapters.BeerDataListAdapter
 import com.example.hanadroid.databinding.FragmentBeerDataListBinding
+import com.example.hanadroid.ui.recyclerView.CombinedScrollListener
+import com.example.hanadroid.ui.recyclerView.MyPreloadModelProvider
 import com.example.hanadroid.ui.uistate.BeerDataUiState
 import com.example.hanadroid.util.PaginationScrollListener
 import com.example.hanadroid.viewmodels.BeerSharedViewModel
@@ -76,17 +81,33 @@ class BeerListFragment : Fragment() {
                 }
             }
 
-            addOnScrollListener(object : PaginationScrollListener(
-                this.layoutManager as LinearLayoutManager
-            ) {
-                override fun loadMoreItems() {
-                    // fetch more items
+            // For Preloading Images using Glide
+            val sizeProvider = FixedPreloadSizeProvider<String>(0, 0)
+            val modelProvider = MyPreloadModelProvider(requireContext())
+            val preloader = RecyclerViewPreloader(
+                Glide.with(this@BeerListFragment), modelProvider, sizeProvider, 10 /*maxPreload*/
+            )
+
+            // For Pagination
+            val paginationScrollListener = object : PaginationScrollListener(layoutManager as LinearLayoutManager) {
+                    override fun loadMoreItems() {
+                        // fetch more items
+                    }
+
+                    override fun isLastPage() = false
+
+                    override fun isLoading() = false
                 }
 
-                override fun isLastPage() = false
+            val combinedListener = CombinedScrollListener(
+                listOf(
+                    paginationScrollListener,
+                    preloader
+                )
+            )
 
-                override fun isLoading() = false
-            })
+            // Add Combined Listeners to the RecyclerView
+            addOnScrollListener(combinedListener)
         }
     }
 
