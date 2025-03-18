@@ -1,5 +1,9 @@
 package com.example.hanadroid.util
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -8,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.example.hanadroid.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -117,4 +122,31 @@ fun AppCompatActivity.getCurrentFragment(): Fragment? {
             fragmentManager.getBackStackEntryAt(fragmentManager.backStackEntryCount - 1).name
 
     return fragmentManager.findFragmentByTag(fragmentTag)
+}
+
+
+// Open Activity with Animations and Transitions
+fun Activity.startModule(modulePath: String, bundle: Bundle? = null) {
+    val uriString = getString(R.string.btn_custom_media_notification) + "://$modulePath"
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(uriString)
+        bundle?.let { putExtras(bundle) }
+    }
+    startActivity(intent)
+    // AnimationManager
+}
+
+fun Activity.navigateToHomeScreen() {
+    startModule("home")
+}
+
+fun Activity?.finishThisScreenWithResult(isCancelled: Boolean) {
+    this?.let {
+        if (isCancelled) {
+            setResult(Activity.RESULT_CANCELED)
+        } else {
+            setResult(Activity.RESULT_OK)
+        }
+        finish()
+    }
 }

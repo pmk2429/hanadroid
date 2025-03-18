@@ -31,6 +31,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="32">
         <activity
+            android:name=".ui.CountriesComposeGQLActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.DispatcherActivity"
             android:exported="false" />
         <activity
@@ -174,11 +177,22 @@
             </intent-filter>
         </receiver>
 
+        <provider
+            android:name=".files.AndroidFoodFileProvider"
+            android:authorities="com.example.hanadroid"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
         <service
             android:name=".services.MusicPlayerService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="mediaPlayback" />
+            android:foregroundServiceType="mediaPlayback"
+            tools:ignore="ForegroundServicePermission" />
     </application>
 
 </manifest>
