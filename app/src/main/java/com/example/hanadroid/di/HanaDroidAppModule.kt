@@ -8,10 +8,13 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.apollographql.apollo.ApolloClient
 import com.example.hanadroid.data.beerapi.BeerDataApiHelper
 import com.example.hanadroid.data.beerapi.BeerDataApiHelperImpl
 import com.example.hanadroid.data.beerapi.BeerDataApiService
 import com.example.hanadroid.data.boredactivityapi.BoredActivityApiService
+import com.example.hanadroid.data.countries_gql.ApolloCountryClient
+import com.example.hanadroid.data.countries_gql.CountryClient
 import com.example.hanadroid.data.disneyapi.DisneyApiHelper
 import com.example.hanadroid.data.disneyapi.DisneyApiHelperImpl
 import com.example.hanadroid.data.disneyapi.DisneyApiService
@@ -187,6 +190,20 @@ class HanaDroidAppModule {
     @Singleton
     fun provideDisneyApiHelper(): DisneyApiHelper {
         return DisneyApiHelperImpl(provideDisneyApiService())
+    }
+
+    @Provides
+    @Singleton
+    fun provideApolloClient(): ApolloClient {
+        return ApolloClient.Builder()
+            .serverUrl("https://countries.trevorblades.com/graphql")
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCountryClient(apolloClient: ApolloClient): CountryClient {
+        return ApolloCountryClient(apolloClient)
     }
 
     @Singleton

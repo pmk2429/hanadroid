@@ -13,14 +13,16 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.work.*
 import com.example.hanadroid.broadcastreceivers.AirplaneModeBroadcastReceiver
 import com.example.hanadroid.broadcastreceivers.NotificationIntentReceiver
 import com.example.hanadroid.databinding.ActivityEntryBinding
+import com.example.hanadroid.util.HanaAppResultContract
 import com.example.hanadroid.util.createNotificationChannel
 import com.example.hanadroid.util.setDebouncedOnClickListener
 import com.example.hanadroid.util.showNotificationWithAcceptAndDeclineActionsPendingIntent
@@ -29,6 +31,12 @@ class EntryActivity : AppCompatActivity() {
 
     private var _binding: ActivityEntryBinding? = null
     private val binding get() = _binding!!
+
+    private var hanaActivityLauncher: ActivityResultLauncher<Any> = registerForActivityResult(
+        HanaAppResultContract() // similar to ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        handleActivityResult(result)
+    }
 
     private val myBroadcastReceiver by lazy { AirplaneModeBroadcastReceiver() }
     private val notificationIntentReceiver by lazy { NotificationIntentReceiver() }
@@ -125,7 +133,15 @@ class EntryActivity : AppCompatActivity() {
                     EntryActivity::class.java
                 )
             }
+
+            countriesGqlCompose.setOnClickListener {
+                launchActivity(CountriesComposeGQLActivity::class.java)
+            }
         }
+    }
+
+    internal fun handleActivityResult(result: ActivityResult) {
+
     }
 
     private fun launchActivity(activityClass: Class<*>?) {

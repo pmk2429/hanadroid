@@ -36,6 +36,7 @@
 
     <string name="btn_media_activity_text">Media</string>
     <string name="btn_custom_media_notification">Custom Notification</string>
+    <string name="btn_countries_gql_compose">Countries GQL</string>
     <string name="btn_workers_activity_text">Workers</string>
     <string name="btn_tabbed_fragments_text">Tabs</string>
     <string name="btn_timer_activity_text">Timer</string>

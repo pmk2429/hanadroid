@@ -1,4 +1,4 @@
-package com.example.hanadroid.util
+package com.example.hanadroid.cache
 
 import android.graphics.Bitmap
 import android.util.LruCache
