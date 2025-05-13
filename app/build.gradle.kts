@@ -17,11 +17,11 @@ apollo {
 
 android {
     namespace = "com.example.hanadroid"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.hanadroid"
-        minSdk = 28
+        minSdk = 31
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

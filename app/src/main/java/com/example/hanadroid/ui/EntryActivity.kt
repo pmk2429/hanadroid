@@ -48,7 +48,7 @@ class EntryActivity : AppCompatActivity() {
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) createNotificationChannel(this)
-            else Toast.makeText(this, "No Notif Permission", Toast.LENGTH_LONG)
+            else Toast.makeText(this, "No Notif Permission", Toast.LENGTH_LONG).show()
         }
 
     private val activityLauncher =
@@ -67,14 +67,15 @@ class EntryActivity : AppCompatActivity() {
             }
         }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityEntryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         checkAllPermissions()
-        checkNotificationPermission()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkNotificationPermission()
+        }
         bindOnClicks()
     }
 
@@ -148,30 +149,50 @@ class EntryActivity : AppCompatActivity() {
         activityLauncher.launch(Intent(this, activityClass))
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private fun initBroadcastReceivers() {
-        val listenToBroadcastsFromOtherApps = false
-        val receiverFlags = if (listenToBroadcastsFromOtherApps) {
-            ContextCompat.RECEIVER_EXPORTED
-        } else {
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        }
-        IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
-            registerReceiver(myBroadcastReceiver, it, receiverFlags)
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val listenToBroadcastsFromOtherApps = false
+            val receiverFlags = if (listenToBroadcastsFromOtherApps) {
+                ContextCompat.RECEIVER_EXPORTED
+            } else {
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            }
 
-        // register Notification Receiver
-        // In this case, sendBroadcast(intent) will be called by Android System and delivers the Intent
-        val intentFilter = IntentFilter().apply {
-            addAction(NotificationIntentReceiver.ACCEPT_NOTIFICATION_ACTION)
-            addAction(NotificationIntentReceiver.DECLINE_NOTIFICATION_ACTION)
+            // Register airplane mode receiver
+            IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
+                registerReceiver(myBroadcastReceiver, it, receiverFlags)
+            }
+
+            // Register Notification Receiver
+            val intentFilter = IntentFilter().apply {
+                addAction(NotificationIntentReceiver.ACCEPT_NOTIFICATION_ACTION)
+                addAction(NotificationIntentReceiver.DECLINE_NOTIFICATION_ACTION)
+            }
+            registerReceiver(notificationIntentReceiver, intentFilter, receiverFlags)
+        } else {
+            // For older Android versions, use the original registration method
+            IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
+                registerReceiver(myBroadcastReceiver, it)
+            }
+
+            val intentFilter = IntentFilter().apply {
+                addAction(NotificationIntentReceiver.ACCEPT_NOTIFICATION_ACTION)
+                addAction(NotificationIntentReceiver.DECLINE_NOTIFICATION_ACTION)
+            }
+            registerReceiver(notificationIntentReceiver, intentFilter)
         }
-        registerReceiver(notificationIntentReceiver, intentFilter)
     }
 
     override fun onStop() {
         super.onStop()
-        unregisterReceiver(myBroadcastReceiver)
-        unregisterReceiver(notificationIntentReceiver)
+        try {
+            unregisterReceiver(myBroadcastReceiver)
+            unregisterReceiver(notificationIntentReceiver)
+        } catch (e: IllegalArgumentException) {
+            // Receiver was not registered, ignore
+            Log.e("EntryActivity", "Receiver not registered: ${e.message}")
+        }
     }
 
     /**
@@ -201,10 +222,22 @@ class EntryActivity : AppCompatActivity() {
         val packageName = packageName
 
         // Get the list of permissions declared in the manifest
-        val permissions = packageManager.getPackageInfo(
-            packageName,
-            PackageManager.GET_PERMISSIONS
-        ).requestedPermissions
+        val permissions = try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                packageManager.getPackageInfo(
+                    packageName,
+                    PackageManager.PackageInfoFlags.of(PackageManager.GET_PERMISSIONS.toLong())
+                ).requestedPermissions
+            } else {
+                packageManager.getPackageInfo(
+                    packageName,
+                    PackageManager.GET_PERMISSIONS
+                ).requestedPermissions
+            }
+        } catch (e: Exception) {
+            Log.e("EntryActivity", "Error getting permissions: ${e.message}")
+            null
+        }
 
         // Print the list of permissions
         permissions?.forEach { permission ->
@@ -220,11 +253,12 @@ class EntryActivity : AppCompatActivity() {
                 this,
                 permission
             ) == PackageManager.PERMISSION_GRANTED -> {
-                // make your action here
+                createNotificationChannel(this)
             }
 
             shouldShowRequestPermissionRationale(permission) -> {
                 // permission denied permanently
+                Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show()
             }
 
             else -> {

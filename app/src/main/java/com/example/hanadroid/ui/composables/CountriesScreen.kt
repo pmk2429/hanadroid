@@ -48,11 +48,12 @@ fun CountriesScreen(
                 items(state.countries) { country ->
                     CountryItem(
                         country = country,
-                        onClick = {},
+                        onClick = {
+                            onSelectCountry(country.code)
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onSelectCountry(country.code) }
-                            .padding(16.dp)
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
                     )
                 }
             }
@@ -119,14 +120,16 @@ fun CountryItem(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.clickable {
+            onClick()
+        },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = country.emoji,
             fontSize = 30.sp
         )
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(8.dp))
         Column(
             modifier = modifier.weight(1f)
         ) {
