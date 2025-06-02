@@ -185,6 +185,9 @@ dependencies {
     // Paging
     implementation(libs.androidx.paging.runtime.ktx)
 
+    // Mavericks
+    implementation(libs.mavericks)
+
     // Debug Tools
     debugImplementation(libs.chucker.library)
     debugImplementation(libs.androidx.compose.ui.tooling)
