@@ -22,15 +22,15 @@ class SingleRowView @JvmOverloads constructor(
         }
     }
 
-    var title: CharSequence
-        get() = binding.activityTitle.text
+    var title: String = ""
         set(value) {
+            field = value
             binding.activityTitle.text = value
         }
 
-    var value: CharSequence
-        get() = binding.activityValue.text
+    var value: String = ""
         set(value) {
+            field = value
             binding.activityValue.text = value
         }
 
