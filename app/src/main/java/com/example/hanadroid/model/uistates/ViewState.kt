@@ -5,10 +5,10 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.PagingData
 import com.example.hanadroid.model.BeerInfo
 import com.example.hanadroid.model.FancyModel
-import com.example.hanadroid.viewmodels.BaseEvent
-import com.example.hanadroid.viewmodels.BaseResult
-import com.example.hanadroid.viewmodels.BaseViewAction
-import com.example.hanadroid.viewmodels.BaseViewState
+import com.example.hanadroid.viewmodels.infra.BaseEvent
+import com.example.hanadroid.viewmodels.infra.BaseResult
+import com.example.hanadroid.viewmodels.infra.BaseViewAction
+import com.example.hanadroid.viewmodels.infra.BaseViewState
 
 data class ListViewState(
     val page: PagingData<BeerInfo>? = null,
@@ -19,8 +19,8 @@ data class ListViewState(
     val errorVisibility: Int? = View.GONE
 ) : BaseViewState
 
-sealed class ViewEffect : BaseViewAction {
-    data class TransitionToScreen(val url: String) : ViewEffect()
+sealed class BaseViewEffect : BaseViewAction {
+    data class TransitionToScreen(val url: String) : BaseViewEffect()
 }
 
 sealed class Event : BaseEvent {

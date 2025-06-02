@@ -1,4 +1,4 @@
-package com.example.hanadroid.viewmodels
+package com.example.hanadroid.viewmodels.infra
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

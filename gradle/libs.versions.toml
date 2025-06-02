@@ -1,6 +1,7 @@
 [versions]
 # Build Configuration
 compileSdk = "35"
+mavericks = "3.0.10"
 minSdk = "31"
 targetSdk = "35"
 
@@ -153,6 +154,7 @@ arrow-core = { group = "io.arrow-kt", name = "arrow-core", version.ref = "arrow"
 arrow-fx-coroutines = { group = "io.arrow-kt", name = "arrow-fx-coroutines", version.ref = "arrow" }
 
 # Networking
+mavericks = { module = "com.airbnb.android:mavericks", version.ref = "mavericks" }
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
