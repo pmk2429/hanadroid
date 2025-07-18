@@ -14,7 +14,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.example.hanadroid.R
 import com.example.hanadroid.broadcastreceivers.NotificationIntentReceiver
 import com.example.hanadroid.ui.BeerDataActivity
-import com.example.hanadroid.ui.UniversityMainActivity
+import com.example.hanadroid.ui.DisneyCharactersActivity
 
 const val WORKER_CHANNEL_ID = "123425"
 const val PENDING_INTENT_CHANNEL_ID = "789"
@@ -183,7 +183,7 @@ fun NotificationManager.showNotificationWithAcceptAndDeclineActionsPendingIntent
     )
     createNotificationChannel(serviceChannel)
 
-    val declineIntent = Intent(context, UniversityMainActivity::class.java)
+    val declineIntent = Intent(context, DisneyCharactersActivity::class.java)
     val declinePendingIntent =
         PendingIntent.getActivity(context, 0, declineIntent, PendingIntent.FLAG_IMMUTABLE)
 

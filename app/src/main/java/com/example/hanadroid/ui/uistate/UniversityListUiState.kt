@@ -1,7 +1,8 @@
 package com.example.hanadroid.ui.uistate
 
 import com.example.hanadroid.model.University
-import com.example.hanadroid.repository.SortOrder
+import com.example.hanadroid.sharedprefs.SortOrder
+import com.example.hanadroid.sharedprefs.UniversitySortOrder
 
 /**
  * Separate State holders for rendering Data, Error, Empty or Loading UI states to avoid doing
@@ -13,7 +14,7 @@ sealed class UniversityListUiState {
 
     data class ListState(
         val universitiesList: List<University> = emptyList(),
-        val sortOrder: SortOrder
+        val universitySortOrder: UniversitySortOrder
     ) : UniversityListUiState()
 
     data class ErrorState(

@@ -7,10 +7,10 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.hanadroid.model.University
 import com.example.hanadroid.networking.NetworkResult
-import com.example.hanadroid.repository.SortOrder
 import com.example.hanadroid.repository.UniversityRepository
-import com.example.hanadroid.repository.UserPreferencesRepository
-import com.example.hanadroid.ui.fragments.UniversityListFragment.Companion.ARGS_UNIVERSITY_COUNTRY_KEY
+import com.example.hanadroid.sharedprefs.SortOrder
+import com.example.hanadroid.sharedprefs.UniversitySortOrder
+import com.example.hanadroid.sharedprefs.UserPreferencesRepository
 import com.example.hanadroid.ui.uistate.UniversityListUiState
 import com.example.hanadroid.util.CountryList
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +36,7 @@ class UniversityListViewModel @Inject constructor(
     private var getUniversitiesJob: Job? = null
 
     private var country =
-        savedStateHandle.get<String>(ARGS_UNIVERSITY_COUNTRY_KEY) ?: CountryList.unitedStates
+        savedStateHandle.get<String>("ARGS_UNIVERSITY_COUNTRY_KEY") ?: CountryList.unitedStates
 
     private var _universityUiState =
         MutableStateFlow<UniversityListUiState>(UniversityListUiState.LoadingState)
@@ -75,7 +75,7 @@ class UniversityListViewModel @Inject constructor(
                         _universityUiState.update { _ ->
                             UniversityListUiState.ListState(
                                 universitiesList = result.data,
-                                sortOrder = SortOrder.NONE
+                                universitySortOrder = UniversitySortOrder.NONE
                             )
                         }
                     }
@@ -137,21 +137,16 @@ class UniversityListViewModel @Inject constructor(
                             flowOf(universitiesResponse),
                             userPreferencesFlow
                         ) { allUniversities, userPreferences ->
-                            // Combine the results and emit a new UniversityListUiState
-                            val sortedUniversities = sortUniversities(
-                                allUniversities,
-                                userPreferences.sortOrder
-                            )
-                            _localUniversities = sortedUniversities
+                            _localUniversities = allUniversities
                             return@combine UniversityListUiState.ListState(
-                                universitiesList = sortedUniversities,
-                                sortOrder = userPreferences.sortOrder
+                                universitiesList = allUniversities,
+                                universitySortOrder = userPreferences.universitySortOrder
                             )
                         }.onEach {
                             _universityUiState.update { _ ->
                                 UniversityListUiState.ListState(
                                     universitiesList = it.universitiesList,
-                                    sortOrder = it.sortOrder
+                                    universitySortOrder = it.universitySortOrder
                                 )
                             }
                         }.launchIn(this)
@@ -174,20 +169,6 @@ class UniversityListViewModel @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Sorts the employees based on the Type defined as the order of [Employee.employeeType].
-     */
-    private fun sortUniversities(
-        universities: List<University>,
-        sortOrder: SortOrder
-    ): List<University> {
-        return when (sortOrder) {
-            SortOrder.NONE -> universities
-            SortOrder.BY_UNIVERSITY_NAME -> universities.sortedWith(compareBy { it.name })
-            SortOrder.BY_UNIVERSITY_TYPE -> universities
         }
     }
 
@@ -216,7 +197,7 @@ class UniversityListViewModel @Inject constructor(
         _universityUiState.update { _ ->
             UniversityListUiState.ListState(
                 universitiesList = filteredUniversities,
-                sortOrder = SortOrder.NONE
+                universitySortOrder = UniversitySortOrder.NONE
             )
         }
     }
