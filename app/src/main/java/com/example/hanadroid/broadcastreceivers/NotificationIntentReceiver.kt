@@ -3,7 +3,7 @@ package com.example.hanadroid.broadcastreceivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.hanadroid.ui.UniversityMainActivity
+import com.example.hanadroid.ui.DisneyCharactersActivity
 
 class NotificationIntentReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
@@ -13,7 +13,7 @@ class NotificationIntentReceiver : BroadcastReceiver() {
             }
 
             ACCEPT_NOTIFICATION_ACTION -> {
-                val scheduledIntent = Intent(context, UniversityMainActivity::class.java).apply {
+                val scheduledIntent = Intent(context, DisneyCharactersActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
                 context.startActivity(scheduledIntent)

@@ -41,7 +41,7 @@ import com.example.hanadroid.networking.RetryInterceptor
 import com.example.hanadroid.networking.UNIVERSITY_BASE_URL
 import com.example.hanadroid.networking.WOOF_DOG_BASE_URL
 import com.example.hanadroid.repository.UniversityRepository
-import com.example.hanadroid.repository.UserPreferencesRepository
+import com.example.hanadroid.sharedprefs.UserPreferencesRepository
 import com.example.hanadroid.util.CoroutineDispatcherProvider
 import com.example.hanadroid.util.DefaultDispatcherProvider
 import com.squareup.moshi.Moshi

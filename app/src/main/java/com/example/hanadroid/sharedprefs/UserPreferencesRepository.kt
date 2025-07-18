@@ -1,4 +1,4 @@
-package com.example.hanadroid.repository
+package com.example.hanadroid.sharedprefs
 
 import android.util.Log
 import androidx.datastore.core.DataStore
@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
-enum class SortOrder {
+enum class UniversitySortOrder {
     NONE,
     BY_UNIVERSITY_TYPE,
     BY_UNIVERSITY_NAME
 }
 
 data class UserPreferences(
-    val sortOrder: SortOrder
+    val universitySortOrder: UniversitySortOrder
 )
 
 /**
@@ -55,25 +55,25 @@ class UserPreferencesRepository @Inject constructor(
         // updateData handles data transactionally, ensuring that if the sort is updated at the same
         // time from another thread, we won't have conflicts
         dataStore.edit { preferences ->
-            val currentOrder = SortOrder.valueOf(
-                preferences[PreferencesKeys.SORT_ORDER] ?: SortOrder.NONE.name
+            val currentOrder = UniversitySortOrder.valueOf(
+                preferences[PreferencesKeys.SORT_ORDER] ?: UniversitySortOrder.NONE.name
             )
 
-            val newSortOrder = if (enable) {
-                if (currentOrder == SortOrder.NONE) {
-                    SortOrder.BY_UNIVERSITY_TYPE
+            val newUniversitySortOrder = if (enable) {
+                if (currentOrder == UniversitySortOrder.NONE) {
+                    UniversitySortOrder.BY_UNIVERSITY_TYPE
                 } else {
-                    SortOrder.NONE
+                    UniversitySortOrder.NONE
                 }
             } else {
-                if (currentOrder == SortOrder.NONE) {
-                    SortOrder.BY_UNIVERSITY_TYPE
+                if (currentOrder == UniversitySortOrder.NONE) {
+                    UniversitySortOrder.BY_UNIVERSITY_TYPE
                 } else {
-                    SortOrder.NONE
+                    UniversitySortOrder.NONE
                 }
             }
 
-            preferences[PreferencesKeys.SORT_ORDER] = newSortOrder.name
+            preferences[PreferencesKeys.SORT_ORDER] = newUniversitySortOrder.name
         }
     }
 
@@ -81,11 +81,11 @@ class UserPreferencesRepository @Inject constructor(
         mapUserPreferences(dataStore.data.first().toPreferences())
 
     private fun mapUserPreferences(preferences: Preferences): UserPreferences {
-        // Get the sort order from preferences and convert it to a [SortOrder] object
-        val sortOrder =
-            SortOrder.valueOf(
-                preferences[PreferencesKeys.SORT_ORDER] ?: SortOrder.NONE.name
+        // Get the sort order from preferences and convert it to a [UniversitySortOrder] object
+        val universitySortOrder =
+            UniversitySortOrder.valueOf(
+                preferences[PreferencesKeys.SORT_ORDER] ?: UniversitySortOrder.NONE.name
             )
-        return UserPreferences(sortOrder)
+        return UserPreferences(universitySortOrder)
     }
 }

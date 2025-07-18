@@ -89,7 +89,6 @@ class EntryActivity : AppCompatActivity() {
 
             fab.apply {
                 setOnTouchListener(handleTouchListener)
-                setOnClickListener { launchActivity(UniversityMainActivity::class.java) }
             }
 
             fabBoredActivity.apply {
